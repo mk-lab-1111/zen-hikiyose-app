@@ -18,10 +18,22 @@
       margin-bottom: var(--sp-3);
       cursor: pointer;
       transition: border-color var(--ease-fast), transform var(--ease-fast);
+      position: relative;
     }
     .box-card:active { transform: scale(0.98); border-color: var(--color-border-accent); }
-    .box-card__title { font-weight: 700; font-size: var(--text-sm); margin-bottom: 6px; }
+    .box-card__title { font-weight: 700; font-size: var(--text-sm); margin-bottom: 6px; padding-right: 28px; }
     .box-card__body  { font-size: var(--text-xs); color: var(--color-text-secondary); line-height: 1.7; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .box-card__delete {
+      position: absolute; top: var(--sp-3); right: var(--sp-3);
+      width: 24px; height: 24px;
+      background: none; border: none;
+      color: var(--color-text-muted);
+      cursor: pointer; padding: 0;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: var(--radius-sm);
+      transition: color var(--ease-fast), background var(--ease-fast);
+    }
+    .box-card__delete:active { color: var(--color-danger); background: rgba(244,67,54,0.1); }
 
     /* セッション画面 */
     .session-view {
@@ -34,7 +46,7 @@
       text-align: center;
       transition: background var(--ease-slow);
     }
-    .session-view.is-dimmed { background: rgba(8,8,8,0.97); }
+    .session-view.is-dimmed { background: rgba(4,4,12,0.98); }
     .session-title {
       font-size: var(--text-lg); font-weight: 900;
       color: var(--color-accent);
@@ -98,12 +110,48 @@
       background: var(--color-accent);
       margin: 1px auto 0;
     }
+
+    /* カスタム追加モーダル */
+    .add-modal {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 300;
+      display: flex; align-items: flex-end; justify-content: center;
+    }
+    .add-sheet {
+      background: var(--color-bg-card);
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      padding: var(--sp-6) var(--sp-5) calc(var(--sp-6) + env(safe-area-inset-bottom));
+      width: 100%;
+      max-width: 480px;
+      animation: sheet-in var(--ease-slow);
+      max-height: 90dvh;
+      overflow-y: auto;
+    }
+    @keyframes sheet-in {
+      from { transform: translateY(40px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+    .example-chip {
+      display: inline-block;
+      padding: 6px 12px;
+      background: var(--color-accent-bg);
+      border: 1px solid var(--color-border-accent);
+      border-radius: var(--radius-full);
+      font-size: var(--text-xs);
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      margin: 4px 4px 4px 0;
+      line-height: 1.5;
+      transition: background var(--ease-fast);
+    }
+    .example-chip:active { background: var(--color-accent-bg); opacity: 0.7; }
   </style>
 </head>
 <body>
 <div id="app">
 
-  <header class="page-header" id="main-header">
+  <header class="page-header">
     <button class="page-header__back" onclick="history.back()">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
     </button>
@@ -132,15 +180,25 @@
     <!-- カレンダー記録 -->
     <section class="section">
       <p class="section-title">実践記録</p>
-      <div class="card" id="cal-wrap">
+      <div class="card">
         <div id="moshimo-calendar"></div>
       </div>
     </section>
 
-    <!-- ボックス一覧 -->
+    <!-- プリセット一覧 -->
     <section class="section">
-      <p class="section-title">シナリオを選択</p>
+      <p class="section-title">プリセットシナリオ</p>
       <div id="box-list"><div class="spinner"></div></div>
+    </section>
+
+    <!-- オリジナルシナリオ -->
+    <section class="section">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-3);">
+        <p class="section-title" style="margin-bottom:0;">オリジナルシナリオ</p>
+        <span id="custom-limit-note" style="font-size:var(--text-xs);color:var(--color-text-muted);"></span>
+      </div>
+      <div id="custom-box-list"></div>
+      <button class="btn-secondary mt-3" onclick="openAddModal()" id="btn-add-custom">＋ 自分だけのシナリオを追加</button>
     </section>
 
   </main>
@@ -154,7 +212,7 @@
   <div id="phase-ready">
     <p class="session-title" id="s-title"></p>
     <p class="session-body" id="s-body"></p>
-    <div class="timer-select" id="timer-select">
+    <div class="timer-select">
       <button class="timer-btn is-active" id="btn-1min" onclick="selectTimer(1)">1分</button>
       <button class="timer-btn" id="btn-3min" onclick="selectTimer(3)">3分</button>
       <button class="timer-btn" id="btn-5min" onclick="selectTimer(5)">5分</button>
@@ -176,7 +234,7 @@
     <p style="font-size:var(--text-lg);font-weight:900;color:var(--color-accent);margin-bottom:var(--sp-3);">実践完了</p>
     <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--sp-4);">今の体感度を選んでください</p>
     <p style="font-size:var(--text-xs);color:var(--color-text-muted);margin-bottom:var(--sp-3);">1＝あまり感じない ／ 5＝強くリアルに感じた</p>
-    <div class="rating-wrap" id="rating-wrap">
+    <div class="rating-wrap">
       <button class="rating-btn" onclick="selectRating(1)">1</button>
       <button class="rating-btn" onclick="selectRating(2)">2</button>
       <button class="rating-btn" onclick="selectRating(3)">3</button>
@@ -184,6 +242,32 @@
       <button class="rating-btn" onclick="selectRating(5)">5</button>
     </div>
     <button class="btn-primary" id="btn-save-rating" onclick="saveRecord()" style="max-width:240px;margin-top:var(--sp-4);" disabled>記録して閉じる</button>
+  </div>
+</div>
+
+<!-- オリジナル追加モーダル -->
+<div class="add-modal hidden" id="add-modal">
+  <div class="add-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <p style="font-weight:700;font-size:var(--text-md);margin-bottom:var(--sp-4);">オリジナルシナリオを追加</p>
+
+    <p style="font-size:var(--text-xs);color:var(--color-text-muted);margin-bottom:var(--sp-2);">例文（タップして入力欄に反映）</p>
+    <div style="margin-bottom:var(--sp-4);">
+      <span class="example-chip" onclick="applyExample('もしも理想の家に引っ越せたら、どんな気持ちになっているか。その空間の感触、景色、安心感を今すぐ体感してみましょう。')">理想の家に引っ越せたら</span>
+      <span class="example-chip" onclick="applyExample('もし大好きな人と毎日会えるようになったら、どんな気持ちでしょう。その温かさ、笑い声、満たされた心を感じてみてください。')">大好きな人と毎日会えたら</span>
+      <span class="example-chip" onclick="applyExample('もし起業して月500万円を稼げるようになったら、どんな朝を迎えているでしょう。その自由と誇りを全身で感じてみましょう。')">起業して月500万円稼げたら</span>
+    </div>
+
+    <label class="input-label" for="custom-title-input">シナリオタイトル（例：もしも〜〜だったら）</label>
+    <input type="text" class="input-field" id="custom-title-input" placeholder="もしも理想の仕事に就いていたら" style="margin-bottom:var(--sp-4);">
+
+    <label class="input-label" for="custom-body-input">没入するための説明文</label>
+    <textarea class="input-field" id="custom-body-input" rows="4" placeholder="そのシナリオの中で、あなたは何を見て、何を感じていますか？できるだけ具体的に書いてください。"></textarea>
+
+    <div style="display:flex;gap:var(--sp-3);margin-top:var(--sp-5);">
+      <button class="btn-ghost" onclick="closeAddModal()">キャンセル</button>
+      <button class="btn-primary" onclick="saveCustomBox()">追加する</button>
+    </div>
   </div>
 </div>
 
@@ -196,6 +280,7 @@
   ZenApp.init();
 
   const isPremium = ZenPremium.isPremium();
+  const FREE_CUSTOM_LIMIT = 3;
 
   // ===== 説明の折りたたみ =====
   const visits = parseInt(localStorage.getItem('_moshimo_visits') || '0') + 1;
@@ -209,7 +294,7 @@
     document.getElementById('desc-icon').classList.toggle('is-open');
   };
 
-  // ===== プレミアムロック =====
+  // ===== プレミアムロック（タイマーボタン） =====
   const btn3 = document.getElementById('btn-3min');
   const btn5 = document.getElementById('btn-5min');
   if (!isPremium) {
@@ -240,15 +325,13 @@
       ${weekdays.map(d => `<div style="text-align:center;font-size:10px;color:var(--color-text-muted);padding:4px 0;">${d}</div>`).join('')}
     </div>
     <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;">`;
-
     for (let i = 0; i < firstDay; i++) html += '<div></div>';
     for (let d = 1; d <= daysInMonth; d++) {
       const dateKey = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
       const hasRecord = recordDates.has(dateKey);
       const isToday = d === today;
       html += `<div style="aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:var(--radius-sm);font-size:11px;${isToday ? 'color:var(--color-accent);font-weight:700;' : ''}">
-        ${d}
-        ${hasRecord ? '<div class="cal-record-dot"></div>' : ''}
+        ${d}${hasRecord ? '<div class="cal-record-dot"></div>' : ''}
       </div>`;
     }
     html += '</div>';
@@ -256,16 +339,105 @@
   };
   renderCalendar();
 
-  // ===== ボックス一覧 =====
+  // ===== プリセット一覧 =====
   fetch('../data/zen_hikiyose_moshimo_boxes.json')
     .then(r => r.json())
     .then(data => {
       document.getElementById('box-list').innerHTML = data.boxes.map(b => `
-        <div class="box-card" onclick="openSession(${b.id}, '${b.title.replace(/'/g,"\\'")}', '${b.body.replace(/'/g,"\\'")}')">
+        <div class="box-card" onclick="openSession(${b.id}, ${JSON.stringify(b.title)}, ${JSON.stringify(b.body)})">
           <div class="box-card__title">${b.title}</div>
           <div class="box-card__body">${b.body}</div>
         </div>`).join('');
     });
+
+  // ===== オリジナルシナリオ =====
+  const getCustomBoxes = () => ZenStorage.get('zen_hikiyose_moshimo_custom', []);
+  const saveCustomBoxes = (boxes) => ZenStorage.set('zen_hikiyose_moshimo_custom', boxes);
+
+  const renderCustomBoxes = () => {
+    const boxes = getCustomBoxes();
+    const limitNote = document.getElementById('custom-limit-note');
+    const btnAdd = document.getElementById('btn-add-custom');
+
+    if (isPremium) {
+      limitNote.textContent = `${boxes.length}件`;
+    } else {
+      limitNote.textContent = `${boxes.length} / ${FREE_CUSTOM_LIMIT}件（無料版）`;
+      if (boxes.length >= FREE_CUSTOM_LIMIT) {
+        btnAdd.textContent = 'プレミアムで無制限追加';
+        btnAdd.onclick = () => { window.location.href = 'zen_hikiyose_premium.html'; };
+      } else {
+        btnAdd.textContent = '＋ 自分だけのシナリオを追加';
+        btnAdd.onclick = openAddModal;
+      }
+    }
+
+    const container = document.getElementById('custom-box-list');
+    if (boxes.length === 0) {
+      container.innerHTML = `<p style="font-size:var(--text-sm);color:var(--color-text-muted);padding:var(--sp-3) 0;">まだオリジナルシナリオがありません。</p>`;
+      return;
+    }
+    container.innerHTML = boxes.map((b, i) => `
+      <div class="box-card" onclick="openSession('custom_${i}', ${JSON.stringify(b.title)}, ${JSON.stringify(b.body)})">
+        <button class="box-card__delete" onclick="event.stopPropagation();deleteCustomBox(${i})" title="削除">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <div class="box-card__title">${b.title}</div>
+        <div class="box-card__body">${b.body}</div>
+      </div>`).join('');
+  };
+  renderCustomBoxes();
+
+  window.deleteCustomBox = (idx) => {
+    if (!confirm('このシナリオを削除しますか？')) return;
+    const boxes = getCustomBoxes();
+    boxes.splice(idx, 1);
+    saveCustomBoxes(boxes);
+    renderCustomBoxes();
+    ZenApp.showToast('削除しました', 'default');
+  };
+
+  // ===== カスタム追加モーダル =====
+  window.openAddModal = () => {
+    const boxes = getCustomBoxes();
+    if (!isPremium && boxes.length >= FREE_CUSTOM_LIMIT) {
+      ZenApp.showToast('無料版は3件まで追加できます', 'error');
+      return;
+    }
+    document.getElementById('custom-title-input').value = '';
+    document.getElementById('custom-body-input').value = '';
+    document.getElementById('add-modal').classList.remove('hidden');
+  };
+
+  window.closeAddModal = () => {
+    document.getElementById('add-modal').classList.add('hidden');
+  };
+
+  document.getElementById('add-modal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeAddModal();
+  });
+
+  window.applyExample = (body) => {
+    document.getElementById('custom-body-input').value = body;
+    document.getElementById('custom-body-input').focus();
+  };
+
+  window.saveCustomBox = () => {
+    const title = document.getElementById('custom-title-input').value.trim();
+    const body = document.getElementById('custom-body-input').value.trim();
+    if (!title) { ZenApp.showToast('タイトルを入力してください', 'error'); return; }
+    if (!body)  { ZenApp.showToast('説明文を入力してください', 'error'); return; }
+
+    const boxes = getCustomBoxes();
+    if (!isPremium && boxes.length >= FREE_CUSTOM_LIMIT) {
+      ZenApp.showToast('無料版は3件まで追加できます', 'error'); return;
+    }
+    boxes.push({ title, body });
+    saveCustomBoxes(boxes);
+    closeAddModal();
+    renderCustomBoxes();
+    ZenApp.showToast('シナリオを追加しました', 'success');
+  };
 
   // ===== セッション =====
   let currentBoxId = null, currentBoxTitle = '', selectedMinutes = 1, selectedRating = 0;
@@ -308,7 +480,6 @@
     showPhase('timer');
     document.getElementById('timer-label').textContent = `${selectedMinutes}分間 没入してください`;
     document.getElementById('session-view').classList.add('is-dimmed');
-
     let remaining = selectedMinutes * 60;
     const updateDisp = () => {
       const m = Math.floor(remaining / 60);

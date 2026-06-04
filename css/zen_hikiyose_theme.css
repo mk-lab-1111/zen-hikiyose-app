@@ -4,10 +4,10 @@
 
 :root {
   /* ベースカラー */
-  --color-bg-primary:     #121212;
-  --color-bg-secondary:   #1A1A1A;
-  --color-bg-card:        #222222;
-  --color-bg-card-hover:  #2A2A2A;
+  --color-bg-primary:     #1E1E2E;
+  --color-bg-secondary:   #252535;
+  --color-bg-card:        #2C2C3E;
+  --color-bg-card-hover:  #34344A;
 
   /* アクセント */
   --color-accent:         #D4AF37;
@@ -19,11 +19,11 @@
 
   /* テキスト */
   --color-text-primary:   #F0F0F0;
-  --color-text-secondary: #A0A0A0;
-  --color-text-muted:     #555555;
+  --color-text-secondary: #B0B0C0;
+  --color-text-muted:     #6B7080;
 
   /* ボーダー */
-  --color-border:         #2A2A2A;
+  --color-border:         #3A3A50;
 
   /* 状態カラー */
   --color-success:        #4CAF50;
@@ -69,10 +69,10 @@
   --ease-slow:   0.4s cubic-bezier(0.25,0.46,0.45,0.94);
 
   /* フォントサイズ */
-  --text-xs:   0.6875rem;  /* 11px */
-  --text-sm:   0.8125rem;  /* 13px */
-  --text-base: 0.9375rem;  /* 15px */
-  --text-md:   1.0625rem;  /* 17px */
+  --text-xs:   0.75rem;    /* 12px */
+  --text-sm:   0.875rem;   /* 14px */
+  --text-base: 1rem;       /* 16px */
+  --text-md:   1.125rem;   /* 18px */
   --text-lg:   1.25rem;    /* 20px */
   --text-xl:   1.5rem;     /* 24px */
   --text-2xl:  1.875rem;   /* 30px */
@@ -91,9 +91,11 @@
   --color-accent-glow:    rgba(0,229,255,0.15);
   --color-accent-bg:      rgba(0,229,255,0.08);
   --color-border-accent:  rgba(0,229,255,0.28);
+  --color-bg-primary:     #0A1628;
   --color-bg-secondary:   #0D1B2A;
   --color-bg-card:        #111E2E;
   --color-bg-card-hover:  #162436;
+  --color-border:         #1A2840;
   --shadow-accent: 0 0 16px rgba(0,229,255,0.18);
 
   /* エイリアス更新 */
@@ -112,9 +114,11 @@
   --color-accent-glow:    rgba(232,160,191,0.15);
   --color-accent-bg:      rgba(232,160,191,0.08);
   --color-border-accent:  rgba(232,160,191,0.28);
+  --color-bg-primary:     #160E20;
   --color-bg-secondary:   #1A1020;
   --color-bg-card:        #201428;
   --color-bg-card-hover:  #261830;
+  --color-border:         #2C1A38;
   --shadow-accent: 0 0 16px rgba(232,160,191,0.18);
 
   /* エイリアス更新 */

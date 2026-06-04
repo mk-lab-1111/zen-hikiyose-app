@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#D4AF37">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>MINDFUL ASSET - ZENについて</title>
+  <link rel="stylesheet" href="../css/zen_hikiyose_theme.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_base.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_components.css">
+  <style>
+    .zen-quote {
+      border-left: 3px solid var(--color-border-accent);
+      padding: var(--sp-4) var(--sp-4);
+      background: var(--color-accent-bg);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      line-height: 1.9;
+      font-style: italic;
+    }
+    .profile-item {
+      display: flex;
+      gap: var(--sp-3);
+      padding: var(--sp-3) 0;
+      border-bottom: 1px solid var(--color-border);
+      font-size: var(--text-sm);
+    }
+    .profile-item:last-child { border-bottom: none; }
+    .profile-item__dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      margin-top: 8px;
+      flex-shrink: 0;
+    }
+    .profile-item__text { color: var(--color-text-secondary); line-height: 1.7; }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <header class="page-header">
+    <button class="page-header__back" onclick="history.back()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <span class="page-header__title">ZENについて</span>
+  </header>
+
+  <main class="main-content main-content--no-nav">
+
+    <!-- ZENアイコン -->
+    <div style="text-align:center;padding:var(--sp-8) 0 var(--sp-6);">
+      <div style="width:80px;height:80px;border-radius:50%;background:var(--color-accent-bg);border:2px solid var(--color-border-accent);display:flex;align-items:center;justify-content:center;margin:0 auto var(--sp-4);">
+        <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <p style="font-size:var(--text-xs);color:var(--color-text-muted);letter-spacing:0.12em;font-weight:700;">SUPERVISOR</p>
+      <p style="font-size:var(--text-lg);font-weight:900;color:var(--color-accent);margin-top:var(--sp-1);">ZEN</p>
+      <p style="font-size:var(--text-xs);color:var(--color-text-muted);margin-top:4px;">完全匿名 · 顔出しなし · 実名非公開</p>
+    </div>
+
+    <!-- プロフィール -->
+    <section class="section">
+      <p class="section-title">プロフィール</p>
+      <div class="card">
+        <div class="profile-item">
+          <div class="profile-item__dot"></div>
+          <div class="profile-item__text">顔出しなし・声出しなし・実名非公開で活動</div>
+        </div>
+        <div class="profile-item">
+          <div class="profile-item__dot"></div>
+          <div class="profile-item__text">現在：年収1億円超・海外豪邸・FIRE済・複数事業オーナー</div>
+        </div>
+        <div class="profile-item">
+          <div class="profile-item__dot"></div>
+          <div class="profile-item__text">過去：中学まで何も目立たない普通の少年。高校卒業後から独自の思考研究を開始し、急激な成長を遂げる</div>
+        </div>
+        <div class="profile-item">
+          <div class="profile-item__dot"></div>
+          <div class="profile-item__text">20歳から20年以上、独自の思考アルゴリズムを研究・実践し続けている</div>
+        </div>
+        <div class="profile-item">
+          <div class="profile-item__dot"></div>
+          <div class="profile-item__text">成功者の間でのみ共有されてきた本物のメソッドを、完全匿名を条件に監修</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ZENの言葉：開発背景 -->
+    <section class="section">
+      <p class="section-title">このアプリを作った背景</p>
+      <div class="card">
+        <div class="zen-quote">
+          「私がこのアプリを作ったのは、<br>
+          お金や成功の本質が『マインドセット』にあると<br>
+          20年以上の実践を通じて確信したからです。<br><br>
+          情報は溢れています。でも、頭ではわかっていても<br>
+          行動が変わらない人がほとんどです。<br>
+          それは、脳のOSが書き換わっていないから。<br><br>
+          毎日5〜15分、潜在意識に正しい情報を届け続ける。<br>
+          その継続が、3年後に圧倒的な差を生みます。<br><br>
+          このアプリは、私が20年かけて作り上げた<br>
+          思考アルゴリズムを、誰でも実践できる形にしたものです。」
+        </div>
+        <p style="text-align:right;font-size:var(--text-xs);color:var(--color-accent);font-weight:700;margin-top:var(--sp-3);">— ZEN</p>
+      </div>
+    </section>
+
+    <!-- ZENメッセージへのリンク -->
+    <section class="section">
+      <a href="zen_hikiyose_advice.html" class="card card-clickable" style="display:flex;align-items:center;gap:var(--sp-3);">
+        <div style="flex:1;">
+          <p style="font-weight:700;font-size:var(--text-sm);">ZENメッセージを読む</p>
+          <p style="font-size:var(--text-xs);color:var(--color-text-muted);margin-top:2px;">30日間のZEN監修アドバイス</p>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+    </section>
+
+    <!-- 実践者の声へのリンク -->
+    <section class="section">
+      <a href="zen_hikiyose_reviews.html" class="card card-clickable" style="display:flex;align-items:center;gap:var(--sp-3);">
+        <div style="flex:1;">
+          <p style="font-weight:700;font-size:var(--text-sm);">実践者の声を見る</p>
+          <p style="font-size:var(--text-xs);color:var(--color-text-muted);margin-top:2px;">実際に変容を遂げた方々のレポート</p>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+    </section>
+
+  </main>
+
+</div>
+
+<script type="module">
+  import ZenApp from '../js/zen_hikiyose_app.js';
+  ZenApp.init();
+</script>
+</body>
+</html>

@@ -30,6 +30,7 @@ const ZenScore = (() => {
     score: 0,
     totalDays: 0,
     streak: 0,
+    bestStreak: 0,
     lastPracticeDate: null,
     lastGrowthDate: null,
     dailyLog: {},  // 'YYYY-MM-DD': { morning, evening, log, dreamLog, roadmap, bothBonus }
@@ -119,6 +120,8 @@ const ZenScore = (() => {
         data.streak = 1;
       }
       data.lastPracticeDate = today;
+      // 最高記録を更新
+      data.bestStreak = Math.max(data.bestStreak || 0, data.streak);
     }
 
     saveData(data);
@@ -127,10 +130,11 @@ const ZenScore = (() => {
 
   const getCurrentScore = () => Math.round(getData().score || 0);
   const getStreak = () => getData().streak || 0;
+  const getBestStreak = () => getData().bestStreak || 0;
   const getTotalDays = () => getData().totalDays || 0;
   const getDailyLog = (dateKey = todayKey()) => getData().dailyLog[dateKey] || {};
 
-  return { applyDailyGrowth, addPoints, getCurrentScore, getStreak, getTotalDays, getDailyLog };
+  return { applyDailyGrowth, addPoints, getCurrentScore, getStreak, getBestStreak, getTotalDays, getDailyLog };
 })();
 
 export default ZenScore;

@@ -233,8 +233,10 @@
       SUB_IDX.includes(idx) || OUTER_SUB_IDX.includes(idx) ? 'サブテーマを書いてください' :
       '展開アクションを書いてください';
     document.getElementById('modal-input').value = cells[idx];
+    // iOSキーボードでグリッドが潰れないようにグリッドを隠す
+    document.getElementById('premium-lock-target').style.display = 'none';
     document.getElementById('edit-modal').classList.remove('hidden');
-    document.getElementById('modal-input').focus();
+    setTimeout(() => document.getElementById('modal-input').focus(), 50);
   };
 
   window.applyEdit = () => {
@@ -248,13 +250,16 @@
     const outerPos = OUTER_SUB_IDX.indexOf(editingIdx);
     if (outerPos !== -1) cells[SUB_IDX[outerPos]] = val;
 
+    document.getElementById('premium-lock-target').style.display = '';
+    document.getElementById('edit-modal').classList.add('hidden');
+    editingIdx = null;
     renderGrid();
-    closeModal();
   };
 
   window.closeModal = (e) => {
     if (e && e.target !== document.getElementById('edit-modal')) return;
     document.getElementById('edit-modal').classList.add('hidden');
+    document.getElementById('premium-lock-target').style.display = '';
     editingIdx = null;
   };
   document.getElementById('edit-modal').addEventListener('click', (e) => {

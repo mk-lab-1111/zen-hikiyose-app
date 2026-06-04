@@ -181,6 +181,10 @@
   }
 
   window.toggleCourse = (id, idx, isAvailable) => {
+    if (!isAvailable) {
+      window.location.href = 'zen_hikiyose_premium.html';
+      return;
+    }
     const steps = document.getElementById(`steps-${id}`);
     const icon = document.getElementById(`icon-${id}`);
     const isOpen = !steps.classList.contains('hidden');
