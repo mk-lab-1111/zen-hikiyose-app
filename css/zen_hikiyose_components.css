@@ -197,7 +197,7 @@
 }
 
 .bottom-nav__item:active {
-  background: rgba(255,255,255,0.03);
+  background: rgba(128,128,128,0.08);
 }
 
 .bottom-nav__item.is-active {

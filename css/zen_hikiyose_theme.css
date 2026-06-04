@@ -3,33 +3,33 @@
    ========================================================================== */
 
 :root {
-  /* ベースカラー */
-  --color-bg-primary:     #1E1E2E;
-  --color-bg-secondary:   #252535;
-  --color-bg-card:        #2C2C3E;
-  --color-bg-card-hover:  #34344A;
+  /* ベースカラー（白背景ゴールドテーマ） */
+  --color-bg-primary:     #FFFFFF;
+  --color-bg-secondary:   #F5F5F5;
+  --color-bg-card:        #FFFFFF;
+  --color-bg-card-hover:  #F5F5F5;
 
-  /* アクセント */
-  --color-accent:         #D4AF37;
-  --color-accent-light:   #E8C96A;
-  --color-accent-dark:    #A07D20;
-  --color-accent-glow:    rgba(212,175,55,0.15);
-  --color-accent-bg:      rgba(212,175,55,0.08);
-  --color-border-accent:  rgba(212,175,55,0.30);
+  /* アクセント（白背景向けに濃いゴールド） */
+  --color-accent:         #C9A028;
+  --color-accent-light:   #D4AF37;
+  --color-accent-dark:    #9A7A1C;
+  --color-accent-glow:    rgba(201,160,40,0.12);
+  --color-accent-bg:      rgba(201,160,40,0.08);
+  --color-border-accent:  rgba(201,160,40,0.40);
 
   /* テキスト */
-  --color-text-primary:   #F0F0F0;
-  --color-text-secondary: #B0B0C0;
-  --color-text-muted:     #6B7080;
+  --color-text-primary:   #1A1A1A;
+  --color-text-secondary: #444444;
+  --color-text-muted:     #777777;
 
   /* ボーダー */
-  --color-border:         #3A3A50;
+  --color-border:         #E0E0E0;
 
   /* 状態カラー */
   --color-success:        #4CAF50;
-  --color-warning:        #FF9800;
-  --color-danger:         #F44336;
-  --color-info:           #2196F3;
+  --color-warning:        #E07000;
+  --color-danger:         #D9534F;
+  --color-info:           #1976D2;
 
   /* ===== 後方互換エイリアス ===== */
   --color-bg:             var(--color-bg-primary);
@@ -38,7 +38,7 @@
   --color-accent-border:  var(--color-border-accent);
   --color-text:           var(--color-text-primary);
   --color-text-sub:       var(--color-text-secondary);
-  --color-border-light:   #333333;
+  --color-border-light:   #E8E8E8;
 
   /* スペーシング */
   --sp-1: 4px;
@@ -57,11 +57,11 @@
   --radius-xl:  20px;
   --radius-full:9999px;
 
-  /* シャドウ */
-  --shadow-sm:     0 1px 4px rgba(0,0,0,0.4);
-  --shadow-md:     0 4px 12px rgba(0,0,0,0.5);
-  --shadow-lg:     0 8px 24px rgba(0,0,0,0.6);
-  --shadow-accent: 0 0 16px rgba(212,175,55,0.2);
+  /* シャドウ（白背景向けに軽く） */
+  --shadow-sm:     0 2px 8px rgba(0,0,0,0.08);
+  --shadow-md:     0 4px 14px rgba(0,0,0,0.10);
+  --shadow-lg:     0 8px 24px rgba(0,0,0,0.14);
+  --shadow-accent: 0 0 16px rgba(201,160,40,0.12);
 
   /* トランジション */
   --ease-fast:   0.15s ease;
@@ -95,13 +95,25 @@
   --color-bg-secondary:   #0D1B2A;
   --color-bg-card:        #111E2E;
   --color-bg-card-hover:  #162436;
+  --color-text-primary:   #F0F0F0;
+  --color-text-secondary: #B0C8D8;
+  --color-text-muted:     #5A7090;
   --color-border:         #1A2840;
+  --color-border-light:   #243050;
+  --color-warning:        #FF9800;
+  --color-danger:         #F44336;
+  --shadow-sm:     0 1px 4px rgba(0,0,0,0.5);
+  --shadow-md:     0 4px 12px rgba(0,0,0,0.6);
+  --shadow-lg:     0 8px 24px rgba(0,0,0,0.7);
   --shadow-accent: 0 0 16px rgba(0,229,255,0.18);
 
   /* エイリアス更新 */
+  --color-bg:             var(--color-bg-primary);
   --color-bg-elevated:    var(--color-bg-card);
   --color-accent-dim:     var(--color-accent-bg);
   --color-accent-border:  var(--color-border-accent);
+  --color-text:           var(--color-text-primary);
+  --color-text-sub:       var(--color-text-secondary);
 }
 
 /* ==========================================================================
@@ -118,13 +130,25 @@
   --color-bg-secondary:   #1A1020;
   --color-bg-card:        #201428;
   --color-bg-card-hover:  #261830;
+  --color-text-primary:   #F0E8F4;
+  --color-text-secondary: #C0A8C8;
+  --color-text-muted:     #705878;
   --color-border:         #2C1A38;
+  --color-border-light:   #3C2448;
+  --color-warning:        #FF9800;
+  --color-danger:         #F44336;
+  --shadow-sm:     0 1px 4px rgba(0,0,0,0.5);
+  --shadow-md:     0 4px 12px rgba(0,0,0,0.6);
+  --shadow-lg:     0 8px 24px rgba(0,0,0,0.7);
   --shadow-accent: 0 0 16px rgba(232,160,191,0.18);
 
   /* エイリアス更新 */
+  --color-bg:             var(--color-bg-primary);
   --color-bg-elevated:    var(--color-bg-card);
   --color-accent-dim:     var(--color-accent-bg);
   --color-accent-border:  var(--color-border-accent);
+  --color-text:           var(--color-text-primary);
+  --color-text-sub:       var(--color-text-secondary);
 }
 
 /* ==========================================================================
