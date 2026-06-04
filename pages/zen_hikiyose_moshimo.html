@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#D4AF37">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>MINDFUL ASSET - もしもボックス</title>
+  <link rel="stylesheet" href="../css/zen_hikiyose_theme.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_base.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_components.css">
+  <style>
+    .box-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--sp-4);
+      margin-bottom: var(--sp-3);
+      cursor: pointer;
+      transition: border-color var(--ease-fast), transform var(--ease-fast);
+    }
+    .box-card:active { transform: scale(0.98); border-color: var(--color-border-accent); }
+    .box-card__title { font-weight: 700; font-size: var(--text-sm); margin-bottom: 6px; }
+    .box-card__body  { font-size: var(--text-xs); color: var(--color-text-secondary); line-height: 1.7; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+    /* セッション画面 */
+    .session-view {
+      position: fixed; inset: 0;
+      background: var(--color-bg-primary);
+      z-index: 200;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: var(--sp-6);
+      text-align: center;
+      transition: background var(--ease-slow);
+    }
+    .session-view.is-dimmed { background: rgba(8,8,8,0.97); }
+    .session-title {
+      font-size: var(--text-lg); font-weight: 900;
+      color: var(--color-accent);
+      margin-bottom: var(--sp-4);
+      line-height: 1.5;
+    }
+    .session-body {
+      font-size: var(--text-sm); color: var(--color-text-secondary);
+      line-height: 1.85; margin-bottom: var(--sp-6);
+      max-width: 340px;
+    }
+    .timer-display {
+      font-size: 4rem; font-weight: 900;
+      color: var(--color-accent);
+      letter-spacing: 0.05em;
+      line-height: 1;
+      margin-bottom: var(--sp-6);
+      font-variant-numeric: tabular-nums;
+    }
+    .timer-select { display: flex; gap: var(--sp-3); margin-bottom: var(--sp-6); }
+    .timer-btn {
+      flex: 1; padding: var(--sp-3) var(--sp-2);
+      border: 1.5px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background: var(--color-bg-card);
+      color: var(--color-text-secondary);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: var(--text-sm); font-weight: 700;
+      cursor: pointer;
+      transition: all var(--ease-fast);
+    }
+    .timer-btn.is-active {
+      border-color: var(--color-border-accent);
+      background: var(--color-accent-bg);
+      color: var(--color-accent);
+    }
+    .timer-btn.is-locked { opacity: 0.4; cursor: not-allowed; }
+
+    /* 体感度 */
+    .rating-wrap { display: flex; gap: var(--sp-3); justify-content: center; margin: var(--sp-4) 0; }
+    .rating-btn {
+      width: 48px; height: 48px;
+      border: 1.5px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background: var(--color-bg-card);
+      color: var(--color-text-muted);
+      font-weight: 900; font-size: var(--text-md);
+      font-family: 'Noto Sans JP', sans-serif;
+      cursor: pointer;
+      transition: all var(--ease-fast);
+    }
+    .rating-btn.is-selected {
+      border-color: var(--color-border-accent);
+      background: var(--color-accent-bg);
+      color: var(--color-accent);
+    }
+
+    /* カレンダー記録 */
+    .cal-record-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--color-accent);
+      margin: 1px auto 0;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <header class="page-header" id="main-header">
+    <button class="page-header__back" onclick="history.back()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <span class="page-header__title">もしもボックス</span>
+  </header>
+
+  <main class="main-content main-content--no-nav" id="main-content">
+
+    <!-- 説明（初回のみ展開） -->
+    <section class="section">
+      <div class="card">
+        <button class="collapsible-toggle" onclick="toggleDesc()">
+          <span style="font-weight:700;font-size:var(--text-sm);">もしもボックスとは</span>
+          <svg class="collapsible-icon" id="desc-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="collapsible-body" id="desc-body">
+          <div style="margin-top:var(--sp-3);font-size:var(--text-sm);color:var(--color-text-secondary);line-height:1.85;">
+            <p>「もしも〇〇だったら」というシナリオに完全没入する実践です。</p>
+            <p style="margin-top:var(--sp-2);">脳はリアルと想像を区別しません。タイマーをセットし、画面の暗転とともにシナリオの世界に入ることで、神経回路レベルの変容を促します。</p>
+            <p style="margin-top:var(--sp-2);">1分・3分・5分から選択。無料版は1分のみ利用できます。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- カレンダー記録 -->
+    <section class="section">
+      <p class="section-title">実践記録</p>
+      <div class="card" id="cal-wrap">
+        <div id="moshimo-calendar"></div>
+      </div>
+    </section>
+
+    <!-- ボックス一覧 -->
+    <section class="section">
+      <p class="section-title">シナリオを選択</p>
+      <div id="box-list"><div class="spinner"></div></div>
+    </section>
+
+  </main>
+
+</div>
+<div id="toast-container" class="toast-container"></div>
+
+<!-- セッション画面（フルスクリーン） -->
+<div class="session-view hidden" id="session-view">
+  <!-- 準備フェーズ -->
+  <div id="phase-ready">
+    <p class="session-title" id="s-title"></p>
+    <p class="session-body" id="s-body"></p>
+    <div class="timer-select" id="timer-select">
+      <button class="timer-btn is-active" id="btn-1min" onclick="selectTimer(1)">1分</button>
+      <button class="timer-btn" id="btn-3min" onclick="selectTimer(3)">3分</button>
+      <button class="timer-btn" id="btn-5min" onclick="selectTimer(5)">5分</button>
+    </div>
+    <button class="btn-primary" onclick="startSession()" style="max-width:240px;">開始する</button>
+    <button class="btn-text" onclick="closeSession()" style="margin-top:var(--sp-3);width:auto;font-size:var(--text-xs);">キャンセル</button>
+  </div>
+
+  <!-- タイマーフェーズ -->
+  <div id="phase-timer" class="hidden">
+    <p style="font-size:var(--text-xs);color:var(--color-text-muted);letter-spacing:0.1em;margin-bottom:var(--sp-4);" id="timer-label">1分間 没入してください</p>
+    <div class="timer-display" id="timer-disp">1:00</div>
+    <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--sp-4);" id="s-title-small"></p>
+    <button class="btn-ghost btn-sm btn-auto" onclick="cancelTimer()" style="margin-top:var(--sp-4);">中断する</button>
+  </div>
+
+  <!-- 体感度フェーズ -->
+  <div id="phase-rating" class="hidden">
+    <p style="font-size:var(--text-lg);font-weight:900;color:var(--color-accent);margin-bottom:var(--sp-3);">実践完了</p>
+    <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--sp-4);">今の体感度を選んでください</p>
+    <p style="font-size:var(--text-xs);color:var(--color-text-muted);margin-bottom:var(--sp-3);">1＝あまり感じない ／ 5＝強くリアルに感じた</p>
+    <div class="rating-wrap" id="rating-wrap">
+      <button class="rating-btn" onclick="selectRating(1)">1</button>
+      <button class="rating-btn" onclick="selectRating(2)">2</button>
+      <button class="rating-btn" onclick="selectRating(3)">3</button>
+      <button class="rating-btn" onclick="selectRating(4)">4</button>
+      <button class="rating-btn" onclick="selectRating(5)">5</button>
+    </div>
+    <button class="btn-primary" id="btn-save-rating" onclick="saveRecord()" style="max-width:240px;margin-top:var(--sp-4);" disabled>記録して閉じる</button>
+  </div>
+</div>
+
+<script type="module">
+  import ZenStorage from '../js/zen_hikiyose_storage.js';
+  import ZenScore from '../js/zen_hikiyose_score.js';
+  import ZenPremium from '../js/zen_hikiyose_premium.js';
+  import ZenApp from '../js/zen_hikiyose_app.js';
+
+  ZenApp.init();
+
+  const isPremium = ZenPremium.isPremium();
+
+  // ===== 説明の折りたたみ =====
+  const visits = parseInt(localStorage.getItem('_moshimo_visits') || '0') + 1;
+  localStorage.setItem('_moshimo_visits', visits);
+  if (visits === 1) {
+    document.getElementById('desc-body').classList.add('is-open');
+    document.getElementById('desc-icon').classList.add('is-open');
+  }
+  window.toggleDesc = () => {
+    document.getElementById('desc-body').classList.toggle('is-open');
+    document.getElementById('desc-icon').classList.toggle('is-open');
+  };
+
+  // ===== プレミアムロック =====
+  const btn3 = document.getElementById('btn-3min');
+  const btn5 = document.getElementById('btn-5min');
+  if (!isPremium) {
+    btn3.classList.add('is-locked');
+    btn3.title = 'プレミアム限定';
+    btn5.classList.add('is-locked');
+    btn5.title = 'プレミアム限定';
+  }
+
+  // ===== カレンダー =====
+  const getRecords = () => ZenStorage.get('zen_hikiyose_moshimo', []);
+
+  const renderCalendar = () => {
+    const records = getRecords();
+    const recordDates = new Set(records.map(r => r.date.split('T')[0]));
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const today = now.getDate();
+
+    const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+    let html = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--sp-2);">
+      <span style="font-weight:700;font-size:var(--text-sm);">${year}年${month+1}月</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px;">
+      ${weekdays.map(d => `<div style="text-align:center;font-size:10px;color:var(--color-text-muted);padding:4px 0;">${d}</div>`).join('')}
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;">`;
+
+    for (let i = 0; i < firstDay; i++) html += '<div></div>';
+    for (let d = 1; d <= daysInMonth; d++) {
+      const dateKey = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const hasRecord = recordDates.has(dateKey);
+      const isToday = d === today;
+      html += `<div style="aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:var(--radius-sm);font-size:11px;${isToday ? 'color:var(--color-accent);font-weight:700;' : ''}">
+        ${d}
+        ${hasRecord ? '<div class="cal-record-dot"></div>' : ''}
+      </div>`;
+    }
+    html += '</div>';
+    document.getElementById('moshimo-calendar').innerHTML = html;
+  };
+  renderCalendar();
+
+  // ===== ボックス一覧 =====
+  fetch('../data/zen_hikiyose_moshimo_boxes.json')
+    .then(r => r.json())
+    .then(data => {
+      document.getElementById('box-list').innerHTML = data.boxes.map(b => `
+        <div class="box-card" onclick="openSession(${b.id}, '${b.title.replace(/'/g,"\\'")}', '${b.body.replace(/'/g,"\\'")}')">
+          <div class="box-card__title">${b.title}</div>
+          <div class="box-card__body">${b.body}</div>
+        </div>`).join('');
+    });
+
+  // ===== セッション =====
+  let currentBoxId = null, currentBoxTitle = '', selectedMinutes = 1, selectedRating = 0;
+  let timerInterval = null;
+
+  window.openSession = (id, title, body) => {
+    currentBoxId = id;
+    currentBoxTitle = title;
+    selectedMinutes = 1;
+    selectedRating = 0;
+    document.getElementById('s-title').textContent = title;
+    document.getElementById('s-body').textContent = body;
+    document.getElementById('s-title-small').textContent = title;
+    showPhase('ready');
+    document.getElementById('session-view').classList.remove('hidden');
+    document.getElementById('session-view').classList.remove('is-dimmed');
+    document.getElementById('btn-1min').classList.add('is-active');
+    document.getElementById('btn-3min').classList.remove('is-active');
+    document.getElementById('btn-5min').classList.remove('is-active');
+    document.getElementById('btn-save-rating').disabled = true;
+    selectedRating = 0;
+    document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('is-selected'));
+  };
+
+  window.closeSession = () => {
+    clearInterval(timerInterval);
+    document.getElementById('session-view').classList.add('hidden');
+  };
+
+  window.selectTimer = (min) => {
+    if (!isPremium && min > 1) {
+      ZenApp.showToast('プレミアムプランで解放されます', 'error'); return;
+    }
+    selectedMinutes = min;
+    ['1min','3min','5min'].forEach(k => document.getElementById(`btn-${k}`).classList.remove('is-active'));
+    document.getElementById(`btn-${min}min`).classList.add('is-active');
+  };
+
+  window.startSession = () => {
+    showPhase('timer');
+    document.getElementById('timer-label').textContent = `${selectedMinutes}分間 没入してください`;
+    document.getElementById('session-view').classList.add('is-dimmed');
+
+    let remaining = selectedMinutes * 60;
+    const updateDisp = () => {
+      const m = Math.floor(remaining / 60);
+      const s = remaining % 60;
+      document.getElementById('timer-disp').textContent = `${m}:${String(s).padStart(2,'0')}`;
+    };
+    updateDisp();
+    timerInterval = setInterval(() => {
+      remaining--;
+      updateDisp();
+      if (remaining <= 0) {
+        clearInterval(timerInterval);
+        document.getElementById('session-view').classList.remove('is-dimmed');
+        showPhase('rating');
+      }
+    }, 1000);
+  };
+
+  window.cancelTimer = () => {
+    clearInterval(timerInterval);
+    document.getElementById('session-view').classList.remove('is-dimmed');
+    showPhase('ready');
+  };
+
+  window.selectRating = (n) => {
+    selectedRating = n;
+    document.querySelectorAll('.rating-btn').forEach((b, i) => {
+      b.classList.toggle('is-selected', i + 1 <= n);
+    });
+    document.getElementById('btn-save-rating').disabled = false;
+  };
+
+  window.saveRecord = () => {
+    const records = getRecords();
+    const ptKey = `moshimo${selectedMinutes}`;
+    records.push({
+      boxId: currentBoxId,
+      title: currentBoxTitle,
+      minutes: selectedMinutes,
+      rating: selectedRating,
+      date: new Date().toISOString()
+    });
+    ZenStorage.set('zen_hikiyose_moshimo', records);
+    const earned = ZenScore.addPoints(ptKey);
+    ZenApp.showToast(`実践を記録しました（+${earned}pt）`, 'success');
+    closeSession();
+    renderCalendar();
+  };
+
+  const showPhase = (name) => {
+    ['ready','timer','rating'].forEach(p => {
+      document.getElementById(`phase-${p}`).classList.toggle('hidden', p !== name);
+    });
+  };
+</script>
+</body>
+</html>

@@ -5,86 +5,154 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#D4AF37">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>MINDFUL ASSET - 引き寄せログ</title>
+  <title>MINDFUL ASSET - ログ</title>
   <link rel="stylesheet" href="../css/zen_hikiyose_theme.css">
   <link rel="stylesheet" href="../css/zen_hikiyose_base.css">
   <link rel="stylesheet" href="../css/zen_hikiyose_components.css">
   <style>
+    /* 引き寄せログ */
     .asset-value {
-      background: var(--color-accent-dim);
-      border: 1px solid var(--color-accent-border);
+      background: var(--color-accent-bg);
+      border: 1px solid var(--color-border-accent);
       border-radius: var(--radius-md);
       padding: var(--sp-3) var(--sp-4);
       margin-top: var(--sp-2);
       display: none;
     }
-    .asset-value__label {
-      font-size: var(--text-xs);
-      color: var(--color-text-muted);
-      margin-bottom: 2px;
-    }
-    .asset-value__num {
-      font-size: var(--text-xl);
-      font-weight: 900;
-      color: var(--color-accent);
-    }
+    .asset-value__label { font-size: var(--text-xs); color: var(--color-text-muted); margin-bottom: 2px; }
+    .asset-value__num   { font-size: var(--text-xl); font-weight: 900; color: var(--color-accent); }
     .log-item {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      padding: var(--sp-3) 0;
-      border-bottom: 1px solid var(--color-border);
+      display: flex; flex-direction: column; gap: 6px;
+      padding: var(--sp-3) 0; border-bottom: 1px solid var(--color-border);
     }
     .log-item:last-child { border-bottom: none; }
-    .log-item__text { font-size: var(--text-sm); color: var(--color-text); line-height: 1.65; }
-    .log-item__meta { display: flex; justify-content: space-between; align-items: center; }
-    .log-item__date { font-size: var(--text-xs); color: var(--color-text-muted); }
+    .log-item__text  { font-size: var(--text-sm); color: var(--color-text-primary); line-height: 1.65; }
+    .log-item__meta  { display: flex; justify-content: space-between; align-items: center; }
+    .log-item__date  { font-size: var(--text-xs); color: var(--color-text-muted); }
     .log-item__value { font-size: var(--text-xs); color: var(--color-accent); font-weight: 700; }
+
+    /* 夢実現ログ */
+    .theme-card {
+      padding: var(--sp-4); border-radius: var(--radius-md);
+      border: 1px solid var(--color-border); background: var(--color-bg-card);
+      cursor: pointer; transition: border-color var(--ease-fast);
+    }
+    .theme-card--active { border-color: var(--color-accent); }
+    .theme-card--paused { opacity: 0.6; }
+    .theme-badge {
+      display: inline-flex; align-items: center;
+      padding: 2px 8px; border-radius: var(--radius-full);
+      font-size: var(--text-xs); font-weight: 700;
+    }
+    .theme-badge--active    { background: rgba(76,175,80,0.1); color: var(--color-success); }
+    .theme-badge--paused    { background: rgba(255,152,0,0.1); color: var(--color-warning); }
+    .theme-badge--completed { background: var(--color-accent-bg); color: var(--color-accent); }
+    .dream-entry { padding: var(--sp-3) 0; border-bottom: 1px solid var(--color-border); }
+    .dream-entry:last-child { border-bottom: none; }
+    .dream-entry__date { font-size: var(--text-xs); color: var(--color-text-muted); margin-bottom: 4px; }
+    .dream-entry__text { font-size: var(--text-sm); color: var(--color-text-primary); line-height: 1.65; }
   </style>
 </head>
 <body>
 <div id="app">
 
   <header class="page-header">
-    <span class="page-header__title">引き寄せログ</span>
-    <a href="zen_hikiyose_dream_log.html" style="font-size:var(--text-xs);color:var(--color-text-muted);">夢実現ログ</a>
+    <span class="page-header__title">ログ</span>
   </header>
 
-  <main class="main-content">
+  <!-- タブ -->
+  <div class="tab-bar" style="padding:0 var(--sp-4);margin-bottom:0;">
+    <button class="tab-item is-active" id="tab-hikiyose" onclick="switchTab('hikiyose')">引き寄せログ</button>
+    <button class="tab-item" id="tab-dream" onclick="switchTab('dream')">夢実現ログ</button>
+  </div>
 
-    <!-- 入力フォーム -->
-    <section class="section">
-      <label class="input-label" for="log-input">今日起きた小さなラッキーや気づきを書いてください</label>
-      <textarea class="input-field" id="log-input" rows="3"
-        placeholder="今日起きた小さなラッキーや気づきを書いてください"
-        oninput="calcAsset(this.value)"></textarea>
+  <main class="main-content" style="padding-top:var(--sp-4);">
 
-      <!-- 資産価値プレビュー -->
-      <div class="asset-value" id="asset-preview">
-        <div class="asset-value__label">マインド潜在資産価値</div>
-        <div class="asset-value__num" id="asset-num">+0円</div>
+    <!-- ===== 引き寄せログ ===== -->
+    <div id="pane-hikiyose">
+
+      <!-- 入力フォーム -->
+      <section class="section">
+        <label class="input-label" for="log-input">今日起きた小さなラッキーや気づきを書いてください</label>
+        <textarea class="input-field" id="log-input" rows="3"
+          placeholder="例）思いがけず上司に褒められた。欲しかった本が安くなっていた。"
+          oninput="calcAsset(this.value)"></textarea>
+        <div class="asset-value" id="asset-preview">
+          <div class="asset-value__label">マインド潜在資産価値</div>
+          <div class="asset-value__num" id="asset-num">+0円</div>
+        </div>
+        <button class="btn-primary mt-3" onclick="saveLog()">記録する</button>
+      </section>
+
+      <!-- ログ一覧 -->
+      <section class="section">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-3);">
+          <p class="section-title" style="margin-bottom:0;">記録一覧</p>
+          <span style="font-size:var(--text-xs);color:var(--color-text-muted);" id="log-limit-note">直近5件を表示</span>
+        </div>
+        <div class="card" id="log-list"><div class="spinner"></div></div>
+      </section>
+
+      <div class="card" id="premium-hint" style="text-align:center;padding:var(--sp-3);background:transparent;border-style:dashed;">
+        <p style="font-size:var(--text-xs);color:var(--color-text-muted);">
+          プレミアムで全件表示・資産価値グラフが利用できます。
+          <a href="zen_hikiyose_premium.html" style="color:var(--color-accent);">詳細を見る</a>
+        </p>
       </div>
+    </div>
 
-      <button class="btn-primary mt-3" onclick="saveLog()">記録する</button>
-    </section>
+    <!-- ===== 夢実現ログ ===== -->
+    <div id="pane-dream" class="hidden">
 
-    <!-- ログ一覧 -->
-    <section class="section">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-3);">
-        <p class="section-title" style="margin-bottom:0;">記録一覧</p>
-        <span style="font-size:var(--text-xs);color:var(--color-text-muted);" id="log-limit-note">直近5件を表示</span>
-      </div>
-      <div class="card" id="log-list">
-        <div class="spinner"></div>
-      </div>
-    </section>
+      <!-- コツ（折りたたみ） -->
+      <section class="section">
+        <div class="card">
+          <button class="collapsible-toggle" onclick="toggleTips()">
+            <span style="font-weight:700;font-size:var(--text-sm);">続けるためのコツ</span>
+            <svg class="collapsible-icon" id="tips-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="collapsible-body" id="tips-body">
+            <div style="margin-top:var(--sp-3);font-size:var(--text-sm);color:var(--color-text-secondary);line-height:1.85;white-space:pre-line;" id="tips-text"></div>
+          </div>
+        </div>
+      </section>
 
-    <!-- 有料版ヒント -->
-    <div class="card" id="premium-hint" style="text-align:center;padding:var(--sp-3);background:transparent;border-style:dashed;">
-      <p style="font-size:var(--text-xs);color:var(--color-text-muted);">
-        プレミアムで全件表示・資産価値グラフが利用できます。
-        <a href="zen_hikiyose_premium.html" style="color:var(--color-accent);">詳細を見る</a>
-      </p>
+      <!-- テーマ一覧 -->
+      <section class="section" id="theme-list-section">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-3);">
+          <p class="section-title" style="margin-bottom:0;">実践テーマ</p>
+          <button class="btn-secondary btn-sm btn-auto" onclick="addTheme()">＋ テーマを追加</button>
+        </div>
+        <div id="theme-list" style="display:flex;flex-direction:column;gap:var(--sp-3);"></div>
+        <div id="premium-lock-wrap" class="hidden">
+          <div class="card" style="text-align:center;padding:var(--sp-5);margin-top:var(--sp-3);">
+            <p style="font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--sp-3);">
+              プレミアムでテーマ数が無制限になります
+            </p>
+            <a href="zen_hikiyose_premium.html" class="btn-secondary btn-auto" style="display:inline-flex;padding:9px 20px;">詳細を見る</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- テーマ詳細 -->
+      <section class="section hidden" id="theme-detail">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-3);">
+          <div>
+            <p style="font-weight:700;font-size:var(--text-md);" id="detail-title"></p>
+            <p style="font-size:var(--text-xs);color:var(--color-text-muted);margin-top:2px;" id="detail-badge-wrap"></p>
+          </div>
+          <button class="btn-ghost btn-sm btn-auto" onclick="closeDetail()">一覧に戻る</button>
+        </div>
+        <label class="input-label" for="entry-input">今日のできたことを書く</label>
+        <textarea class="input-field" id="entry-input" rows="3" placeholder="小さなことでも構いません。今日実践できたことを書いてください。"></textarea>
+        <button class="btn-primary mt-3" onclick="saveEntry()">記録する</button>
+        <div class="divider"></div>
+        <div id="entry-list" style="display:flex;flex-direction:column;"></div>
+        <div style="margin-top:var(--sp-4);">
+          <button class="btn-text" id="btn-pause" onclick="togglePause()" style="color:var(--color-text-muted);font-size:var(--text-xs);">一時停止する</button>
+        </div>
+      </section>
+
     </div>
 
   </main>
@@ -125,12 +193,22 @@
   ZenApp.init();
 
   const isPremium = ZenPremium.isPremium();
+
+  // ===== タブ切り替え =====
+  window.switchTab = (tab) => {
+    ['hikiyose', 'dream'].forEach(t => {
+      document.getElementById(`tab-${t}`).classList.toggle('is-active', t === tab);
+      document.getElementById(`pane-${t}`).classList.toggle('hidden', t !== tab);
+    });
+    if (tab === 'dream') initDream();
+  };
+
+  // ===== 引き寄せログ =====
   if (isPremium) {
     document.getElementById('log-limit-note').textContent = '全件表示';
     document.getElementById('premium-hint').style.display = 'none';
   }
 
-  // 資産価値計算
   window.calcAsset = (text) => {
     const preview = document.getElementById('asset-preview');
     if (text.trim().length === 0) { preview.style.display = 'none'; return; }
@@ -144,15 +222,12 @@
   window.saveLog = () => {
     const text = document.getElementById('log-input').value.trim();
     if (!text) { ZenApp.showToast('内容を入力してください', 'error'); return; }
-
     const base = (Math.floor(Math.random() * 9) + 1) * 10000;
     const bonus = Math.min(text.length * 300, 40000);
     const assetValue = Math.round((base + bonus) / 1000) * 1000;
-
     const logs = ZenStorage.get('zen_hikiyose_log', []);
     logs.unshift({ text, assetValue, date: new Date().toISOString() });
     ZenStorage.set('zen_hikiyose_log', logs);
-
     const earned = ZenScore.addPoints('log');
     document.getElementById('log-input').value = '';
     document.getElementById('asset-preview').style.display = 'none';
@@ -164,28 +239,140 @@
     const logs = ZenStorage.get('zen_hikiyose_log', []);
     const display = isPremium ? logs : logs.slice(0, 5);
     const container = document.getElementById('log-list');
-
     if (display.length === 0) {
       container.innerHTML = '<p style="text-align:center;color:var(--color-text-muted);font-size:var(--text-sm);padding:var(--sp-4) 0;">まだ記録がありません</p>';
       return;
     }
-
     container.innerHTML = display.map(item => {
       const d = new Date(item.date);
-      const dateStr = `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
-      return `
-        <div class="log-item">
-          <p class="log-item__text">${item.text}</p>
-          <div class="log-item__meta">
-            <span class="log-item__date">${dateStr}</span>
-            <span class="log-item__value">+${item.assetValue.toLocaleString('ja-JP')}円</span>
-          </div>
+      const dateStr = `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+      return `<div class="log-item">
+        <p class="log-item__text">${item.text}</p>
+        <div class="log-item__meta">
+          <span class="log-item__date">${dateStr}</span>
+          <span class="log-item__value">+${item.assetValue.toLocaleString('ja-JP')}円</span>
         </div>
-      `;
+      </div>`;
     }).join('');
   };
-
   renderLogs();
+
+  // ===== 夢実現ログ =====
+  let dreamInited = false;
+  let selectedThemeId = null;
+
+  const getDreamData = () => ZenStorage.get('zen_hikiyose_dream_log', { themes: [] });
+  const saveDreamData = (d) => ZenStorage.set('zen_hikiyose_dream_log', d);
+
+  const initDream = () => {
+    if (dreamInited) return;
+    dreamInited = true;
+
+    // コツ読み込み
+    fetch('../data/zen_hikiyose_content_dream_log_tips.txt')
+      .then(r => r.text())
+      .then(text => { document.getElementById('tips-text').textContent = text; });
+
+    // 2回目以降は折りたたみ
+    const visits = parseInt(localStorage.getItem('_dream_log_visits') || '0') + 1;
+    localStorage.setItem('_dream_log_visits', visits);
+    if (visits > 1) {
+      document.getElementById('tips-body').classList.remove('is-open');
+    } else {
+      document.getElementById('tips-body').classList.add('is-open');
+      document.getElementById('tips-icon').classList.add('is-open');
+    }
+
+    renderThemes();
+  };
+
+  window.toggleTips = () => {
+    document.getElementById('tips-body').classList.toggle('is-open');
+    document.getElementById('tips-icon').classList.toggle('is-open');
+  };
+
+  const renderThemes = () => {
+    const data = getDreamData();
+    const container = document.getElementById('theme-list');
+    const themes = data.themes;
+    if (themes.length === 0) {
+      container.innerHTML = `<p style="color:var(--color-text-muted);font-size:var(--text-sm);text-align:center;padding:var(--sp-4) 0;">テーマがまだありません。追加してください。</p>`;
+    } else {
+      const statusMap = { active: '実践中', paused: '一時停止中', completed: '達成' };
+      container.innerHTML = themes.map((t, i) => `
+        <div class="theme-card theme-card--${t.status}" onclick="openDetail(${i})">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2);">
+            <span style="font-weight:700;font-size:var(--text-sm);flex:1;">${t.title}</span>
+            <span class="theme-badge theme-badge--${t.status}">${statusMap[t.status] || t.status}</span>
+          </div>
+          <div style="margin-top:6px;font-size:var(--text-xs);color:var(--color-text-muted);">${t.entries.length}件の記録</div>
+        </div>`).join('');
+    }
+    const lockWrap = document.getElementById('premium-lock-wrap');
+    lockWrap.classList.toggle('hidden', isPremium || themes.length < 1);
+  };
+
+  window.addTheme = () => {
+    const data = getDreamData();
+    if (!isPremium && data.themes.length >= 1) {
+      ZenApp.showToast('無料版はテーマ1つまでです', 'error'); return;
+    }
+    const title = prompt('テーマ名を入力してください（例：毎日30分読書）');
+    if (!title || !title.trim()) return;
+    data.themes.push({ id: Date.now(), title: title.trim(), status: 'active', entries: [] });
+    saveDreamData(data);
+    renderThemes();
+  };
+
+  window.openDetail = (idx) => {
+    const data = getDreamData();
+    const theme = data.themes[idx];
+    selectedThemeId = theme.id;
+    document.getElementById('detail-title').textContent = theme.title;
+    const statusMap = { active: '実践中', paused: '一時停止中', completed: '達成' };
+    const badgeClass = { active: 'theme-badge--active', paused: 'theme-badge--paused', completed: 'theme-badge--completed' };
+    document.getElementById('detail-badge-wrap').innerHTML = `<span class="theme-badge ${badgeClass[theme.status]}">${statusMap[theme.status]}</span>`;
+    document.getElementById('btn-pause').textContent = theme.status === 'paused' ? '再開する' : '一時停止する';
+    const entryList = document.getElementById('entry-list');
+    entryList.innerHTML = theme.entries.length === 0
+      ? '<p style="color:var(--color-text-muted);font-size:var(--text-sm);text-align:center;padding:var(--sp-3) 0;">まだ記録がありません</p>'
+      : [...theme.entries].reverse().map(e => {
+          const d = new Date(e.date);
+          return `<div class="dream-entry"><div class="dream-entry__date">${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}</div><div class="dream-entry__text">${e.text}</div></div>`;
+        }).join('');
+    document.getElementById('theme-list-section').classList.add('hidden');
+    document.getElementById('theme-detail').classList.remove('hidden');
+  };
+
+  window.closeDetail = () => {
+    selectedThemeId = null;
+    document.getElementById('theme-detail').classList.add('hidden');
+    document.getElementById('theme-list-section').classList.remove('hidden');
+    renderThemes();
+  };
+
+  window.saveEntry = () => {
+    const text = document.getElementById('entry-input').value.trim();
+    if (!text) { ZenApp.showToast('内容を入力してください', 'error'); return; }
+    const data = getDreamData();
+    const theme = data.themes.find(t => t.id === selectedThemeId);
+    if (!theme) return;
+    theme.entries.push({ text, date: new Date().toISOString() });
+    saveDreamData(data);
+    document.getElementById('entry-input').value = '';
+    const earned = ZenScore.addPoints('dreamLog');
+    ZenApp.showToast(`記録しました（+${earned}pt）`, 'success');
+    openDetail(data.themes.findIndex(t => t.id === selectedThemeId));
+  };
+
+  window.togglePause = () => {
+    const data = getDreamData();
+    const theme = data.themes.find(t => t.id === selectedThemeId);
+    if (!theme) return;
+    theme.status = theme.status === 'paused' ? 'active' : 'paused';
+    saveDreamData(data);
+    openDetail(data.themes.findIndex(t => t.id === selectedThemeId));
+  };
 </script>
 </body>
 </html>

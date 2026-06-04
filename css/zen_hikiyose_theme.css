@@ -4,29 +4,41 @@
 
 :root {
   /* ベースカラー */
-  --color-bg:           #121212;
-  --color-bg-card:      #1A1A1A;
-  --color-bg-elevated:  #222222;
+  --color-bg-primary:     #121212;
+  --color-bg-secondary:   #1A1A1A;
+  --color-bg-card:        #222222;
+  --color-bg-card-hover:  #2A2A2A;
 
   /* アクセント */
-  --color-accent:       #D4AF37;
-  --color-accent-dim:   rgba(212,175,55,0.12);
-  --color-accent-border:rgba(212,175,55,0.30);
+  --color-accent:         #D4AF37;
+  --color-accent-light:   #E8C96A;
+  --color-accent-dark:    #A07D20;
+  --color-accent-glow:    rgba(212,175,55,0.15);
+  --color-accent-bg:      rgba(212,175,55,0.08);
+  --color-border-accent:  rgba(212,175,55,0.30);
 
   /* テキスト */
-  --color-text:         #F0F0F0;
-  --color-text-sub:     #A0A0A0;
-  --color-text-muted:   #666666;
+  --color-text-primary:   #F0F0F0;
+  --color-text-secondary: #A0A0A0;
+  --color-text-muted:     #555555;
 
   /* ボーダー */
-  --color-border:       #2A2A2A;
-  --color-border-light: #333333;
+  --color-border:         #2A2A2A;
 
   /* 状態カラー */
-  --color-success:      #4CAF50;
-  --color-warning:      #FF9800;
-  --color-danger:       #F44336;
-  --color-info:         #2196F3;
+  --color-success:        #4CAF50;
+  --color-warning:        #FF9800;
+  --color-danger:         #F44336;
+  --color-info:           #2196F3;
+
+  /* ===== 後方互換エイリアス ===== */
+  --color-bg:             var(--color-bg-primary);
+  --color-bg-elevated:    var(--color-bg-card);
+  --color-accent-dim:     var(--color-accent-bg);
+  --color-accent-border:  var(--color-border-accent);
+  --color-text:           var(--color-text-primary);
+  --color-text-sub:       var(--color-text-secondary);
+  --color-border-light:   #333333;
 
   /* スペーシング */
   --sp-1: 4px;
@@ -46,9 +58,9 @@
   --radius-full:9999px;
 
   /* シャドウ */
-  --shadow-sm:  0 1px 4px rgba(0,0,0,0.4);
-  --shadow-md:  0 4px 12px rgba(0,0,0,0.5);
-  --shadow-lg:  0 8px 24px rgba(0,0,0,0.6);
+  --shadow-sm:     0 1px 4px rgba(0,0,0,0.4);
+  --shadow-md:     0 4px 12px rgba(0,0,0,0.5);
+  --shadow-lg:     0 8px 24px rgba(0,0,0,0.6);
   --shadow-accent: 0 0 16px rgba(212,175,55,0.2);
 
   /* トランジション */
@@ -57,13 +69,13 @@
   --ease-slow:   0.4s cubic-bezier(0.25,0.46,0.45,0.94);
 
   /* フォントサイズ */
-  --text-xs:  0.6875rem;  /* 11px */
-  --text-sm:  0.8125rem;  /* 13px */
-  --text-base:0.9375rem;  /* 15px */
-  --text-md:  1.0625rem;  /* 17px */
-  --text-lg:  1.25rem;    /* 20px */
-  --text-xl:  1.5rem;     /* 24px */
-  --text-2xl: 1.875rem;   /* 30px */
+  --text-xs:   0.6875rem;  /* 11px */
+  --text-sm:   0.8125rem;  /* 13px */
+  --text-base: 0.9375rem;  /* 15px */
+  --text-md:   1.0625rem;  /* 17px */
+  --text-lg:   1.25rem;    /* 20px */
+  --text-xl:   1.5rem;     /* 24px */
+  --text-2xl:  1.875rem;   /* 30px */
 
   /* ボトムナビ */
   --bottom-nav-h: 60px;
@@ -73,24 +85,42 @@
    サイバー覚醒テーマ
    ========================================================================== */
 [data-theme="cyber"] {
-  --color-accent:        #00E5FF;
-  --color-accent-dim:    rgba(0,229,255,0.10);
-  --color-accent-border: rgba(0,229,255,0.28);
-  --color-bg-card:       #0D1B2A;
-  --color-bg-elevated:   #111E2E;
+  --color-accent:         #00E5FF;
+  --color-accent-light:   #6EEFFF;
+  --color-accent-dark:    #00A8CC;
+  --color-accent-glow:    rgba(0,229,255,0.15);
+  --color-accent-bg:      rgba(0,229,255,0.08);
+  --color-border-accent:  rgba(0,229,255,0.28);
+  --color-bg-secondary:   #0D1B2A;
+  --color-bg-card:        #111E2E;
+  --color-bg-card-hover:  #162436;
   --shadow-accent: 0 0 16px rgba(0,229,255,0.18);
+
+  /* エイリアス更新 */
+  --color-bg-elevated:    var(--color-bg-card);
+  --color-accent-dim:     var(--color-accent-bg);
+  --color-accent-border:  var(--color-border-accent);
 }
 
 /* ==========================================================================
    Luxury Cinderellaテーマ
    ========================================================================== */
 [data-theme="luxury"] {
-  --color-accent:        #E8A0BF;
-  --color-accent-dim:    rgba(232,160,191,0.10);
-  --color-accent-border: rgba(232,160,191,0.28);
-  --color-bg-card:       #1A1020;
-  --color-bg-elevated:   #201428;
+  --color-accent:         #E8A0BF;
+  --color-accent-light:   #F0C0D5;
+  --color-accent-dark:    #C07090;
+  --color-accent-glow:    rgba(232,160,191,0.15);
+  --color-accent-bg:      rgba(232,160,191,0.08);
+  --color-border-accent:  rgba(232,160,191,0.28);
+  --color-bg-secondary:   #1A1020;
+  --color-bg-card:        #201428;
+  --color-bg-card-hover:  #261830;
   --shadow-accent: 0 0 16px rgba(232,160,191,0.18);
+
+  /* エイリアス更新 */
+  --color-bg-elevated:    var(--color-bg-card);
+  --color-accent-dim:     var(--color-accent-bg);
+  --color-accent-border:  var(--color-border-accent);
 }
 
 /* ==========================================================================

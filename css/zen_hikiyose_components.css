@@ -577,7 +577,8 @@ textarea.input-field {
   background: var(--color-accent);
 }
 .calendar-dot--eve {
-  background: #A78BFA;
+  background: var(--color-accent-dark, #888888);
+  opacity: 0.6;
 }
 
 /* ==========================================================================
@@ -586,10 +587,9 @@ textarea.input-field {
 
 .mandala-grid {
   display: grid;
-  grid-template-columns: repeat(9, 1fr);
+  grid-template-columns: repeat(9, minmax(0, 1fr));
   gap: 2px;
   width: 100%;
-  aspect-ratio: 1;
   user-select: none;
 }
 

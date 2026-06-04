@@ -90,7 +90,7 @@ const ZenScore = (() => {
     if (!data.dailyLog[today]) data.dailyLog[today] = {};
     const dl = data.dailyLog[today];
 
-    const BASE = { morning: 50, evening: 50, log: 20, dreamLog: 30, roadmap: 10 };
+    const BASE = { morning: 50, evening: 50, log: 20, dreamLog: 30, roadmap: 10, moshimo1: 20, moshimo3: 40, moshimo5: 60 };
     if (!BASE[type]) return 0;
 
     // 一日一回制限（log, dreamLog, roadmapは何度でもOK）

@@ -220,19 +220,9 @@
       grid.appendChild(cell);
     }
 
-    // ブロック境界をCSSで強調（3×3ブロック）
+    // グリッドスタイルを確定
     const gridEl = document.getElementById('mandala-grid');
-    gridEl.style.cssText = `
-      display: grid;
-      grid-template-columns: repeat(3, 1fr) 4px repeat(3, 1fr) 4px repeat(3, 1fr);
-      grid-template-rows: repeat(3, 1fr) 4px repeat(3, 1fr) 4px repeat(3, 1fr);
-      gap: 2px;
-      width: 100%;
-    `;
-
-    // 全セルを再描画（シンプルなgridで）
-    gridEl.style.cssText = 'display:grid;grid-template-columns:repeat(9,1fr);gap:2px;width:100%;';
-    // ブロック間の視覚的区切りはCSS変数で調整済み
+    gridEl.style.cssText = 'display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:2px;width:100%;';
   };
 
   const openEdit = (idx) => {
