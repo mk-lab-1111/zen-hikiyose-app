@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#D4AF37">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>MINDFUL ASSET - マンダラチャート</title>
+  <link rel="stylesheet" href="../css/zen_hikiyose_theme.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_base.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_components.css">
+</head>
+<body>
+  <div id="app">
+    <header class="page-header">
+      <a href="zen_hikiyose_home.html" style="color:var(--color-text-muted);font-size:1.5rem;">‹</a>
+      <span class="page-header-title">マンダラチャート</span>
+      <span class="badge badge-premium">PREMIUM</span>
+    </header>
+
+    <main class="main-content">
+      <div id="premium-lock" class="card" style="text-align:center;padding:40px 16px;">
+        <p style="font-size:3rem;margin-bottom:16px;">🎯</p>
+        <p style="font-weight:700;font-size:1.1rem;color:var(--color-accent);margin-bottom:8px;">Premiumプラン限定</p>
+        <p class="text-muted text-sm" style="margin-bottom:24px;">大谷翔平も実践したマンダラチャートで目標を体系化。8つの分野から81の行動目標を設定します。</p>
+        <a href="zen_hikiyose_premium.html" class="btn btn-primary">Premiumにアップグレード</a>
+      </div>
+
+      <div id="premium-content" class="hidden">
+        <p class="page-subtitle">中心の目標から8つの分野を展開しましょう</p>
+        <div id="mandala-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:24px;">
+          <!-- 9セルのマンダラ（JSで生成） -->
+        </div>
+        <button class="btn btn-primary" onclick="saveMandala()">保存する</button>
+      </div>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="zen_hikiyose_home.html" class="bottom-nav-item">
+        <span class="nav-icon">🏠</span><span class="nav-label">ホーム</span>
+      </a>
+      <a href="zen_hikiyose_affirmation.html" class="bottom-nav-item">
+        <span class="nav-icon">🔥</span><span class="nav-label">アファメーション</span>
+      </a>
+      <a href="zen_hikiyose_log.html" class="bottom-nav-item">
+        <span class="nav-icon">📓</span><span class="nav-label">ログ</span>
+      </a>
+      <a href="zen_hikiyose_roadmap.html" class="bottom-nav-item">
+        <span class="nav-icon">🗺️</span><span class="nav-label">マップ</span>
+      </a>
+      <a href="zen_hikiyose_settings.html" class="bottom-nav-item">
+        <span class="nav-icon">⚙️</span><span class="nav-label">設定</span>
+      </a>
+    </nav>
+  </div>
+
+  <script type="module">
+    import ZenStorage from '../js/zen_hikiyose_storage.js';
+    import ZenPremium from '../js/zen_hikiyose_premium.js';
+
+    const theme = ZenStorage.get('theme', 'default');
+    if (theme && theme !== 'default') document.documentElement.setAttribute('data-theme', theme);
+
+    if (ZenPremium.isPremium()) {
+      document.getElementById('premium-lock').classList.add('hidden');
+      document.getElementById('premium-content').classList.remove('hidden');
+
+      const saved = ZenStorage.get('mandala_data', Array(9).fill(''));
+      const grid = document.getElementById('mandala-grid');
+      const labels = ['健康', '精神', '人間関係', '財務', '仕事', '学習', '趣味', '環境', '中心目標'];
+      const order = [0, 1, 2, 3, 8, 4, 5, 6, 7]; // 中心を[4]に
+
+      order.forEach((idx, pos) => {
+        const isCenter = idx === 8;
+        const cell = document.createElement('div');
+        cell.style.cssText = `background:${isCenter ? 'var(--color-accent-glow)' : 'var(--color-bg-card)'};border:1px solid ${isCenter ? 'var(--color-accent)' : 'var(--color-border)'};border-radius:6px;padding:8px;min-height:80px;display:flex;flex-direction:column;gap:4px;`;
+        cell.innerHTML = `
+          <span style="font-size:9px;color:${isCenter ? 'var(--color-accent)' : 'var(--color-text-muted)'};">${labels[idx]}</span>
+          <textarea style="flex:1;background:transparent;border:none;color:var(--color-text-primary);font-size:11px;resize:none;outline:none;font-family:inherit;" data-index="${idx}" placeholder="入力...">${saved[idx]}</textarea>
+        `;
+        grid.appendChild(cell);
+      });
+
+      window.saveMandala = () => {
+        const data = Array(9).fill('');
+        document.querySelectorAll('[data-index]').forEach(el => { data[+el.dataset.index] = el.value; });
+        ZenStorage.set('mandala_data', data);
+        alert('保存しました');
+      };
+    }
+  </script>
+</body>
+</html>

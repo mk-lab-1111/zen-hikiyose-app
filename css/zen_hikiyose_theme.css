@@ -1,0 +1,116 @@
+/* ==========================================================================
+   zen_hikiyose_theme.css - カラーパレット・テーマ変数
+   ========================================================================== */
+
+:root {
+  /* ベースカラー */
+  --color-bg-primary:    #121212;  /* マットブラック */
+  --color-bg-secondary:  #1A1A1A;  /* ダークグラファイト */
+  --color-bg-card:       #222222;  /* カード背景 */
+
+  /* アクセントカラー */
+  --color-gold:          #D4AF37;  /* シャンパンゴールド */
+  --color-gold-light:    #E8C96A;  /* ゴールド明 */
+  --color-gold-dark:     #A07D20;  /* ゴールド暗 */
+
+  /* テキストカラー */
+  --color-text-primary:  #F0F0F0;
+  --color-text-secondary:#A0A0A0;
+  --color-text-muted:    #666666;
+
+  /* ボーダー */
+  --color-border:        #2A2A2A;
+  --color-border-gold:   #D4AF3740;
+
+  /* セマンティック */
+  --color-success:       #4CAF50;
+  --color-warning:       #FF9800;
+  --color-danger:        #F44336;
+
+  /* テーマ切替用変数（defaultはゴールド） */
+  --color-accent:        #D4AF37;
+  --color-accent-glow:   #D4AF3720;
+
+  /* スペーシング */
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  32px;
+  --space-2xl: 48px;
+
+  /* ボーダーRadius */
+  --radius-sm:  4px;
+  --radius-md:  8px;
+  --radius-lg:  12px;
+  --radius-xl:  16px;
+  --radius-full: 9999px;
+
+  /* シャドウ */
+  --shadow-card:    0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-gold:    0 0 16px var(--color-accent-glow);
+  --shadow-modal:   0 8px 32px rgba(0, 0, 0, 0.6);
+
+  /* トランジション */
+  --transition-fast:   0.15s ease;
+  --transition-normal: 0.25s ease;
+  --transition-slow:   0.4s ease;
+
+  /* フォントサイズ */
+  --font-xs:   0.75rem;
+  --font-sm:   0.875rem;
+  --font-base: 1rem;
+  --font-lg:   1.125rem;
+  --font-xl:   1.25rem;
+  --font-2xl:  1.5rem;
+  --font-3xl:  1.875rem;
+
+  /* ボトムナビ高さ */
+  --bottom-nav-height: 64px;
+}
+
+/* ==========================================================================
+   サイバー覚醒テーマ（男性向け）
+   ========================================================================== */
+[data-theme="cyber"] {
+  --color-accent:        #00E5FF;
+  --color-accent-glow:   #00E5FF20;
+  --color-bg-card:       #0D1B2A;
+  --color-bg-secondary:  #0A1520;
+  --color-border:        #1A3A4A;
+  --color-border-gold:   #00E5FF40;
+}
+
+/* ==========================================================================
+   Luxury Cinderellaテーマ（女性向け）
+   ========================================================================== */
+[data-theme="luxury"] {
+  --color-accent:        #E8A0BF;
+  --color-accent-glow:   #E8A0BF20;
+  --color-bg-card:       #1A1020;
+  --color-bg-secondary:  #150D1A;
+  --color-border:        #2A1A2A;
+  --color-border-gold:   #E8A0BF40;
+}
+
+/* ==========================================================================
+   グラデーション定義
+   ========================================================================== */
+.gradient-gold {
+  background: linear-gradient(135deg, var(--color-gold-dark), var(--color-gold), var(--color-gold-light));
+}
+
+.gradient-accent {
+  background: linear-gradient(135deg, var(--color-accent), var(--color-gold));
+}
+
+.gradient-dark {
+  background: linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%);
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, var(--color-gold-dark), var(--color-gold-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

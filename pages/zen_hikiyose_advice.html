@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#D4AF37">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>MINDFUL ASSET - アドバイス</title>
+  <link rel="stylesheet" href="../css/zen_hikiyose_theme.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_base.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_components.css">
+</head>
+<body>
+  <div id="app">
+    <header class="page-header">
+      <a href="zen_hikiyose_home.html" style="color:var(--color-text-muted);font-size:1.5rem;">‹</a>
+      <span class="page-header-title">アドバイス</span>
+    </header>
+
+    <main class="main-content">
+      <div id="advice-list" style="display:flex;flex-direction:column;gap:12px;">
+        <div class="spinner"></div>
+      </div>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="zen_hikiyose_home.html" class="bottom-nav-item">
+        <span class="nav-icon">🏠</span><span class="nav-label">ホーム</span>
+      </a>
+      <a href="zen_hikiyose_affirmation.html" class="bottom-nav-item">
+        <span class="nav-icon">🔥</span><span class="nav-label">アファメーション</span>
+      </a>
+      <a href="zen_hikiyose_log.html" class="bottom-nav-item">
+        <span class="nav-icon">📓</span><span class="nav-label">ログ</span>
+      </a>
+      <a href="zen_hikiyose_roadmap.html" class="bottom-nav-item">
+        <span class="nav-icon">🗺️</span><span class="nav-label">マップ</span>
+      </a>
+      <a href="zen_hikiyose_settings.html" class="bottom-nav-item">
+        <span class="nav-icon">⚙️</span><span class="nav-label">設定</span>
+      </a>
+    </nav>
+  </div>
+
+  <script type="module">
+    import ZenStorage from '../js/zen_hikiyose_storage.js';
+
+    const theme = ZenStorage.get('theme', 'default');
+    if (theme && theme !== 'default') document.documentElement.setAttribute('data-theme', theme);
+
+    fetch('../data/zen_hikiyose_advice.json')
+      .then(r => r.json())
+      .then(data => {
+        const todayIdx = new Date().getDay();
+        const container = document.getElementById('advice-list');
+        container.innerHTML = data.advice.map((a, i) => {
+          const isToday = (todayIdx === 0 ? 6 : todayIdx - 1) === i;
+          return `
+            <div class="${isToday ? 'card card-premium' : 'card'}">
+              ${isToday ? '<span class="badge badge-free" style="margin-bottom:8px;">TODAY</span>' : ''}
+              <p style="font-weight:700;font-size:0.9375rem;color:var(--color-accent);margin-bottom:8px;">${a.title}</p>
+              <p style="font-size:0.875rem;color:var(--color-text-secondary);line-height:1.7;">${a.body}</p>
+            </div>
+          `;
+        }).join('');
+      });
+  </script>
+</body>
+</html>

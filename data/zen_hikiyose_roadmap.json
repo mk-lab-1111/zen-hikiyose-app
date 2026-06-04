@@ -1,0 +1,39 @@
+{
+  "courses": [
+    {
+      "id": "foundation",
+      "title": "マインド基盤コース",
+      "description": "引き寄せの法則の基礎を固める7日間プログラム",
+      "duration_days": 7,
+      "is_premium": false,
+      "color": "#D4AF37",
+      "steps": [
+        { "day": 1, "title": "引き寄せの仕組みを理解する", "action": "ノートに「私が引き寄せたいこと」を5つ書く" },
+        { "day": 2, "title": "現在地の棚卸し", "action": "現在の資産（お金・人間関係・健康）を正直に書き出す" },
+        { "day": 3, "title": "理想の1日を設計する", "action": "5年後の理想の1日を朝から夜まで詳細に書く" },
+        { "day": 4, "title": "ブロックを発見する", "action": "「お金に罪悪感がある」等のネガティブ信念を書き出す" },
+        { "day": 5, "title": "アファメーション作成", "action": "自分だけの引き寄せアファメーションを3つ作る" },
+        { "day": 6, "title": "感謝日記スタート", "action": "今日感謝できることを10個書く" },
+        { "day": 7, "title": "習慣設計", "action": "毎日続けるマインド習慣を3つ決めて宣言する" }
+      ]
+    },
+    {
+      "id": "wealth",
+      "title": "富の意識覚醒コース",
+      "description": "億プレイヤーの金銭感覚を手に入れる14日間",
+      "duration_days": 14,
+      "is_premium": true,
+      "color": "#E8C96A",
+      "steps": []
+    },
+    {
+      "id": "manifestation",
+      "title": "超加速マニフェストコース",
+      "description": "21日間で現実創造のスピードを3倍にする上級コース",
+      "duration_days": 21,
+      "is_premium": true,
+      "color": "#A07D20",
+      "steps": []
+    }
+  ]
+}

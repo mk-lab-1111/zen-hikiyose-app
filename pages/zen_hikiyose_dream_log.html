@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#D4AF37">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>MINDFUL ASSET - 夢日記</title>
+  <link rel="stylesheet" href="../css/zen_hikiyose_theme.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_base.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_components.css">
+</head>
+<body>
+  <div id="app">
+    <header class="page-header">
+      <a href="zen_hikiyose_home.html" style="color:var(--color-text-muted);font-size:1.5rem;">‹</a>
+      <span class="page-header-title">夢日記</span>
+      <span class="badge badge-premium">PREMIUM</span>
+    </header>
+
+    <main class="main-content" id="main-content">
+      <!-- プレミアムロック表示（デフォルト） -->
+      <div id="premium-lock" class="card" style="text-align:center;padding:40px 16px;">
+        <p style="font-size:3rem;margin-bottom:16px;">🔒</p>
+        <p style="font-weight:700;font-size:1.1rem;color:var(--color-accent);margin-bottom:8px;">Premiumプラン限定</p>
+        <p class="text-muted text-sm" style="margin-bottom:24px;">夢日記機能は潜在意識にアクセスするための上位機能です。Premiumにアップグレードして引き寄せ力を最大化しましょう。</p>
+        <a href="zen_hikiyose_premium.html" class="btn btn-primary">Premiumにアップグレード</a>
+      </div>
+
+      <!-- プレミアムコンテンツ（unlockで表示） -->
+      <div id="premium-content" class="hidden">
+        <p class="page-subtitle">目覚めた直後の夢を記録しましょう</p>
+        <div class="section">
+          <label class="input-label">夢の内容（断片でもOK）</label>
+          <textarea class="input-field" id="dream-text" rows="6" placeholder="どんな場所？誰がいた？何が起きた？"></textarea>
+        </div>
+        <div class="section">
+          <label class="input-label">夢の中の感情</label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;" id="emotion-buttons">
+            <button class="btn btn-secondary btn-auto btn-sm" onclick="setEmotion(this, '嬉しい')">😊 嬉しい</button>
+            <button class="btn btn-secondary btn-auto btn-sm" onclick="setEmotion(this, '怖い')">😨 怖い</button>
+            <button class="btn btn-secondary btn-auto btn-sm" onclick="setEmotion(this, '不安')">😰 不安</button>
+            <button class="btn btn-secondary btn-auto btn-sm" onclick="setEmotion(this, '穏やか')">😌 穏やか</button>
+            <button class="btn btn-secondary btn-auto btn-sm" onclick="setEmotion(this, '興奮')">🔥 興奮</button>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="saveDream()">夢を記録する</button>
+      </div>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="zen_hikiyose_home.html" class="bottom-nav-item">
+        <span class="nav-icon">🏠</span><span class="nav-label">ホーム</span>
+      </a>
+      <a href="zen_hikiyose_affirmation.html" class="bottom-nav-item">
+        <span class="nav-icon">🔥</span><span class="nav-label">アファメーション</span>
+      </a>
+      <a href="zen_hikiyose_log.html" class="bottom-nav-item">
+        <span class="nav-icon">📓</span><span class="nav-label">ログ</span>
+      </a>
+      <a href="zen_hikiyose_roadmap.html" class="bottom-nav-item">
+        <span class="nav-icon">🗺️</span><span class="nav-label">マップ</span>
+      </a>
+      <a href="zen_hikiyose_settings.html" class="bottom-nav-item">
+        <span class="nav-icon">⚙️</span><span class="nav-label">設定</span>
+      </a>
+    </nav>
+  </div>
+  <div class="toast-container" id="toast-container"></div>
+
+  <script type="module">
+    import ZenStorage from '../js/zen_hikiyose_storage.js';
+    import ZenPremium from '../js/zen_hikiyose_premium.js';
+
+    const theme = ZenStorage.get('theme', 'default');
+    if (theme && theme !== 'default') document.documentElement.setAttribute('data-theme', theme);
+
+    if (ZenPremium.isPremium()) {
+      document.getElementById('premium-lock').classList.add('hidden');
+      document.getElementById('premium-content').classList.remove('hidden');
+    }
+
+    let selectedEmotion = '';
+    window.setEmotion = (btn, emotion) => {
+      selectedEmotion = emotion;
+      document.getElementById('emotion-buttons').querySelectorAll('button').forEach(b => {
+        b.style.background = b === btn ? 'var(--color-accent)' : '';
+        b.style.color = b === btn ? '#121212' : '';
+      });
+    };
+
+    window.saveDream = () => {
+      const text = document.getElementById('dream-text').value.trim();
+      if (!text) return;
+      const dreams = ZenStorage.get('dream_logs', []);
+      dreams.push({ date: new Date().toISOString(), text, emotion: selectedEmotion });
+      ZenStorage.set('dream_logs', dreams);
+      const toast = document.createElement('div');
+      toast.className = 'toast toast-gold';
+      toast.textContent = '夢を記録しました！🌙';
+      document.getElementById('toast-container').appendChild(toast);
+      setTimeout(() => { toast.classList.add('toast-hiding'); setTimeout(() => toast.remove(), 300); }, 2000);
+      document.getElementById('dream-text').value = '';
+      selectedEmotion = '';
+    };
+  </script>
+</body>
+</html>

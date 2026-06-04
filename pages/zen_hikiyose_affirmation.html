@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#D4AF37">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>MINDFUL ASSET - アファメーション</title>
+  <link rel="stylesheet" href="../css/zen_hikiyose_theme.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_base.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_components.css">
+</head>
+<body>
+  <div id="app">
+    <header class="page-header">
+      <span class="page-header-title">アファメーション</span>
+      <span class="badge badge-free">FREE</span>
+    </header>
+
+    <main class="main-content">
+      <p class="page-subtitle">あなただけの言葉で潜在意識を書き換えましょう</p>
+
+      <div class="section">
+        <p class="section-title">MY AFFIRMATIONS</p>
+        <div id="affirmation-list" style="display:flex;flex-direction:column;gap:12px;">
+          <!-- JSで挿入 -->
+        </div>
+        <button class="btn btn-secondary mt-16" onclick="addAffirmation()">＋ アファメーションを追加</button>
+      </div>
+
+      <div class="section">
+        <p class="section-title">今日の実践</p>
+        <div class="card" style="text-align:center;padding:32px 16px;">
+          <p style="font-size:3rem;margin-bottom:16px;">🔥</p>
+          <p class="text-muted text-sm">アファメーションを声に出して読み、<br>「完了」を押してください</p>
+          <button class="btn btn-primary mt-16" onclick="completePractice()">今日の実践完了</button>
+        </div>
+      </div>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="zen_hikiyose_home.html" class="bottom-nav-item">
+        <span class="nav-icon">🏠</span><span class="nav-label">ホーム</span>
+      </a>
+      <a href="zen_hikiyose_affirmation.html" class="bottom-nav-item active">
+        <span class="nav-icon">🔥</span><span class="nav-label">アファメーション</span>
+      </a>
+      <a href="zen_hikiyose_log.html" class="bottom-nav-item">
+        <span class="nav-icon">📓</span><span class="nav-label">ログ</span>
+      </a>
+      <a href="zen_hikiyose_roadmap.html" class="bottom-nav-item">
+        <span class="nav-icon">🗺️</span><span class="nav-label">マップ</span>
+      </a>
+      <a href="zen_hikiyose_settings.html" class="bottom-nav-item">
+        <span class="nav-icon">⚙️</span><span class="nav-label">設定</span>
+      </a>
+    </nav>
+  </div>
+  <div class="toast-container" id="toast-container"></div>
+
+  <script type="module">
+    import ZenStorage from '../js/zen_hikiyose_storage.js';
+
+    const theme = ZenStorage.get('theme', 'default');
+    if (theme && theme !== 'default') document.documentElement.setAttribute('data-theme', theme);
+
+    const DEFAULT_AFFIRMATIONS = [
+      '私はお金と豊かさを引き寄せる磁石です',
+      '私はすでに理想の人生を生きています',
+      '宇宙は常に私の味方です',
+    ];
+
+    const renderList = () => {
+      const list = ZenStorage.get('affirmations', DEFAULT_AFFIRMATIONS);
+      const container = document.getElementById('affirmation-list');
+      container.innerHTML = list.map((text, i) => `
+        <div class="card" style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:1.2rem;color:var(--color-accent);">✦</span>
+          <p style="flex:1;font-size:0.9rem;line-height:1.6;">${text}</p>
+          <button onclick="removeAffirmation(${i})" style="color:var(--color-text-muted);font-size:1.2rem;padding:4px;">×</button>
+        </div>
+      `).join('');
+    };
+
+    window.addAffirmation = () => {
+      const text = prompt('新しいアファメーションを入力してください（現在形・肯定文で）');
+      if (!text) return;
+      const list = ZenStorage.get('affirmations', DEFAULT_AFFIRMATIONS);
+      list.push(text.trim());
+      ZenStorage.set('affirmations', list);
+      renderList();
+    };
+
+    window.removeAffirmation = (index) => {
+      const list = ZenStorage.get('affirmations', DEFAULT_AFFIRMATIONS);
+      list.splice(index, 1);
+      ZenStorage.set('affirmations', list);
+      renderList();
+    };
+
+    window.completePractice = () => {
+      ZenStorage.set('affirmation_last_date', new Date().toDateString());
+      const toast = document.createElement('div');
+      toast.className = 'toast toast-gold';
+      toast.textContent = '今日のアファメーション実践完了！✨';
+      document.getElementById('toast-container').appendChild(toast);
+      setTimeout(() => { toast.classList.add('toast-hiding'); setTimeout(() => toast.remove(), 300); }, 2000);
+    };
+
+    renderList();
+  </script>
+</body>
+</html>

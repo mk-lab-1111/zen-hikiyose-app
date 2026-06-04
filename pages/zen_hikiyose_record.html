@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#D4AF37">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>MINDFUL ASSET - 今日を記録</title>
+  <link rel="stylesheet" href="../css/zen_hikiyose_theme.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_base.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_components.css">
+</head>
+<body>
+  <div id="app">
+    <header class="page-header">
+      <a href="zen_hikiyose_home.html" style="color:var(--color-text-muted);font-size:1.5rem;">‹</a>
+      <span class="page-header-title">今日を記録</span>
+      <span class="badge badge-free">FREE</span>
+    </header>
+
+    <main class="main-content">
+      <p class="text-muted text-sm mb-16" id="today-date"></p>
+
+      <div class="section">
+        <label class="input-label">今日の引き寄せスコア（1〜10）</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+          <!-- 1〜10のスコアボタン（JSで生成） -->
+          <div id="score-buttons" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <label class="input-label" for="record-text">今日の気づき・感謝・できごと</label>
+        <textarea class="input-field" id="record-text" rows="5" placeholder="今日感謝できることを3つ書いてみましょう..."></textarea>
+      </div>
+
+      <div class="section">
+        <label class="input-label" for="record-intention">明日の意図（引き寄せたいこと）</label>
+        <textarea class="input-field" id="record-intention" rows="3" placeholder="明日、宇宙に注文することを書きましょう..."></textarea>
+      </div>
+
+      <button class="btn btn-primary" onclick="saveRecord()">記録を保存する</button>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="zen_hikiyose_home.html" class="bottom-nav-item">
+        <span class="nav-icon">🏠</span><span class="nav-label">ホーム</span>
+      </a>
+      <a href="zen_hikiyose_affirmation.html" class="bottom-nav-item">
+        <span class="nav-icon">🔥</span><span class="nav-label">アファメーション</span>
+      </a>
+      <a href="zen_hikiyose_log.html" class="bottom-nav-item active">
+        <span class="nav-icon">📓</span><span class="nav-label">ログ</span>
+      </a>
+      <a href="zen_hikiyose_roadmap.html" class="bottom-nav-item">
+        <span class="nav-icon">🗺️</span><span class="nav-label">マップ</span>
+      </a>
+      <a href="zen_hikiyose_settings.html" class="bottom-nav-item">
+        <span class="nav-icon">⚙️</span><span class="nav-label">設定</span>
+      </a>
+    </nav>
+  </div>
+  <div class="toast-container" id="toast-container"></div>
+
+  <script type="module">
+    import ZenStorage from '../js/zen_hikiyose_storage.js';
+    import ZenScore from '../js/zen_hikiyose_score.js';
+
+    const theme = ZenStorage.get('theme', 'default');
+    if (theme && theme !== 'default') document.documentElement.setAttribute('data-theme', theme);
+
+    document.getElementById('today-date').textContent = new Date().toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+
+    let selectedScore = 5;
+    const scoreContainer = document.getElementById('score-buttons');
+    for (let i = 1; i <= 10; i++) {
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-secondary btn-auto btn-sm';
+      btn.textContent = i;
+      btn.style.width = '40px';
+      btn.style.padding = '6px 0';
+      btn.style.borderRadius = 'var(--radius-md)';
+      if (i === selectedScore) { btn.style.background = 'var(--color-accent)'; btn.style.color = '#121212'; }
+      btn.onclick = () => {
+        selectedScore = i;
+        scoreContainer.querySelectorAll('button').forEach((b, idx) => {
+          b.style.background = idx + 1 === i ? 'var(--color-accent)' : '';
+          b.style.color = idx + 1 === i ? '#121212' : '';
+        });
+      };
+      scoreContainer.appendChild(btn);
+    }
+
+    window.saveRecord = () => {
+      const text = document.getElementById('record-text').value.trim();
+      const intention = document.getElementById('record-intention').value.trim();
+      const entry = {
+        date: new Date().toISOString(),
+        score: selectedScore * 10,
+        text,
+        intention,
+      };
+      const records = ZenStorage.get('daily_records', []);
+      records.push(entry);
+      ZenStorage.set('daily_records', records);
+      ZenScore.addEntry(selectedScore * 10);
+
+      const toast = document.createElement('div');
+      toast.className = 'toast toast-gold';
+      toast.textContent = '記録を保存しました！✨';
+      document.getElementById('toast-container').appendChild(toast);
+      setTimeout(() => { toast.classList.add('toast-hiding'); setTimeout(() => { toast.remove(); window.location.href = 'zen_hikiyose_home.html'; }, 300); }, 1500);
+    };
+  </script>
+</body>
+</html>

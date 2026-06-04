@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#D4AF37">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>MINDFUL ASSET - 設定</title>
+  <link rel="stylesheet" href="../css/zen_hikiyose_theme.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_base.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_components.css">
+</head>
+<body>
+  <div id="app">
+    <header class="page-header">
+      <span class="page-header-title">設定</span>
+    </header>
+
+    <main class="main-content">
+
+      <!-- プレミアム状態 -->
+      <div class="section">
+        <p class="section-title">PLAN</p>
+        <div class="card card-premium" id="plan-card" style="display:flex;align-items:center;gap:16px;">
+          <div style="font-size:2rem;">👑</div>
+          <div style="flex:1;">
+            <p id="plan-label" style="font-weight:700;color:var(--color-accent);">無料プラン</p>
+            <p class="text-muted text-xs">Premiumで全機能解放</p>
+          </div>
+          <a href="zen_hikiyose_premium.html" class="btn btn-primary btn-auto btn-sm" id="upgrade-btn">アップグレード</a>
+        </div>
+      </div>
+
+      <!-- テーマ選択 -->
+      <div class="section">
+        <p class="section-title">THEME</p>
+        <div class="card" style="display:flex;flex-direction:column;gap:12px;">
+          <button class="btn btn-secondary" onclick="applyTheme('default')" id="t-default">🌟 ゴールド（デフォルト）</button>
+          <button class="btn btn-secondary" onclick="applyTheme('cyber')" id="t-cyber">⚡ サイバー覚醒</button>
+          <button class="btn btn-secondary" onclick="applyTheme('luxury')" id="t-luxury">🌸 Luxury Cinderella</button>
+        </div>
+      </div>
+
+      <!-- データ管理 -->
+      <div class="section">
+        <p class="section-title">DATA</p>
+        <div class="card" style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span class="text-sm">保存データ件数</span>
+            <span class="text-sm text-gold" id="record-count">—</span>
+          </div>
+          <div class="divider"></div>
+          <button class="btn btn-ghost" style="color:var(--color-danger);" onclick="clearData()">全データを削除</button>
+        </div>
+      </div>
+
+      <!-- アプリ情報 -->
+      <div class="section">
+        <p class="section-title">APP INFO</p>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <span class="text-sm">バージョン</span>
+            <span class="text-muted text-sm">1.0.0</span>
+          </div>
+          <div class="divider"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span class="text-sm">アプリ名</span>
+            <span class="text-muted text-sm">MINDFUL ASSET</span>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="zen_hikiyose_home.html" class="bottom-nav-item">
+        <span class="nav-icon">🏠</span><span class="nav-label">ホーム</span>
+      </a>
+      <a href="zen_hikiyose_affirmation.html" class="bottom-nav-item">
+        <span class="nav-icon">🔥</span><span class="nav-label">アファメーション</span>
+      </a>
+      <a href="zen_hikiyose_log.html" class="bottom-nav-item">
+        <span class="nav-icon">📓</span><span class="nav-label">ログ</span>
+      </a>
+      <a href="zen_hikiyose_roadmap.html" class="bottom-nav-item">
+        <span class="nav-icon">🗺️</span><span class="nav-label">マップ</span>
+      </a>
+      <a href="zen_hikiyose_settings.html" class="bottom-nav-item active">
+        <span class="nav-icon">⚙️</span><span class="nav-label">設定</span>
+      </a>
+    </nav>
+  </div>
+  <div class="toast-container" id="toast-container"></div>
+
+  <script type="module">
+    import ZenStorage from '../js/zen_hikiyose_storage.js';
+    import ZenPremium from '../js/zen_hikiyose_premium.js';
+
+    // テーマ適用
+    const savedTheme = ZenStorage.get('theme', 'default');
+    if (savedTheme && savedTheme !== 'default') document.documentElement.setAttribute('data-theme', savedTheme);
+    highlightTheme(savedTheme);
+
+    // プレミアム状態
+    if (ZenPremium.isPremium()) {
+      document.getElementById('plan-label').textContent = 'Premiumプラン';
+      document.getElementById('upgrade-btn').classList.add('hidden');
+    }
+
+    // データ件数
+    const records = ZenStorage.get('daily_records', []);
+    document.getElementById('record-count').textContent = `${records.length} 件`;
+
+    function highlightTheme(t) {
+      ['default', 'cyber', 'luxury'].forEach(id => {
+        const btn = document.getElementById(`t-${id}`);
+        if (!btn) return;
+        btn.style.background = id === t ? 'var(--color-accent)' : '';
+        btn.style.color = id === t ? '#121212' : '';
+      });
+    }
+
+    window.applyTheme = (theme) => {
+      ZenStorage.set('theme', theme);
+      if (theme !== 'default') {
+        document.documentElement.setAttribute('data-theme', theme);
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+      }
+      highlightTheme(theme);
+    };
+
+    window.clearData = () => {
+      if (!confirm('全ての記録データを削除します。この操作は元に戻せません。')) return;
+      ZenStorage.clear();
+      const toast = document.createElement('div');
+      toast.className = 'toast toast-error';
+      toast.textContent = 'データを削除しました';
+      document.getElementById('toast-container').appendChild(toast);
+      setTimeout(() => { window.location.href = 'zen_hikiyose_onboarding.html'; }, 1500);
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="1億円プレイヤーの脳をインストールするマインド資産運用アプリ">
+  <meta name="theme-color" content="#D4AF37">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="MINDFUL ASSET">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+  <title>MINDFUL ASSET</title>
+  <link rel="stylesheet" href="css/zen_hikiyose_theme.css">
+  <link rel="stylesheet" href="css/zen_hikiyose_base.css">
+  <link rel="stylesheet" href="css/zen_hikiyose_components.css">
+</head>
+<body>
+  <div id="app">
+    <!-- ヘッダー -->
+    <header class="page-header">
+      <span class="page-header-title">MINDFUL ASSET</span>
+      <div class="score-circle" style="width:48px;height:48px;" id="header-score">
+        <span class="score-value" style="font-size:1rem;" id="header-score-value">—</span>
+        <span class="score-label">SCORE</span>
+      </div>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+
+      <!-- ウェルカムバナー -->
+      <div class="card card-premium mb-16" style="text-align:center;padding:24px 16px;">
+        <p class="text-muted text-xs" style="margin-bottom:8px;">TODAY'S QUOTE</p>
+        <p style="font-size:1.1rem;font-weight:700;color:var(--color-accent);line-height:1.5;">
+          "あなたの思考が現実を創る"
+        </p>
+        <p class="text-muted text-sm" style="margin-top:8px;">引き寄せの法則 — 宇宙の絶対法則</p>
+      </div>
+
+      <!-- 今日のアドバイス -->
+      <div class="section">
+        <p class="section-title">TODAY'S ADVICE</p>
+        <div class="card" id="daily-advice">
+          <div class="spinner"></div>
+        </div>
+      </div>
+
+      <!-- クイックアクション -->
+      <div class="section">
+        <p class="section-title">QUICK ACTION</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <a href="pages/zen_hikiyose_record.html" class="card card-clickable" style="text-align:center;padding:20px 12px;">
+            <div style="font-size:28px;margin-bottom:8px;">✍️</div>
+            <div style="font-size:0.8rem;font-weight:500;color:var(--color-text-primary);">今日を記録</div>
+            <span class="badge badge-free" style="margin-top:8px;">FREE</span>
+          </a>
+          <a href="pages/zen_hikiyose_affirmation.html" class="card card-clickable" style="text-align:center;padding:20px 12px;">
+            <div style="font-size:28px;margin-bottom:8px;">🔥</div>
+            <div style="font-size:0.8rem;font-weight:500;color:var(--color-text-primary);">アファメーション</div>
+            <span class="badge badge-free" style="margin-top:8px;">FREE</span>
+          </a>
+          <a href="pages/zen_hikiyose_dream_log.html" class="card card-clickable" style="text-align:center;padding:20px 12px;">
+            <div style="font-size:28px;margin-bottom:8px;">🌙</div>
+            <div style="font-size:0.8rem;font-weight:500;color:var(--color-text-primary);">夢日記</div>
+            <span class="badge badge-premium" style="margin-top:8px;">PREMIUM</span>
+          </a>
+          <a href="pages/zen_hikiyose_mandala.html" class="card card-clickable" style="text-align:center;padding:20px 12px;">
+            <div style="font-size:28px;margin-bottom:8px;">🎯</div>
+            <div style="font-size:0.8rem;font-weight:500;color:var(--color-text-primary);">マンダラチャート</div>
+            <span class="badge badge-premium" style="margin-top:8px;">PREMIUM</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 連続記録 -->
+      <div class="section">
+        <p class="section-title">STREAK</p>
+        <div class="card" style="display:flex;align-items:center;gap:16px;">
+          <div style="font-size:36px;">🔥</div>
+          <div>
+            <div style="font-size:1.5rem;font-weight:700;color:var(--color-accent);" id="streak-count">0</div>
+            <div class="text-muted text-sm">日連続記録中</div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- ボトムナビゲーション -->
+    <nav class="bottom-nav">
+      <a href="pages/zen_hikiyose_home.html" class="bottom-nav-item active">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-label">ホーム</span>
+      </a>
+      <a href="pages/zen_hikiyose_affirmation.html" class="bottom-nav-item">
+        <span class="nav-icon">🔥</span>
+        <span class="nav-label">アファメーション</span>
+      </a>
+      <a href="pages/zen_hikiyose_log.html" class="bottom-nav-item">
+        <span class="nav-icon">📓</span>
+        <span class="nav-label">ログ</span>
+      </a>
+      <a href="pages/zen_hikiyose_roadmap.html" class="bottom-nav-item">
+        <span class="nav-icon">🗺️</span>
+        <span class="nav-label">マップ</span>
+      </a>
+      <a href="pages/zen_hikiyose_settings.html" class="bottom-nav-item">
+        <span class="nav-icon">⚙️</span>
+        <span class="nav-label">設定</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- トーストコンテナ -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script type="module">
+    import ZenStorage from './js/zen_hikiyose_storage.js';
+    import ZenScore from './js/zen_hikiyose_score.js';
+
+    // テーマ適用
+    const theme = ZenStorage.get('theme', 'default');
+    if (theme && theme !== 'default') {
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    // オンボーディング未完了ならリダイレクト
+    const onboarded = ZenStorage.get('onboarding_completed', false);
+    if (!onboarded) {
+      window.location.href = 'pages/zen_hikiyose_onboarding.html';
+    }
+
+    // スコア表示
+    const score = ZenScore.calculate();
+    document.getElementById('header-score-value').textContent = score || '—';
+
+    // 連続記録
+    document.getElementById('streak-count').textContent = ZenScore.getStreak();
+
+    // 今日のアドバイス
+    fetch('data/zen_hikiyose_advice.json')
+      .then(r => r.json())
+      .then(data => {
+        const day = new Date().getDay(); // 0=日, 1=月...
+        const index = day === 0 ? 6 : day - 1;
+        const advice = data.advice[index] || data.advice[0];
+        document.getElementById('daily-advice').innerHTML = `
+          <p style="font-size:0.75rem;color:var(--color-accent);font-weight:500;margin-bottom:8px;">${advice.title}</p>
+          <p style="font-size:0.875rem;color:var(--color-text-secondary);line-height:1.7;">${advice.body}</p>
+        `;
+      })
+      .catch(() => {
+        document.getElementById('daily-advice').textContent = '今日も引き寄せの実践を続けましょう。';
+      });
+
+    // Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>

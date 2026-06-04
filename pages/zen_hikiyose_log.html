@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#D4AF37">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>MINDFUL ASSET - ログ</title>
+  <link rel="stylesheet" href="../css/zen_hikiyose_theme.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_base.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_components.css">
+</head>
+<body>
+  <div id="app">
+    <header class="page-header">
+      <span class="page-header-title">記録ログ</span>
+      <a href="zen_hikiyose_record.html" class="btn btn-secondary btn-auto btn-sm">＋ 記録</a>
+    </header>
+
+    <main class="main-content">
+      <div id="log-list" style="display:flex;flex-direction:column;gap:12px;">
+        <div class="spinner"></div>
+      </div>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="zen_hikiyose_home.html" class="bottom-nav-item">
+        <span class="nav-icon">🏠</span><span class="nav-label">ホーム</span>
+      </a>
+      <a href="zen_hikiyose_affirmation.html" class="bottom-nav-item">
+        <span class="nav-icon">🔥</span><span class="nav-label">アファメーション</span>
+      </a>
+      <a href="zen_hikiyose_log.html" class="bottom-nav-item active">
+        <span class="nav-icon">📓</span><span class="nav-label">ログ</span>
+      </a>
+      <a href="zen_hikiyose_roadmap.html" class="bottom-nav-item">
+        <span class="nav-icon">🗺️</span><span class="nav-label">マップ</span>
+      </a>
+      <a href="zen_hikiyose_settings.html" class="bottom-nav-item">
+        <span class="nav-icon">⚙️</span><span class="nav-label">設定</span>
+      </a>
+    </nav>
+  </div>
+
+  <script type="module">
+    import ZenStorage from '../js/zen_hikiyose_storage.js';
+
+    const theme = ZenStorage.get('theme', 'default');
+    if (theme && theme !== 'default') document.documentElement.setAttribute('data-theme', theme);
+
+    const records = ZenStorage.get('daily_records', []).reverse();
+    const container = document.getElementById('log-list');
+
+    if (records.length === 0) {
+      container.innerHTML = `
+        <div class="card" style="text-align:center;padding:40px 16px;">
+          <p style="font-size:2rem;margin-bottom:12px;">📓</p>
+          <p class="text-muted text-sm">まだ記録がありません</p>
+          <a href="zen_hikiyose_record.html" class="btn btn-primary mt-16" style="display:inline-flex;width:auto;">最初の記録をする</a>
+        </div>
+      `;
+    } else {
+      container.innerHTML = records.map(r => {
+        const date = new Date(r.date).toLocaleDateString('ja-JP', { month: 'long', day: 'numeric', weekday: 'short' });
+        const score = Math.round((r.score || 0) / 10);
+        return `
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <span class="text-muted text-xs">${date}</span>
+              <span style="color:var(--color-accent);font-weight:700;font-size:0.875rem;">スコア ${score}/10</span>
+            </div>
+            ${r.text ? `<p style="font-size:0.875rem;color:var(--color-text-secondary);line-height:1.6;">${r.text}</p>` : ''}
+            ${r.intention ? `<p class="text-xs text-muted" style="margin-top:8px;">意図：${r.intention}</p>` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#D4AF37">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>MINDFUL ASSET - はじめに</title>
+  <link rel="stylesheet" href="../css/zen_hikiyose_theme.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_base.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_components.css">
+  <style>
+    .onboarding-slide {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 24px;
+      min-height: calc(100vh - 120px);
+      min-height: calc(100dvh - 120px);
+    }
+    .onboarding-slide.active { display: flex; }
+    .slide-emoji { font-size: 64px; margin-bottom: 24px; }
+    .slide-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--color-accent);
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+    .slide-body {
+      font-size: 0.9375rem;
+      color: var(--color-text-secondary);
+      line-height: 1.8;
+      max-width: 320px;
+    }
+    .dots {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      padding: 16px;
+    }
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-border);
+      transition: background var(--transition-normal), width var(--transition-normal);
+    }
+    .dot.active {
+      background: var(--color-accent);
+      width: 20px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main style="display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;">
+
+      <!-- スライド1 -->
+      <div class="onboarding-slide active" id="slide-0">
+        <div class="slide-emoji">💰</div>
+        <h1 class="slide-title">MINDFUL ASSET へようこそ</h1>
+        <p class="slide-body">1億円プレイヤーの脳をインストールする、マインド資産運用アプリです。毎日の実践で現実を変えましょう。</p>
+      </div>
+
+      <!-- スライド2 -->
+      <div class="onboarding-slide" id="slide-1">
+        <div class="slide-emoji">🔥</div>
+        <h1 class="slide-title">引き寄せを科学する</h1>
+        <p class="slide-body">アファメーション・夢日記・マンダラチャートなど、実証された手法で潜在意識を書き換えていきます。</p>
+      </div>
+
+      <!-- スライド3 -->
+      <div class="onboarding-slide" id="slide-2">
+        <div class="slide-emoji">📊</div>
+        <h1 class="slide-title">マインドスコアで成長を可視化</h1>
+        <p class="slide-body">毎日の記録がスコアに反映されます。数字が上がるほど、現実の引き寄せ力が強くなっていきます。</p>
+      </div>
+
+      <!-- スライド4：テーマ選択 -->
+      <div class="onboarding-slide" id="slide-3">
+        <div class="slide-emoji">🎨</div>
+        <h1 class="slide-title">テーマを選んでください</h1>
+        <div style="display:flex;flex-direction:column;gap:12px;width:100%;max-width:320px;margin-top:8px;">
+          <button class="btn btn-secondary btn-auto" onclick="selectTheme('default')" id="theme-default"
+            style="width:100%;justify-content:flex-start;padding-left:20px;">
+            🌟 ゴールド（デフォルト）
+          </button>
+          <button class="btn btn-secondary btn-auto" onclick="selectTheme('cyber')" id="theme-cyber"
+            style="width:100%;justify-content:flex-start;padding-left:20px;">
+            ⚡ サイバー覚醒（男性向け）
+          </button>
+          <button class="btn btn-secondary btn-auto" onclick="selectTheme('luxury')" id="theme-luxury"
+            style="width:100%;justify-content:flex-start;padding-left:20px;">
+            🌸 Luxury Cinderella（女性向け）
+          </button>
+        </div>
+      </div>
+
+      <!-- ドットインジケーター -->
+      <div class="dots">
+        <div class="dot active" id="dot-0"></div>
+        <div class="dot" id="dot-1"></div>
+        <div class="dot" id="dot-2"></div>
+        <div class="dot" id="dot-3"></div>
+      </div>
+
+      <!-- ナビゲーションボタン -->
+      <div style="padding:16px 24px 32px;display:flex;flex-direction:column;gap:12px;">
+        <button class="btn btn-primary" id="btn-next" onclick="nextSlide()">次へ</button>
+        <button class="btn btn-ghost" id="btn-skip" onclick="completeOnboarding()">スキップ</button>
+      </div>
+
+    </main>
+  </div>
+
+  <script type="module">
+    import ZenStorage from '../js/zen_hikiyose_storage.js';
+
+    let currentSlide = 0;
+    const totalSlides = 4;
+    let selectedTheme = 'default';
+
+    // テーマ適用
+    const theme = ZenStorage.get('theme', 'default');
+    if (theme && theme !== 'default') {
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    window.selectTheme = (theme) => {
+      selectedTheme = theme;
+      document.querySelectorAll('[id^="theme-"]').forEach(btn => {
+        btn.style.borderColor = '';
+        btn.style.background = '';
+      });
+      const selected = document.getElementById(`theme-${theme}`);
+      if (selected) {
+        selected.style.borderColor = 'var(--color-accent)';
+        selected.style.background = 'var(--color-accent-glow)';
+      }
+      ZenStorage.set('theme', theme);
+      if (theme !== 'default') {
+        document.documentElement.setAttribute('data-theme', theme);
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+      }
+    };
+
+    window.nextSlide = () => {
+      if (currentSlide < totalSlides - 1) {
+        document.getElementById(`slide-${currentSlide}`).classList.remove('active');
+        document.getElementById(`dot-${currentSlide}`).classList.remove('active');
+        currentSlide++;
+        document.getElementById(`slide-${currentSlide}`).classList.add('active');
+        document.getElementById(`dot-${currentSlide}`).classList.add('active');
+
+        if (currentSlide === totalSlides - 1) {
+          document.getElementById('btn-next').textContent = 'はじめる';
+          document.getElementById('btn-next').onclick = completeOnboarding;
+          document.getElementById('btn-skip').classList.add('hidden');
+        }
+      }
+    };
+
+    window.completeOnboarding = () => {
+      ZenStorage.set('onboarding_completed', true);
+      ZenStorage.set('theme', selectedTheme);
+      window.location.href = '../index.html';
+    };
+  </script>
+</body>
+</html>

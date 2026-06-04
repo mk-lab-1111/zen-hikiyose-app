@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#D4AF37">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>MINDFUL ASSET - Premiumプラン</title>
+  <link rel="stylesheet" href="../css/zen_hikiyose_theme.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_base.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_components.css">
+  <style>
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--color-border);
+      font-size: 0.875rem;
+    }
+    .feature-item:last-child { border-bottom: none; }
+    .feature-icon { font-size: 1.25rem; width: 28px; text-align: center; }
+    .review-card { background: var(--color-bg-card); border-radius: var(--radius-md); padding: 16px; margin-bottom: 12px; border-left: 3px solid var(--color-accent); }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header class="page-header">
+      <a href="zen_hikiyose_settings.html" style="color:var(--color-text-muted);font-size:1.5rem;">‹</a>
+      <span class="page-header-title">Premiumプラン</span>
+      <span></span>
+    </header>
+
+    <main class="main-content">
+
+      <!-- ヒーローバナー -->
+      <div class="card card-premium mb-24" style="text-align:center;padding:32px 20px;">
+        <p style="font-size:2.5rem;margin-bottom:8px;">👑</p>
+        <h1 style="font-size:1.5rem;font-weight:700;color:var(--color-accent);margin-bottom:8px;">MINDFUL ASSET Premium</h1>
+        <p class="text-muted text-sm">引き寄せ力を最大化する全機能を解放</p>
+        <div class="divider-gold"></div>
+        <p style="font-size:2rem;font-weight:700;color:var(--color-gold);">¥980<span style="font-size:0.875rem;font-weight:400;color:var(--color-text-muted);">/月</span></p>
+      </div>
+
+      <!-- 機能一覧 -->
+      <div class="section">
+        <p class="section-title">PREMIUM FEATURES</p>
+        <div class="card">
+          <div class="feature-item">
+            <span class="feature-icon">🌙</span>
+            <div>
+              <p style="font-weight:500;">夢日記</p>
+              <p class="text-muted text-xs">潜在意識からのメッセージを記録・解析</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">🎯</span>
+            <div>
+              <p style="font-weight:500;">マンダラチャート</p>
+              <p class="text-muted text-xs">81の行動目標で夢を体系化</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">💰</span>
+            <div>
+              <p style="font-weight:500;">富の意識覚醒コース</p>
+              <p class="text-muted text-xs">14日間で億プレイヤーの金銭感覚を習得</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">⚡</span>
+            <div>
+              <p style="font-weight:500;">超加速マニフェストコース</p>
+              <p class="text-muted text-xs">21日間で現実創造のスピードを3倍に</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">📊</span>
+            <div>
+              <p style="font-weight:500;">詳細マインドスコア分析</p>
+              <p class="text-muted text-xs">グラフで引き寄せ力の推移を可視化</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 実践者の声 -->
+      <div class="section">
+        <p class="section-title">REVIEWS</p>
+        <div id="reviews-container"></div>
+      </div>
+
+      <!-- CTAボタン -->
+      <div style="padding-bottom:16px;">
+        <button class="btn btn-primary mb-16" onclick="unlockPremium()">今すぐPremiumを始める</button>
+        <p class="text-center text-muted text-xs">※ 実装予定：決済システム連動（No.005）</p>
+      </div>
+
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="zen_hikiyose_home.html" class="bottom-nav-item">
+        <span class="nav-icon">🏠</span><span class="nav-label">ホーム</span>
+      </a>
+      <a href="zen_hikiyose_affirmation.html" class="bottom-nav-item">
+        <span class="nav-icon">🔥</span><span class="nav-label">アファメーション</span>
+      </a>
+      <a href="zen_hikiyose_log.html" class="bottom-nav-item">
+        <span class="nav-icon">📓</span><span class="nav-label">ログ</span>
+      </a>
+      <a href="zen_hikiyose_roadmap.html" class="bottom-nav-item">
+        <span class="nav-icon">🗺️</span><span class="nav-label">マップ</span>
+      </a>
+      <a href="zen_hikiyose_settings.html" class="bottom-nav-item active">
+        <span class="nav-icon">⚙️</span><span class="nav-label">設定</span>
+      </a>
+    </nav>
+  </div>
+  <div class="toast-container" id="toast-container"></div>
+
+  <script type="module">
+    import ZenStorage from '../js/zen_hikiyose_storage.js';
+    import ZenPremium from '../js/zen_hikiyose_premium.js';
+
+    const theme = ZenStorage.get('theme', 'default');
+    if (theme && theme !== 'default') document.documentElement.setAttribute('data-theme', theme);
+
+    // レビュー読み込み
+    fetch('../data/zen_hikiyose_review.json')
+      .then(r => r.json())
+      .then(data => {
+        document.getElementById('reviews-container').innerHTML = data.reviews.map(r => `
+          <div class="review-card">
+            <p style="font-size:0.875rem;color:var(--color-text-secondary);line-height:1.7;margin-bottom:8px;">"${r.text}"</p>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span class="text-muted text-xs">${r.name}</span>
+              <span class="badge badge-free">${r.achievement}</span>
+            </div>
+          </div>
+        `).join('');
+      });
+
+    // プレミアムアンロック（暫定：決済なし）
+    window.unlockPremium = () => {
+      ZenPremium.unlock();
+      const toast = document.createElement('div');
+      toast.className = 'toast toast-gold';
+      toast.textContent = 'Premiumが有効になりました！👑';
+      document.getElementById('toast-container').appendChild(toast);
+      setTimeout(() => {
+        toast.classList.add('toast-hiding');
+        setTimeout(() => { toast.remove(); window.location.href = 'zen_hikiyose_settings.html'; }, 300);
+      }, 2000);
+    };
+  </script>
+</body>
+</html>
