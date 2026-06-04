@@ -11,94 +11,190 @@
   <link rel="stylesheet" href="../css/zen_hikiyose_components.css">
 </head>
 <body>
-  <div id="app">
-    <header class="page-header">
-      <span class="page-header-title">MINDFUL ASSET</span>
-      <div class="score-circle" style="width:48px;height:48px;">
-        <span class="score-value" style="font-size:1rem;" id="score-val">—</span>
-        <span class="score-label">SCORE</span>
-      </div>
-    </header>
+<div id="app">
 
-    <main class="main-content">
-      <div class="card card-premium mb-16" style="text-align:center;padding:24px 16px;">
-        <p class="text-muted text-xs mb-8">TODAY'S QUOTE</p>
-        <p style="font-size:1.1rem;font-weight:700;color:var(--color-accent);line-height:1.5;">
-          "あなたの思考が現実を創る"
-        </p>
+  <!-- ヘッダー -->
+  <header class="page-header">
+    <span class="page-header__logo">MINDFUL ASSET</span>
+    <div class="page-header__right">
+      <div class="score-badge" id="score-badge">
+        <span class="score-badge__value" id="score-value">0</span>
+        <span class="score-badge__label">スコア</span>
       </div>
+    </div>
+  </header>
 
-      <div class="section">
-        <p class="section-title">TODAY'S ADVICE</p>
-        <div class="card" id="daily-advice"><div class="spinner"></div></div>
+  <main class="main-content">
+
+    <!-- 今日のアドバイス -->
+    <section class="section">
+      <p class="section-title">今日のZENメッセージ</p>
+      <div class="card-accent" id="daily-advice">
+        <div class="spinner"></div>
       </div>
+    </section>
 
-      <div class="section">
-        <p class="section-title">QUICK ACTION</p>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-          <a href="zen_hikiyose_record.html" class="card card-clickable" style="text-align:center;padding:20px 12px;">
-            <div style="font-size:28px;margin-bottom:8px;">✍️</div>
-            <div style="font-size:0.8rem;font-weight:500;">今日を記録</div>
-            <span class="badge badge-free" style="margin-top:8px;">FREE</span>
-          </a>
-          <a href="zen_hikiyose_affirmation.html" class="card card-clickable" style="text-align:center;padding:20px 12px;">
-            <div style="font-size:28px;margin-bottom:8px;">🔥</div>
-            <div style="font-size:0.8rem;font-weight:500;">アファメーション</div>
-            <span class="badge badge-free" style="margin-top:8px;">FREE</span>
-          </a>
-          <a href="zen_hikiyose_dream_log.html" class="card card-clickable" style="text-align:center;padding:20px 12px;">
-            <div style="font-size:28px;margin-bottom:8px;">🌙</div>
-            <div style="font-size:0.8rem;font-weight:500;">夢日記</div>
-            <span class="badge badge-premium" style="margin-top:8px;">PREMIUM</span>
-          </a>
-          <a href="zen_hikiyose_mandala.html" class="card card-clickable" style="text-align:center;padding:20px 12px;">
-            <div style="font-size:28px;margin-bottom:8px;">🎯</div>
-            <div style="font-size:0.8rem;font-weight:500;">マンダラ</div>
-            <span class="badge badge-premium" style="margin-top:8px;">PREMIUM</span>
-          </a>
+    <!-- 連続実践 -->
+    <section class="section">
+      <div class="stat-grid">
+        <div class="stat-item">
+          <div class="stat-value" id="streak-val">0</div>
+          <div class="stat-label">日連続</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="total-val">0</div>
+          <div class="stat-label">累計実践日</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="score-stat">0</div>
+          <div class="stat-label">マインドスコア</div>
         </div>
       </div>
-    </main>
+    </section>
 
-    <nav class="bottom-nav">
-      <a href="zen_hikiyose_home.html" class="bottom-nav-item active">
-        <span class="nav-icon">🏠</span><span class="nav-label">ホーム</span>
-      </a>
-      <a href="zen_hikiyose_affirmation.html" class="bottom-nav-item">
-        <span class="nav-icon">🔥</span><span class="nav-label">アファメーション</span>
-      </a>
-      <a href="zen_hikiyose_log.html" class="bottom-nav-item">
-        <span class="nav-icon">📓</span><span class="nav-label">ログ</span>
-      </a>
-      <a href="zen_hikiyose_roadmap.html" class="bottom-nav-item">
-        <span class="nav-icon">🗺️</span><span class="nav-label">マップ</span>
-      </a>
-      <a href="zen_hikiyose_settings.html" class="bottom-nav-item">
-        <span class="nav-icon">⚙️</span><span class="nav-label">設定</span>
-      </a>
-    </nav>
-  </div>
+    <!-- ショートカット -->
+    <section class="section">
+      <p class="section-title">今日の実践</p>
+      <div style="display:flex;flex-direction:column;gap:var(--sp-3);">
+        <a href="zen_hikiyose_affirmation.html?session=morning" class="card card-clickable" style="display:flex;align-items:center;gap:var(--sp-4);">
+          <div style="width:44px;height:44px;border-radius:50%;background:var(--color-accent-dim);border:1.5px solid var(--color-accent-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            </svg>
+          </div>
+          <div style="flex:1;">
+            <div style="font-weight:700;font-size:var(--text-sm);">朝のアファメーション</div>
+            <div style="font-size:var(--text-xs);color:var(--color-text-muted);margin-top:2px;" id="morning-status">未実施</div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a href="zen_hikiyose_affirmation.html?session=evening" class="card card-clickable" style="display:flex;align-items:center;gap:var(--sp-4);">
+          <div style="width:44px;height:44px;border-radius:50%;background:rgba(167,139,250,0.1);border:1.5px solid rgba(167,139,250,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </div>
+          <div style="flex:1;">
+            <div style="font-weight:700;font-size:var(--text-sm);">夜のアファメーション</div>
+            <div style="font-size:var(--text-xs);color:var(--color-text-muted);margin-top:2px;" id="evening-status">未実施</div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+    </section>
 
-  <script type="module">
-    import ZenStorage from '../js/zen_hikiyose_storage.js';
-    import ZenScore from '../js/zen_hikiyose_score.js';
+    <!-- クイックアクション -->
+    <section class="section">
+      <p class="section-title">記録する</p>
+      <div class="grid-2">
+        <a href="zen_hikiyose_log.html" class="card card-clickable" style="text-align:center;padding:var(--sp-5) var(--sp-3);">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto var(--sp-2);">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+          </svg>
+          <div style="font-weight:500;font-size:var(--text-sm);">引き寄せログ</div>
+          <span class="badge badge-free" style="margin-top:6px;">無料</span>
+        </a>
+        <a href="zen_hikiyose_dream_log.html" class="card card-clickable" style="text-align:center;padding:var(--sp-5) var(--sp-3);">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto var(--sp-2);">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+          </svg>
+          <div style="font-weight:500;font-size:var(--text-sm);">夢実現ログ</div>
+          <span class="badge badge-premium" style="margin-top:6px;">プレミアム</span>
+        </a>
+        <a href="zen_hikiyose_mandala.html" class="card card-clickable" style="text-align:center;padding:var(--sp-5) var(--sp-3);">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto var(--sp-2);">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+            <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+          </svg>
+          <div style="font-weight:500;font-size:var(--text-sm);">マンダラマップ</div>
+          <span class="badge badge-premium" style="margin-top:6px;">プレミアム</span>
+        </a>
+        <a href="zen_hikiyose_roadmap.html" class="card card-clickable" style="text-align:center;padding:var(--sp-5) var(--sp-3);">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto var(--sp-2);">
+            <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/>
+            <line x1="9" y1="3" x2="9" y2="18"/>
+            <line x1="15" y1="6" x2="15" y2="21"/>
+          </svg>
+          <div style="font-weight:500;font-size:var(--text-sm);">ロードマップ</div>
+          <span class="badge badge-free" style="margin-top:6px;">無料</span>
+        </a>
+      </div>
+    </section>
 
-    const theme = ZenStorage.get('theme', 'default');
-    if (theme && theme !== 'default') document.documentElement.setAttribute('data-theme', theme);
+    <!-- プレミアムリンク -->
+    <div style="text-align:center;padding:var(--sp-2) 0 var(--sp-4);">
+      <a href="zen_hikiyose_premium.html" class="btn-text" style="font-size:var(--text-xs);">プレミアムプランの詳細を見る</a>
+    </div>
 
-    document.getElementById('score-val').textContent = ZenScore.calculate() || '—';
+  </main>
 
-    fetch('../data/zen_hikiyose_advice.json')
-      .then(r => r.json())
-      .then(data => {
-        const idx = new Date().getDay();
-        const a = data.advice[idx === 0 ? 6 : idx - 1] || data.advice[0];
-        document.getElementById('daily-advice').innerHTML = `
-          <p style="font-size:0.75rem;color:var(--color-accent);font-weight:500;margin-bottom:8px;">${a.title}</p>
-          <p style="font-size:0.875rem;color:var(--color-text-secondary);line-height:1.7;">${a.body}</p>
-        `;
-      })
-      .catch(() => { document.getElementById('daily-advice').textContent = '今日も実践を続けましょう。'; });
-  </script>
+  <!-- ボトムナビ -->
+  <nav class="bottom-nav">
+    <a href="zen_hikiyose_home.html" class="bottom-nav__item is-active">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+      <span class="bottom-nav__label">ホーム</span>
+    </a>
+    <a href="zen_hikiyose_affirmation.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></span>
+      <span class="bottom-nav__label">アファメーション</span>
+    </a>
+    <a href="zen_hikiyose_log.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
+      <span class="bottom-nav__label">ログ</span>
+    </a>
+    <a href="zen_hikiyose_roadmap.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg></span>
+      <span class="bottom-nav__label">マップ</span>
+    </a>
+    <a href="zen_hikiyose_settings.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+      <span class="bottom-nav__label">設定</span>
+    </a>
+  </nav>
+
+</div>
+<div id="toast-container" class="toast-container"></div>
+
+<script type="module">
+  import ZenStorage from '../js/zen_hikiyose_storage.js';
+  import ZenScore from '../js/zen_hikiyose_score.js';
+  import ZenApp from '../js/zen_hikiyose_app.js';
+
+  ZenApp.init();
+
+  // スコア表示
+  const score = ZenScore.getCurrentScore();
+  document.getElementById('score-value').textContent = score;
+  document.getElementById('score-stat').textContent = score;
+  document.getElementById('streak-val').textContent = ZenScore.getStreak();
+  document.getElementById('total-val').textContent = ZenScore.getTotalDays();
+
+  // 今日の実施状況
+  const dl = ZenScore.getDailyLog();
+  if (dl.morning) document.getElementById('morning-status').textContent = '完了';
+  if (dl.evening) document.getElementById('evening-status').textContent = '完了';
+
+  // 今日のアドバイス
+  fetch('../data/zen_hikiyose_advice.json')
+    .then(r => r.json())
+    .then(data => {
+      const day = new Date().getDate();
+      const item = data.advice[(day - 1) % data.advice.length];
+      document.getElementById('daily-advice').innerHTML = `
+        <p style="font-size:var(--text-xs);color:var(--color-accent);font-weight:700;letter-spacing:0.08em;margin-bottom:10px;">${item.title}</p>
+        <p style="font-size:var(--text-sm);color:var(--color-text-sub);line-height:1.8;">${item.body}</p>
+        <div style="margin-top:12px;text-align:right;">
+          <a href="zen_hikiyose_advice.html" style="font-size:var(--text-xs);color:var(--color-text-muted);">すべて見る</a>
+        </div>
+      `;
+    })
+    .catch(() => {
+      document.getElementById('daily-advice').innerHTML = '<p style="color:var(--color-text-sub);font-size:var(--text-sm);">今日も実践を続けましょう。</p>';
+    });
+</script>
 </body>
 </html>

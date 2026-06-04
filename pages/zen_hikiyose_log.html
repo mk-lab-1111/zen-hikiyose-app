@@ -5,76 +5,187 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#D4AF37">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>MINDFUL ASSET - ログ</title>
+  <title>MINDFUL ASSET - 引き寄せログ</title>
   <link rel="stylesheet" href="../css/zen_hikiyose_theme.css">
   <link rel="stylesheet" href="../css/zen_hikiyose_base.css">
   <link rel="stylesheet" href="../css/zen_hikiyose_components.css">
+  <style>
+    .asset-value {
+      background: var(--color-accent-dim);
+      border: 1px solid var(--color-accent-border);
+      border-radius: var(--radius-md);
+      padding: var(--sp-3) var(--sp-4);
+      margin-top: var(--sp-2);
+      display: none;
+    }
+    .asset-value__label {
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      margin-bottom: 2px;
+    }
+    .asset-value__num {
+      font-size: var(--text-xl);
+      font-weight: 900;
+      color: var(--color-accent);
+    }
+    .log-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: var(--sp-3) 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .log-item:last-child { border-bottom: none; }
+    .log-item__text { font-size: var(--text-sm); color: var(--color-text); line-height: 1.65; }
+    .log-item__meta { display: flex; justify-content: space-between; align-items: center; }
+    .log-item__date { font-size: var(--text-xs); color: var(--color-text-muted); }
+    .log-item__value { font-size: var(--text-xs); color: var(--color-accent); font-weight: 700; }
+  </style>
 </head>
 <body>
-  <div id="app">
-    <header class="page-header">
-      <span class="page-header-title">記録ログ</span>
-      <a href="zen_hikiyose_record.html" class="btn btn-secondary btn-auto btn-sm">＋ 記録</a>
-    </header>
+<div id="app">
 
-    <main class="main-content">
-      <div id="log-list" style="display:flex;flex-direction:column;gap:12px;">
+  <header class="page-header">
+    <span class="page-header__title">引き寄せログ</span>
+    <a href="zen_hikiyose_dream_log.html" style="font-size:var(--text-xs);color:var(--color-text-muted);">夢実現ログ</a>
+  </header>
+
+  <main class="main-content">
+
+    <!-- 入力フォーム -->
+    <section class="section">
+      <label class="input-label" for="log-input">今日起きた小さなラッキーや気づきを書いてください</label>
+      <textarea class="input-field" id="log-input" rows="3"
+        placeholder="今日起きた小さなラッキーや気づきを書いてください"
+        oninput="calcAsset(this.value)"></textarea>
+
+      <!-- 資産価値プレビュー -->
+      <div class="asset-value" id="asset-preview">
+        <div class="asset-value__label">マインド潜在資産価値</div>
+        <div class="asset-value__num" id="asset-num">+0円</div>
+      </div>
+
+      <button class="btn-primary mt-3" onclick="saveLog()">記録する</button>
+    </section>
+
+    <!-- ログ一覧 -->
+    <section class="section">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-3);">
+        <p class="section-title" style="margin-bottom:0;">記録一覧</p>
+        <span style="font-size:var(--text-xs);color:var(--color-text-muted);" id="log-limit-note">直近5件を表示</span>
+      </div>
+      <div class="card" id="log-list">
         <div class="spinner"></div>
       </div>
-    </main>
+    </section>
 
-    <nav class="bottom-nav">
-      <a href="zen_hikiyose_home.html" class="bottom-nav-item">
-        <span class="nav-icon">🏠</span><span class="nav-label">ホーム</span>
-      </a>
-      <a href="zen_hikiyose_affirmation.html" class="bottom-nav-item">
-        <span class="nav-icon">🔥</span><span class="nav-label">アファメーション</span>
-      </a>
-      <a href="zen_hikiyose_log.html" class="bottom-nav-item active">
-        <span class="nav-icon">📓</span><span class="nav-label">ログ</span>
-      </a>
-      <a href="zen_hikiyose_roadmap.html" class="bottom-nav-item">
-        <span class="nav-icon">🗺️</span><span class="nav-label">マップ</span>
-      </a>
-      <a href="zen_hikiyose_settings.html" class="bottom-nav-item">
-        <span class="nav-icon">⚙️</span><span class="nav-label">設定</span>
-      </a>
-    </nav>
-  </div>
+    <!-- 有料版ヒント -->
+    <div class="card" id="premium-hint" style="text-align:center;padding:var(--sp-3);background:transparent;border-style:dashed;">
+      <p style="font-size:var(--text-xs);color:var(--color-text-muted);">
+        プレミアムで全件表示・資産価値グラフが利用できます。
+        <a href="zen_hikiyose_premium.html" style="color:var(--color-accent);">詳細を見る</a>
+      </p>
+    </div>
 
-  <script type="module">
-    import ZenStorage from '../js/zen_hikiyose_storage.js';
+  </main>
 
-    const theme = ZenStorage.get('theme', 'default');
-    if (theme && theme !== 'default') document.documentElement.setAttribute('data-theme', theme);
+  <!-- ボトムナビ -->
+  <nav class="bottom-nav">
+    <a href="zen_hikiyose_home.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+      <span class="bottom-nav__label">ホーム</span>
+    </a>
+    <a href="zen_hikiyose_affirmation.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></span>
+      <span class="bottom-nav__label">アファメーション</span>
+    </a>
+    <a href="zen_hikiyose_log.html" class="bottom-nav__item is-active">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
+      <span class="bottom-nav__label">ログ</span>
+    </a>
+    <a href="zen_hikiyose_roadmap.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg></span>
+      <span class="bottom-nav__label">マップ</span>
+    </a>
+    <a href="zen_hikiyose_settings.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+      <span class="bottom-nav__label">設定</span>
+    </a>
+  </nav>
 
-    const records = ZenStorage.get('daily_records', []).reverse();
+</div>
+<div id="toast-container" class="toast-container"></div>
+
+<script type="module">
+  import ZenStorage from '../js/zen_hikiyose_storage.js';
+  import ZenScore from '../js/zen_hikiyose_score.js';
+  import ZenPremium from '../js/zen_hikiyose_premium.js';
+  import ZenApp from '../js/zen_hikiyose_app.js';
+
+  ZenApp.init();
+
+  const isPremium = ZenPremium.isPremium();
+  if (isPremium) {
+    document.getElementById('log-limit-note').textContent = '全件表示';
+    document.getElementById('premium-hint').style.display = 'none';
+  }
+
+  // 資産価値計算
+  window.calcAsset = (text) => {
+    const preview = document.getElementById('asset-preview');
+    if (text.trim().length === 0) { preview.style.display = 'none'; return; }
+    const base = (Math.floor(Math.random() * 9) + 1) * 10000;
+    const bonus = Math.min(text.length * 300, 40000);
+    const val = Math.round((base + bonus) / 1000) * 1000;
+    document.getElementById('asset-num').textContent = `+${val.toLocaleString('ja-JP')}円`;
+    preview.style.display = 'block';
+  };
+
+  window.saveLog = () => {
+    const text = document.getElementById('log-input').value.trim();
+    if (!text) { ZenApp.showToast('内容を入力してください', 'error'); return; }
+
+    const base = (Math.floor(Math.random() * 9) + 1) * 10000;
+    const bonus = Math.min(text.length * 300, 40000);
+    const assetValue = Math.round((base + bonus) / 1000) * 1000;
+
+    const logs = ZenStorage.get('zen_hikiyose_log', []);
+    logs.unshift({ text, assetValue, date: new Date().toISOString() });
+    ZenStorage.set('zen_hikiyose_log', logs);
+
+    const earned = ZenScore.addPoints('log');
+    document.getElementById('log-input').value = '';
+    document.getElementById('asset-preview').style.display = 'none';
+    ZenApp.showToast(`ログを記録しました（+${earned}pt）`, 'success');
+    renderLogs();
+  };
+
+  const renderLogs = () => {
+    const logs = ZenStorage.get('zen_hikiyose_log', []);
+    const display = isPremium ? logs : logs.slice(0, 5);
     const container = document.getElementById('log-list');
 
-    if (records.length === 0) {
-      container.innerHTML = `
-        <div class="card" style="text-align:center;padding:40px 16px;">
-          <p style="font-size:2rem;margin-bottom:12px;">📓</p>
-          <p class="text-muted text-sm">まだ記録がありません</p>
-          <a href="zen_hikiyose_record.html" class="btn btn-primary mt-16" style="display:inline-flex;width:auto;">最初の記録をする</a>
+    if (display.length === 0) {
+      container.innerHTML = '<p style="text-align:center;color:var(--color-text-muted);font-size:var(--text-sm);padding:var(--sp-4) 0;">まだ記録がありません</p>';
+      return;
+    }
+
+    container.innerHTML = display.map(item => {
+      const d = new Date(item.date);
+      const dateStr = `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+      return `
+        <div class="log-item">
+          <p class="log-item__text">${item.text}</p>
+          <div class="log-item__meta">
+            <span class="log-item__date">${dateStr}</span>
+            <span class="log-item__value">+${item.assetValue.toLocaleString('ja-JP')}円</span>
+          </div>
         </div>
       `;
-    } else {
-      container.innerHTML = records.map(r => {
-        const date = new Date(r.date).toLocaleDateString('ja-JP', { month: 'long', day: 'numeric', weekday: 'short' });
-        const score = Math.round((r.score || 0) / 10);
-        return `
-          <div class="card">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-              <span class="text-muted text-xs">${date}</span>
-              <span style="color:var(--color-accent);font-weight:700;font-size:0.875rem;">スコア ${score}/10</span>
-            </div>
-            ${r.text ? `<p style="font-size:0.875rem;color:var(--color-text-secondary);line-height:1.6;">${r.text}</p>` : ''}
-            ${r.intention ? `<p class="text-xs text-muted" style="margin-top:8px;">意図：${r.intention}</p>` : ''}
-          </div>
-        `;
-      }).join('');
-    }
-  </script>
+    }).join('');
+  };
+
+  renderLogs();
+</script>
 </body>
 </html>

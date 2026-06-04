@@ -5,153 +5,345 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#D4AF37">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>MINDFUL ASSET - Premiumプラン</title>
+  <title>MINDFUL ASSET - プレミアムプラン</title>
   <link rel="stylesheet" href="../css/zen_hikiyose_theme.css">
   <link rel="stylesheet" href="../css/zen_hikiyose_base.css">
   <link rel="stylesheet" href="../css/zen_hikiyose_components.css">
   <style>
-    .feature-item {
+    /* LP専用スタイル */
+    .lp-hero {
+      background: linear-gradient(160deg, var(--color-bg-card) 0%, var(--color-bg) 100%);
+      border-bottom: 1px solid var(--color-border);
+      padding: var(--sp-8) var(--sp-4) var(--sp-6);
+      text-align: center;
+    }
+    .lp-hero__eyebrow {
+      font-size: var(--text-xs);
+      color: var(--color-accent);
+      letter-spacing: 0.15em;
+      font-weight: 700;
+      margin-bottom: var(--sp-3);
+    }
+    .lp-hero__heading {
+      font-size: clamp(1.1rem, 4.5vw, 1.5rem);
+      font-weight: 900;
+      line-height: 1.5;
+      color: var(--color-text);
+      margin-bottom: var(--sp-4);
+    }
+    .lp-hero__heading span { color: var(--color-accent); }
+
+    /* セクション */
+    .lp-section {
+      padding: var(--sp-6) var(--sp-4);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .lp-section-title {
+      font-size: var(--text-sm);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--color-text-muted);
+      margin-bottom: var(--sp-4);
+      text-align: center;
+    }
+
+    /* プラン選択 */
+    .plan-card {
+      border: 1.5px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--sp-5);
+      margin-bottom: var(--sp-3);
+      background: var(--color-bg-card);
+      position: relative;
+      cursor: pointer;
+      transition: border-color var(--ease-normal);
+    }
+    .plan-card.is-featured {
+      border-color: var(--color-accent);
+      background: var(--color-accent-dim);
+    }
+    .plan-card__popular {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-accent);
+      color: #0D0D0D;
+      font-size: var(--text-xs);
+      font-weight: 700;
+      padding: 2px 12px;
+      border-radius: var(--radius-full);
+      white-space: nowrap;
+    }
+    .plan-card__name {
+      font-weight: 700;
+      font-size: var(--text-sm);
+      margin-bottom: var(--sp-2);
+    }
+    .plan-card__price {
+      font-size: var(--text-2xl);
+      font-weight: 900;
+      color: var(--color-accent);
+      line-height: 1;
+    }
+    .plan-card__price span {
+      font-size: var(--text-sm);
+      font-weight: 400;
+      color: var(--color-text-muted);
+    }
+    .plan-card__note {
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      margin-top: var(--sp-2);
+    }
+
+    /* FAQ */
+    .faq-item {
+      border-bottom: 1px solid var(--color-border);
+      padding: var(--sp-4) 0;
+    }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-q { font-weight: 700; font-size: var(--text-sm); margin-bottom: var(--sp-2); }
+    .faq-a { font-size: var(--text-sm); color: var(--color-text-sub); line-height: 1.7; }
+
+    /* 決済ボタン */
+    .cta-section {
+      padding: var(--sp-6) var(--sp-4) calc(var(--sp-8) + env(safe-area-inset-bottom));
+      text-align: center;
+    }
+
+    /* 支払い方法アイコン */
+    .payment-icons {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--color-border);
-      font-size: 0.875rem;
+      justify-content: center;
+      gap: var(--sp-3);
+      margin-top: var(--sp-3);
+      flex-wrap: wrap;
     }
-    .feature-item:last-child { border-bottom: none; }
-    .feature-icon { font-size: 1.25rem; width: 28px; text-align: center; }
-    .review-card { background: var(--color-bg-card); border-radius: var(--radius-md); padding: 16px; margin-bottom: 12px; border-left: 3px solid var(--color-accent); }
+    .payment-icon {
+      background: var(--color-bg-elevated);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 4px 10px;
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      font-weight: 500;
+    }
+
+    /* レビューカード */
+    .lp-review {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--sp-4);
+      margin-bottom: var(--sp-3);
+      border-left: 3px solid var(--color-accent-border);
+    }
+    .lp-review__text { font-size: var(--text-sm); color: var(--color-text-sub); line-height: 1.75; margin-bottom: var(--sp-2); }
+    .lp-review__meta { font-size: var(--text-xs); color: var(--color-text-muted); }
   </style>
 </head>
 <body>
-  <div id="app">
-    <header class="page-header">
-      <a href="zen_hikiyose_settings.html" style="color:var(--color-text-muted);font-size:1.5rem;">‹</a>
-      <span class="page-header-title">Premiumプラン</span>
-      <span></span>
-    </header>
+<div id="app" style="max-width:480px;margin:0 auto;overflow-x:hidden;">
 
-    <main class="main-content">
+  <!-- ヘッダー -->
+  <header class="page-header">
+    <button class="page-header__back" onclick="history.back()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <span class="page-header__title">プレミアムプラン</span>
+  </header>
 
-      <!-- ヒーローバナー -->
-      <div class="card card-premium mb-24" style="text-align:center;padding:32px 20px;">
-        <p style="font-size:2.5rem;margin-bottom:8px;">👑</p>
-        <h1 style="font-size:1.5rem;font-weight:700;color:var(--color-accent);margin-bottom:8px;">MINDFUL ASSET Premium</h1>
-        <p class="text-muted text-sm">引き寄せ力を最大化する全機能を解放</p>
-        <div class="divider-gold"></div>
-        <p style="font-size:2rem;font-weight:700;color:var(--color-gold);">¥980<span style="font-size:0.875rem;font-weight:400;color:var(--color-text-muted);">/月</span></p>
-      </div>
-
-      <!-- 機能一覧 -->
-      <div class="section">
-        <p class="section-title">PREMIUM FEATURES</p>
-        <div class="card">
-          <div class="feature-item">
-            <span class="feature-icon">🌙</span>
-            <div>
-              <p style="font-weight:500;">夢日記</p>
-              <p class="text-muted text-xs">潜在意識からのメッセージを記録・解析</p>
-            </div>
-          </div>
-          <div class="feature-item">
-            <span class="feature-icon">🎯</span>
-            <div>
-              <p style="font-weight:500;">マンダラチャート</p>
-              <p class="text-muted text-xs">81の行動目標で夢を体系化</p>
-            </div>
-          </div>
-          <div class="feature-item">
-            <span class="feature-icon">💰</span>
-            <div>
-              <p style="font-weight:500;">富の意識覚醒コース</p>
-              <p class="text-muted text-xs">14日間で億プレイヤーの金銭感覚を習得</p>
-            </div>
-          </div>
-          <div class="feature-item">
-            <span class="feature-icon">⚡</span>
-            <div>
-              <p style="font-weight:500;">超加速マニフェストコース</p>
-              <p class="text-muted text-xs">21日間で現実創造のスピードを3倍に</p>
-            </div>
-          </div>
-          <div class="feature-item">
-            <span class="feature-icon">📊</span>
-            <div>
-              <p style="font-weight:500;">詳細マインドスコア分析</p>
-              <p class="text-muted text-xs">グラフで引き寄せ力の推移を可視化</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 実践者の声 -->
-      <div class="section">
-        <p class="section-title">REVIEWS</p>
-        <div id="reviews-container"></div>
-      </div>
-
-      <!-- CTAボタン -->
-      <div style="padding-bottom:16px;">
-        <button class="btn btn-primary mb-16" onclick="unlockPremium()">今すぐPremiumを始める</button>
-        <p class="text-center text-muted text-xs">※ 実装予定：決済システム連動（No.005）</p>
-      </div>
-
-    </main>
-
-    <nav class="bottom-nav">
-      <a href="zen_hikiyose_home.html" class="bottom-nav-item">
-        <span class="nav-icon">🏠</span><span class="nav-label">ホーム</span>
-      </a>
-      <a href="zen_hikiyose_affirmation.html" class="bottom-nav-item">
-        <span class="nav-icon">🔥</span><span class="nav-label">アファメーション</span>
-      </a>
-      <a href="zen_hikiyose_log.html" class="bottom-nav-item">
-        <span class="nav-icon">📓</span><span class="nav-label">ログ</span>
-      </a>
-      <a href="zen_hikiyose_roadmap.html" class="bottom-nav-item">
-        <span class="nav-icon">🗺️</span><span class="nav-label">マップ</span>
-      </a>
-      <a href="zen_hikiyose_settings.html" class="bottom-nav-item active">
-        <span class="nav-icon">⚙️</span><span class="nav-label">設定</span>
-      </a>
-    </nav>
+  <!-- 1. ヒーロー -->
+  <div class="lp-hero">
+    <p class="lp-hero__eyebrow">MINDFUL ASSET PREMIUM</p>
+    <h1 class="lp-hero__heading">
+      すべての機能を活用して、<br>
+      <span>夢の実現を加速させたい方はこちら</span>
+    </h1>
+    <p style="font-size:var(--text-sm);color:var(--color-text-muted);line-height:1.7;">
+      無料版で感じた変化を、さらに大きなものへ。ZEN監修のフルプログラムで、脳のOSを完全に書き換えます。
+    </p>
   </div>
-  <div class="toast-container" id="toast-container"></div>
 
-  <script type="module">
-    import ZenStorage from '../js/zen_hikiyose_storage.js';
-    import ZenPremium from '../js/zen_hikiyose_premium.js';
+  <!-- 2. 比較表 -->
+  <div class="lp-section">
+    <p class="lp-section-title">無料版 vs プレミアム</p>
+    <div class="card" style="overflow-x:auto;">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>機能</th>
+            <th>無料版</th>
+            <th class="col-premium">プレミアム</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>アファメーション音声</td>
+            <td class="dash">1種</td>
+            <td class="check">30種</td>
+          </tr>
+          <tr>
+            <td>ロードマップ</td>
+            <td class="dash">コース01のみ</td>
+            <td class="check">全10コース</td>
+          </tr>
+          <tr>
+            <td>マンダラマップ</td>
+            <td class="dash">1枚</td>
+            <td class="check">無制限</td>
+          </tr>
+          <tr>
+            <td>引き寄せログ</td>
+            <td class="dash">直近5件</td>
+            <td class="check">無制限</td>
+          </tr>
+          <tr>
+            <td>資産価値グラフ</td>
+            <td class="dash">なし</td>
+            <td class="check">あり</td>
+          </tr>
+          <tr>
+            <td>夢実現ログテーマ</td>
+            <td class="dash">1つ</td>
+            <td class="check">無制限</td>
+          </tr>
+          <tr>
+            <td>監修者音声</td>
+            <td class="dash">なし</td>
+            <td class="check">あり</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-    const theme = ZenStorage.get('theme', 'default');
-    if (theme && theme !== 'default') document.documentElement.setAttribute('data-theme', theme);
+  <!-- 3. プラン選択 -->
+  <div class="lp-section">
+    <p class="lp-section-title">プランを選択</p>
 
-    // レビュー読み込み
-    fetch('../data/zen_hikiyose_review.json')
-      .then(r => r.json())
-      .then(data => {
-        document.getElementById('reviews-container').innerHTML = data.reviews.map(r => `
-          <div class="review-card">
-            <p style="font-size:0.875rem;color:var(--color-text-secondary);line-height:1.7;margin-bottom:8px;">"${r.text}"</p>
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span class="text-muted text-xs">${r.name}</span>
-              <span class="badge badge-free">${r.achievement}</span>
-            </div>
-          </div>
-        `).join('');
-      });
+    <div class="plan-card is-featured">
+      <div class="plan-card__popular">一番人気</div>
+      <p class="plan-card__name">月額プラン</p>
+      <div class="plan-card__price">¥1,480<span>/月（税込）</span></div>
+      <p class="plan-card__note">1日あたり約49円 — いつでも解約可能</p>
+    </div>
 
-    // プレミアムアンロック（暫定：決済なし）
-    window.unlockPremium = () => {
-      ZenPremium.unlock();
-      const toast = document.createElement('div');
-      toast.className = 'toast toast-gold';
-      toast.textContent = 'Premiumが有効になりました！👑';
-      document.getElementById('toast-container').appendChild(toast);
-      setTimeout(() => {
-        toast.classList.add('toast-hiding');
-        setTimeout(() => { toast.remove(); window.location.href = 'zen_hikiyose_settings.html'; }, 300);
-      }, 2000);
-    };
-  </script>
+    <div class="plan-card">
+      <p class="plan-card__name">買い切りプラン</p>
+      <div class="plan-card__price">¥9,800<span>（税込）</span></div>
+      <p class="plan-card__note">永久アクセス権 — 一度の支払いで全機能を永続利用</p>
+    </div>
+  </div>
+
+  <!-- 4. 実践者の声 -->
+  <div class="lp-section">
+    <p class="lp-section-title">実践者の声</p>
+    <div class="lp-review">
+      <p class="lp-review__text">「プレミアムに切り替えてから、ロードマップのコースを全部使えるようになりました。3ヶ月で年収が1.5倍になったのは、間違いなくこのアプリのおかげです。」</p>
+      <p class="lp-review__meta">K.M さん・38歳・会社員（営業職）・4ヶ月実践</p>
+    </div>
+    <div class="lp-review">
+      <p class="lp-review__text">「夢実現ログのテーマを複数持てるのが一番の価値でした。仕事・健康・人間関係を同時に改善していくことができています。」</p>
+      <p class="lp-review__meta">M.A さん・41歳・中小企業経営者・8ヶ月実践</p>
+    </div>
+    <div class="lp-review">
+      <p class="lp-review__text">「アファメーションの種類が増えて、毎日飽きずに続けられるようになりました。30種から自分の状況に合ったものを選べるのが大きいです。」</p>
+      <p class="lp-review__meta">H.K さん・35歳・IT企業勤務・3ヶ月実践</p>
+    </div>
+    <a href="zen_hikiyose_reviews.html" style="font-size:var(--text-xs);color:var(--color-text-muted);display:block;text-align:center;margin-top:var(--sp-2);">全ての実践者の声を見る</a>
+  </div>
+
+  <!-- 5. よくある質問 -->
+  <div class="lp-section">
+    <p class="lp-section-title">よくある質問</p>
+    <div class="card">
+      <div class="faq-item">
+        <p class="faq-q">いつでも解約できますか？</p>
+        <p class="faq-a">はい。いつでも解約可能です。解約後も解約日まで機能は継続してご利用いただけます。</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">無料体験期間中に解約したら料金はかかりますか？</p>
+        <p class="faq-a">一切かかりません。無料体験期間内に解約した場合は、請求は発生しません。</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">買い切りプランとは何ですか？</p>
+        <p class="faq-a">一度の支払いで永続的に全機能を利用できるプランです。月額プランのような継続課金はありません。</p>
+      </div>
+      <div class="faq-item" style="border-bottom:none;">
+        <p class="faq-q">データはどこに保存されますか？</p>
+        <p class="faq-a">全てのデータはお使いの端末のローカルストレージに保存されます。外部サーバーへの送信は一切行われません。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. CTAボタン -->
+  <div class="cta-section">
+    <a href="#" class="btn-primary" id="cta-btn" onclick="startPremium(event)">7日間の無料体験を始める</a>
+    <p style="font-size:var(--text-xs);color:var(--color-text-muted);margin-top:var(--sp-2);">いつでも解約可能・追加料金なし</p>
+
+    <div class="payment-icons">
+      <span class="payment-icon">Visa</span>
+      <span class="payment-icon">Mastercard</span>
+      <span class="payment-icon">PayPay</span>
+    </div>
+
+    <p style="font-size:var(--text-xs);color:var(--color-text-muted);margin-top:var(--sp-4);line-height:1.6;">
+      ※ 決済システムは近日実装予定です。<br>
+      現在は機能をお試しいただけます。
+    </p>
+  </div>
+
+  <!-- ボトムナビ -->
+  <nav class="bottom-nav">
+    <a href="zen_hikiyose_home.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+      <span class="bottom-nav__label">ホーム</span>
+    </a>
+    <a href="zen_hikiyose_affirmation.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></span>
+      <span class="bottom-nav__label">アファメーション</span>
+    </a>
+    <a href="zen_hikiyose_log.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
+      <span class="bottom-nav__label">ログ</span>
+    </a>
+    <a href="zen_hikiyose_roadmap.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg></span>
+      <span class="bottom-nav__label">マップ</span>
+    </a>
+    <a href="zen_hikiyose_settings.html" class="bottom-nav__item is-active">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+      <span class="bottom-nav__label">設定</span>
+    </a>
+  </nav>
+
+</div>
+<div id="toast-container" class="toast-container"></div>
+
+<script type="module">
+  import ZenPremium from '../js/zen_hikiyose_premium.js';
+  import ZenApp from '../js/zen_hikiyose_app.js';
+
+  ZenApp.init();
+
+  // すでにプレミアムの場合
+  if (ZenPremium.isPremium()) {
+    document.getElementById('cta-btn').textContent = 'プレミアム会員（有効中）';
+    document.getElementById('cta-btn').style.background = 'var(--color-bg-elevated)';
+    document.getElementById('cta-btn').style.color = 'var(--color-success)';
+    document.getElementById('cta-btn').style.border = '1px solid rgba(76,175,80,0.3)';
+  }
+
+  window.startPremium = (e) => {
+    e.preventDefault();
+    // 決済連動前の暫定処理：プレミアムを有効化
+    ZenPremium.unlock();
+    ZenApp.showToast('プレミアムが有効になりました', 'success');
+    setTimeout(() => { window.location.href = 'zen_hikiyose_settings.html'; }, 1500);
+  };
+</script>
 </body>
 </html>

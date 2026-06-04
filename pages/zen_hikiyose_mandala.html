@@ -5,89 +5,278 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#D4AF37">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>MINDFUL ASSET - マンダラチャート</title>
+  <title>MINDFUL ASSET - マンダラマップ</title>
   <link rel="stylesheet" href="../css/zen_hikiyose_theme.css">
   <link rel="stylesheet" href="../css/zen_hikiyose_base.css">
   <link rel="stylesheet" href="../css/zen_hikiyose_components.css">
+  <style>
+    .mandala-wrap {
+      padding: var(--sp-2);
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    /* 3×3ブロック境界を強調 */
+    .mandala-grid .mandala-cell:nth-child(3n+1):not(:nth-child(1)):not(:nth-child(28)):not(:nth-child(55)) {
+      /* 何も変更しない - CSSで全体は制御 */
+    }
+
+    /* ブロック区切り */
+    .block-row-sep {
+      height: 3px;
+      background: var(--color-border);
+      margin: 2px 0;
+      grid-column: 1 / -1;
+    }
+
+    .mandala-legend {
+      display: flex;
+      gap: var(--sp-4);
+      flex-wrap: wrap;
+      margin-bottom: var(--sp-3);
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+    }
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+    }
+    .legend-dot--main { background: var(--color-accent-dim); border: 1px solid var(--color-accent); }
+    .legend-dot--sub  { background: var(--color-bg-elevated); border: 1px solid var(--color-border-light); }
+    .legend-dot--cell { background: var(--color-bg-card); border: 1px solid var(--color-border); }
+
+    /* 編集モーダル */
+    .edit-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 500;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .edit-sheet {
+      background: var(--color-bg-card);
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      padding: var(--sp-6) var(--sp-5) calc(var(--sp-6) + env(safe-area-inset-bottom));
+      width: 100%;
+      max-width: 480px;
+      animation: sheet-in var(--ease-slow);
+    }
+    @keyframes sheet-in {
+      from { transform: translateY(40px); opacity: 0; }
+      to   { transform: translateY(0); opacity: 1; }
+    }
+    .edit-sheet__title { font-weight: 700; font-size: var(--text-md); margin-bottom: var(--sp-4); }
+    .edit-sheet__role  { font-size: var(--text-xs); color: var(--color-accent); font-weight: 700; letter-spacing: 0.08em; margin-bottom: var(--sp-3); }
+  </style>
 </head>
 <body>
-  <div id="app">
-    <header class="page-header">
-      <a href="zen_hikiyose_home.html" style="color:var(--color-text-muted);font-size:1.5rem;">‹</a>
-      <span class="page-header-title">マンダラチャート</span>
-      <span class="badge badge-premium">PREMIUM</span>
-    </header>
+<div id="app">
 
-    <main class="main-content">
-      <div id="premium-lock" class="card" style="text-align:center;padding:40px 16px;">
-        <p style="font-size:3rem;margin-bottom:16px;">🎯</p>
-        <p style="font-weight:700;font-size:1.1rem;color:var(--color-accent);margin-bottom:8px;">Premiumプラン限定</p>
-        <p class="text-muted text-sm" style="margin-bottom:24px;">大谷翔平も実践したマンダラチャートで目標を体系化。8つの分野から81の行動目標を設定します。</p>
-        <a href="zen_hikiyose_premium.html" class="btn btn-primary">Premiumにアップグレード</a>
-      </div>
+  <header class="page-header">
+    <button class="page-header__back" onclick="history.back()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <span class="page-header__title">マンダラマップ</span>
+    <button style="font-size:var(--text-xs);color:var(--color-accent);background:none;border:none;font-family:inherit;cursor:pointer;padding:4px 8px;" onclick="saveMap()">保存</button>
+  </header>
 
-      <div id="premium-content" class="hidden">
-        <p class="page-subtitle">中心の目標から8つの分野を展開しましょう</p>
-        <div id="mandala-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:24px;">
-          <!-- 9セルのマンダラ（JSで生成） -->
-        </div>
-        <button class="btn btn-primary" onclick="saveMandala()">保存する</button>
-      </div>
-    </main>
+  <main class="main-content main-content--no-nav">
 
-    <nav class="bottom-nav">
-      <a href="zen_hikiyose_home.html" class="bottom-nav-item">
-        <span class="nav-icon">🏠</span><span class="nav-label">ホーム</span>
-      </a>
-      <a href="zen_hikiyose_affirmation.html" class="bottom-nav-item">
-        <span class="nav-icon">🔥</span><span class="nav-label">アファメーション</span>
-      </a>
-      <a href="zen_hikiyose_log.html" class="bottom-nav-item">
-        <span class="nav-icon">📓</span><span class="nav-label">ログ</span>
-      </a>
-      <a href="zen_hikiyose_roadmap.html" class="bottom-nav-item">
-        <span class="nav-icon">🗺️</span><span class="nav-label">マップ</span>
-      </a>
-      <a href="zen_hikiyose_settings.html" class="bottom-nav-item">
-        <span class="nav-icon">⚙️</span><span class="nav-label">設定</span>
-      </a>
-    </nav>
+    <!-- 凡例 -->
+    <div class="mandala-legend">
+      <div class="legend-item"><div class="legend-dot legend-dot--main"></div>中心テーマ</div>
+      <div class="legend-item"><div class="legend-dot legend-dot--sub"></div>サブテーマ（8箇所）</div>
+      <div class="legend-item"><div class="legend-dot legend-dot--cell"></div>展開セル</div>
+    </div>
+
+    <!-- グリッド -->
+    <div class="mandala-wrap" id="premium-lock-target">
+      <div class="mandala-grid" id="mandala-grid"></div>
+    </div>
+
+    <p style="font-size:var(--text-xs);color:var(--color-text-muted);text-align:center;margin-top:var(--sp-3);">
+      各セルをタップして編集できます
+    </p>
+
+    <!-- プレミアム：保存不可案内 -->
+    <div id="save-note" class="card mt-4" style="text-align:center;padding:var(--sp-3);">
+      <p style="font-size:var(--text-xs);color:var(--color-text-muted);">
+        無料版は1枚のみ保存可。
+        <a href="zen_hikiyose_premium.html" style="color:var(--color-accent);">プレミアムで複数保存・高画質出力が使えます</a>
+      </p>
+    </div>
+
+  </main>
+
+  <!-- ボトムナビ -->
+  <nav class="bottom-nav">
+    <a href="zen_hikiyose_home.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+      <span class="bottom-nav__label">ホーム</span>
+    </a>
+    <a href="zen_hikiyose_affirmation.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></span>
+      <span class="bottom-nav__label">アファメーション</span>
+    </a>
+    <a href="zen_hikiyose_log.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
+      <span class="bottom-nav__label">ログ</span>
+    </a>
+    <a href="zen_hikiyose_roadmap.html" class="bottom-nav__item is-active">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg></span>
+      <span class="bottom-nav__label">マップ</span>
+    </a>
+    <a href="zen_hikiyose_settings.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+      <span class="bottom-nav__label">設定</span>
+    </a>
+  </nav>
+
+</div>
+<div id="toast-container" class="toast-container"></div>
+
+<!-- 編集モーダル -->
+<div class="edit-modal hidden" id="edit-modal" onclick="closeModal(event)">
+  <div class="edit-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <p class="edit-sheet__role" id="modal-role"></p>
+    <p class="edit-sheet__title" id="modal-title"></p>
+    <textarea class="input-field" id="modal-input" rows="3" placeholder="内容を入力"></textarea>
+    <div style="display:flex;gap:var(--sp-3);margin-top:var(--sp-4);">
+      <button class="btn-ghost" onclick="closeModal()">キャンセル</button>
+      <button class="btn-primary" onclick="applyEdit()">決定</button>
+    </div>
   </div>
+</div>
 
-  <script type="module">
-    import ZenStorage from '../js/zen_hikiyose_storage.js';
-    import ZenPremium from '../js/zen_hikiyose_premium.js';
+<script type="module">
+  import ZenStorage from '../js/zen_hikiyose_storage.js';
+  import ZenPremium from '../js/zen_hikiyose_premium.js';
+  import ZenApp from '../js/zen_hikiyose_app.js';
 
-    const theme = ZenStorage.get('theme', 'default');
-    if (theme && theme !== 'default') document.documentElement.setAttribute('data-theme', theme);
+  ZenApp.init();
 
-    if (ZenPremium.isPremium()) {
-      document.getElementById('premium-lock').classList.add('hidden');
-      document.getElementById('premium-content').classList.remove('hidden');
+  // isPremium = ZenPremium.isPremium(); // マンダラは無料でも1枚使える
+  const isPremium = ZenPremium.isPremium();
+  if (isPremium) document.getElementById('save-note').style.display = 'none';
 
-      const saved = ZenStorage.get('mandala_data', Array(9).fill(''));
-      const grid = document.getElementById('mandala-grid');
-      const labels = ['健康', '精神', '人間関係', '財務', '仕事', '学習', '趣味', '環境', '中心目標'];
-      const order = [0, 1, 2, 3, 8, 4, 5, 6, 7]; // 中心を[4]に
+  // セル定義
+  // 9×9 = 81セル。インデックス0-80
+  const MAIN_IDX = 40; // 中心セル（row4, col4）
+  // サブテーマ：中心セルの隣接8セル
+  const SUB_IDX = [30, 31, 32, 39, 41, 48, 49, 50];
+  // サブテーマの外側ブロックの中心（対応順）
+  const OUTER_SUB_IDX = [10, 13, 16, 37, 43, 64, 67, 70];
 
-      order.forEach((idx, pos) => {
-        const isCenter = idx === 8;
-        const cell = document.createElement('div');
-        cell.style.cssText = `background:${isCenter ? 'var(--color-accent-glow)' : 'var(--color-bg-card)'};border:1px solid ${isCenter ? 'var(--color-accent)' : 'var(--color-border)'};border-radius:6px;padding:8px;min-height:80px;display:flex;flex-direction:column;gap:4px;`;
-        cell.innerHTML = `
-          <span style="font-size:9px;color:${isCenter ? 'var(--color-accent)' : 'var(--color-text-muted)'};">${labels[idx]}</span>
-          <textarea style="flex:1;background:transparent;border:none;color:var(--color-text-primary);font-size:11px;resize:none;outline:none;font-family:inherit;" data-index="${idx}" placeholder="入力...">${saved[idx]}</textarea>
-        `;
-        grid.appendChild(cell);
-      });
+  const getRole = (idx) => {
+    if (idx === MAIN_IDX) return 'main';
+    if (SUB_IDX.includes(idx) || OUTER_SUB_IDX.includes(idx)) return 'sub';
+    return 'cell';
+  };
 
-      window.saveMandala = () => {
-        const data = Array(9).fill('');
-        document.querySelectorAll('[data-index]').forEach(el => { data[+el.dataset.index] = el.value; });
-        ZenStorage.set('mandala_data', data);
-        alert('保存しました');
-      };
+  const getRoleLabel = (idx) => {
+    if (idx === MAIN_IDX) return '中心テーマ';
+    if (SUB_IDX.includes(idx) || OUTER_SUB_IDX.includes(idx)) return 'サブテーマ';
+    return '展開セル';
+  };
+
+  let cells = ZenStorage.get('zen_hikiyose_mandala', Array(81).fill(''));
+  if (cells.length !== 81) cells = Array(81).fill('');
+
+  let editingIdx = null;
+
+  const renderGrid = () => {
+    const grid = document.getElementById('mandala-grid');
+    grid.innerHTML = '';
+
+    for (let i = 0; i < 81; i++) {
+      const role = getRole(i);
+      const cell = document.createElement('div');
+      cell.className = `mandala-cell mandala-cell--${role}`;
+      cell.dataset.idx = i;
+
+      // ブロック区切り（3行ごとにgap増加）
+      const row = Math.floor(i / 9);
+      const col = i % 9;
+      if (col === 0 && (row === 3 || row === 6)) {
+        // separatorは実装しない（CSSのgapで対応）
+      }
+
+      const textEl = document.createElement('span');
+      textEl.className = 'mandala-cell__text';
+      textEl.textContent = cells[i];
+      cell.appendChild(textEl);
+      cell.addEventListener('click', () => openEdit(i));
+      grid.appendChild(cell);
     }
-  </script>
+
+    // ブロック境界をCSSで強調（3×3ブロック）
+    const gridEl = document.getElementById('mandala-grid');
+    gridEl.style.cssText = `
+      display: grid;
+      grid-template-columns: repeat(3, 1fr) 4px repeat(3, 1fr) 4px repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr) 4px repeat(3, 1fr) 4px repeat(3, 1fr);
+      gap: 2px;
+      width: 100%;
+    `;
+
+    // 全セルを再描画（シンプルなgridで）
+    gridEl.style.cssText = 'display:grid;grid-template-columns:repeat(9,1fr);gap:2px;width:100%;';
+    // ブロック間の視覚的区切りはCSS変数で調整済み
+  };
+
+  const openEdit = (idx) => {
+    editingIdx = idx;
+    document.getElementById('modal-role').textContent = getRoleLabel(idx);
+    document.getElementById('modal-title').textContent =
+      idx === MAIN_IDX ? '中心に目標を書いてください' :
+      SUB_IDX.includes(idx) || OUTER_SUB_IDX.includes(idx) ? 'サブテーマを書いてください' :
+      '展開アクションを書いてください';
+    document.getElementById('modal-input').value = cells[idx];
+    document.getElementById('edit-modal').classList.remove('hidden');
+    document.getElementById('modal-input').focus();
+  };
+
+  window.applyEdit = () => {
+    if (editingIdx === null) return;
+    const val = document.getElementById('modal-input').value.trim();
+    cells[editingIdx] = val;
+
+    // サブテーマとアウターサブテーマを同期
+    const subPos = SUB_IDX.indexOf(editingIdx);
+    if (subPos !== -1) cells[OUTER_SUB_IDX[subPos]] = val;
+    const outerPos = OUTER_SUB_IDX.indexOf(editingIdx);
+    if (outerPos !== -1) cells[SUB_IDX[outerPos]] = val;
+
+    renderGrid();
+    closeModal();
+  };
+
+  window.closeModal = (e) => {
+    if (e && e.target !== document.getElementById('edit-modal')) return;
+    document.getElementById('edit-modal').classList.add('hidden');
+    editingIdx = null;
+  };
+  document.getElementById('edit-modal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeModal(e);
+  });
+
+  window.saveMap = () => {
+    ZenStorage.set('zen_hikiyose_mandala', cells);
+    ZenApp.showToast('保存しました', 'success');
+  };
+
+  renderGrid();
+</script>
 </body>
 </html>

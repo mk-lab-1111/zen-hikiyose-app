@@ -10,138 +10,299 @@
   <link rel="stylesheet" href="../css/zen_hikiyose_base.css">
   <link rel="stylesheet" href="../css/zen_hikiyose_components.css">
   <style>
-    .onboarding-slide {
-      display: none;
+    body { background: var(--color-bg); }
+
+    .ob-wrap {
+      display: flex;
+      flex-direction: column;
+      min-height: 100dvh;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .ob-slides {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ob-slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      padding: 48px 32px 32px;
       text-align: center;
-      padding: 40px 24px;
-      min-height: calc(100vh - 120px);
-      min-height: calc(100dvh - 120px);
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      pointer-events: none;
     }
-    .onboarding-slide.active { display: flex; }
-    .slide-emoji { font-size: 64px; margin-bottom: 24px; }
-    .slide-title {
-      font-size: 1.5rem;
-      font-weight: 700;
+
+    .ob-slide.is-active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+
+    .ob-slide.is-prev {
+      opacity: 0;
+      transform: translateX(-40px);
+    }
+
+    .ob-eyebrow {
+      font-size: var(--text-xs);
       color: var(--color-accent);
-      margin-bottom: 16px;
-      line-height: 1.4;
+      letter-spacing: 0.12em;
+      font-weight: 700;
+      margin-bottom: 20px;
     }
-    .slide-body {
-      font-size: 0.9375rem;
-      color: var(--color-text-secondary);
-      line-height: 1.8;
+
+    .ob-headline {
+      font-size: clamp(1.3rem, 5vw, 1.75rem);
+      font-weight: 900;
+      line-height: 1.45;
+      color: var(--color-text);
+      margin-bottom: 20px;
+    }
+
+    .ob-headline span {
+      color: var(--color-accent);
+    }
+
+    .ob-body {
+      font-size: var(--text-sm);
+      color: var(--color-text-sub);
+      line-height: 1.85;
       max-width: 320px;
     }
-    .dots {
+
+    .ob-silhouette {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--color-bg-card);
+      border: 2px solid var(--color-accent-border);
       display: flex;
-      gap: 8px;
+      align-items: center;
       justify-content: center;
-      padding: 16px;
+      margin: 0 auto 20px;
+      flex-shrink: 0;
     }
-    .dot {
+
+    .ob-feature-list {
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .ob-feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .ob-feature-dot {
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: var(--color-border);
-      transition: background var(--transition-normal), width var(--transition-normal);
-    }
-    .dot.active {
       background: var(--color-accent);
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
+
+    .ob-feature-text {
+      font-size: var(--text-sm);
+      color: var(--color-text-sub);
+      line-height: 1.6;
+    }
+
+    /* テーマ選択 */
+    .theme-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .theme-card {
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      border: 1.5px solid var(--color-border);
+      cursor: pointer;
+      text-align: left;
+      transition: all var(--ease-normal);
+      background: var(--color-bg-card);
+    }
+
+    .theme-card.is-selected {
+      border-color: var(--color-accent);
+      background: var(--color-accent-dim);
+    }
+
+    .theme-card__name {
+      font-weight: 700;
+      font-size: var(--text-sm);
+      color: var(--color-text);
+      margin-bottom: 3px;
+    }
+
+    .theme-card__desc {
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+    }
+
+    /* フッター */
+    .ob-footer {
+      padding: 16px 24px calc(24px + env(safe-area-inset-bottom));
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .ob-dots {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .ob-dot {
+      height: 4px;
       width: 20px;
-      border-radius: 3px;
+      border-radius: var(--radius-full);
+      background: var(--color-border);
+      transition: background var(--ease-normal), width var(--ease-normal);
+    }
+
+    .ob-dot.is-active {
+      background: var(--color-accent);
+      width: 32px;
     }
   </style>
 </head>
 <body>
-  <div id="app">
-    <main style="display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;">
+  <div class="ob-wrap">
+    <!-- スライドエリア -->
+    <div class="ob-slides">
 
       <!-- スライド1 -->
-      <div class="onboarding-slide active" id="slide-0">
-        <div class="slide-emoji">💰</div>
-        <h1 class="slide-title">MINDFUL ASSET へようこそ</h1>
-        <p class="slide-body">1億円プレイヤーの脳をインストールする、マインド資産運用アプリです。毎日の実践で現実を変えましょう。</p>
+      <div class="ob-slide is-active" id="slide-0">
+        <p class="ob-eyebrow">MINDFUL ASSET</p>
+        <h1 class="ob-headline">
+          脳科学×引き寄せ。<br>
+          <span>現世利益を掴み取る。</span>
+        </h1>
+        <p class="ob-body">
+          感情論ではなく、脳科学と潜在意識の仕組みに基づいた、本物の思考アルゴリズムを毎日インストールするアプリです。
+        </p>
       </div>
 
       <!-- スライド2 -->
-      <div class="onboarding-slide" id="slide-1">
-        <div class="slide-emoji">🔥</div>
-        <h1 class="slide-title">引き寄せを科学する</h1>
-        <p class="slide-body">アファメーション・夢日記・マンダラチャートなど、実証された手法で潜在意識を書き換えていきます。</p>
+      <div class="ob-slide" id="slide-1">
+        <div class="ob-silhouette">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <p class="ob-eyebrow">監修者 ZEN とは</p>
+        <h2 class="ob-headline" style="font-size:1.25rem;">
+          完全匿名の<br>実業家・思考研究家
+        </h2>
+        <p class="ob-body">
+          顔出し・声出し・実名非公開。年収1億円超・海外在住・複数事業オーナー。20歳から20年以上、独自の思考アルゴリズムを研究・実践。成功者の間でのみ共有されてきた本物のメソッドを、完全匿名を条件に監修。
+        </p>
       </div>
 
       <!-- スライド3 -->
-      <div class="onboarding-slide" id="slide-2">
-        <div class="slide-emoji">📊</div>
-        <h1 class="slide-title">マインドスコアで成長を可視化</h1>
-        <p class="slide-body">毎日の記録がスコアに反映されます。数字が上がるほど、現実の引き寄せ力が強くなっていきます。</p>
-      </div>
-
-      <!-- スライド4：テーマ選択 -->
-      <div class="onboarding-slide" id="slide-3">
-        <div class="slide-emoji">🎨</div>
-        <h1 class="slide-title">テーマを選んでください</h1>
-        <div style="display:flex;flex-direction:column;gap:12px;width:100%;max-width:320px;margin-top:8px;">
-          <button class="btn btn-secondary btn-auto" onclick="selectTheme('default')" id="theme-default"
-            style="width:100%;justify-content:flex-start;padding-left:20px;">
-            🌟 ゴールド（デフォルト）
-          </button>
-          <button class="btn btn-secondary btn-auto" onclick="selectTheme('cyber')" id="theme-cyber"
-            style="width:100%;justify-content:flex-start;padding-left:20px;">
-            ⚡ サイバー覚醒（男性向け）
-          </button>
-          <button class="btn btn-secondary btn-auto" onclick="selectTheme('luxury')" id="theme-luxury"
-            style="width:100%;justify-content:flex-start;padding-left:20px;">
-            🌸 Luxury Cinderella（女性向け）
-          </button>
+      <div class="ob-slide" id="slide-2">
+        <p class="ob-eyebrow">できること</p>
+        <h2 class="ob-headline" style="font-size:1.25rem;margin-bottom:24px;">
+          このアプリでできること
+        </h2>
+        <div class="ob-feature-list">
+          <div class="ob-feature-item">
+            <div class="ob-feature-dot"></div>
+            <p class="ob-feature-text">ZEN監修のアファメーションを音声で毎日実践</p>
+          </div>
+          <div class="ob-feature-item">
+            <div class="ob-feature-dot"></div>
+            <p class="ob-feature-text">引き寄せログで潜在意識を着実に書き換える</p>
+          </div>
+          <div class="ob-feature-item">
+            <div class="ob-feature-dot"></div>
+            <p class="ob-feature-text">マンダラマップで目標を81のアクションに展開</p>
+          </div>
+          <div class="ob-feature-item">
+            <div class="ob-feature-dot"></div>
+            <p class="ob-feature-text">マインドスコアで成長を数値として可視化</p>
+          </div>
+          <div class="ob-feature-item">
+            <div class="ob-feature-dot"></div>
+            <p class="ob-feature-text">10コースのロードマップで段階的に実力を引き上げる</p>
+          </div>
         </div>
       </div>
 
-      <!-- ドットインジケーター -->
-      <div class="dots">
-        <div class="dot active" id="dot-0"></div>
-        <div class="dot" id="dot-1"></div>
-        <div class="dot" id="dot-2"></div>
-        <div class="dot" id="dot-3"></div>
+      <!-- スライド4 -->
+      <div class="ob-slide" id="slide-3">
+        <p class="ob-eyebrow">テーマ選択</p>
+        <h2 class="ob-headline" style="font-size:1.2rem;margin-bottom:20px;">
+          あなたのテーマを選んでください
+        </h2>
+        <div class="theme-cards">
+          <div class="theme-card is-selected" data-theme="default" onclick="selectTheme('default', this)">
+            <div class="theme-card__name">ゴールド（デフォルト）</div>
+            <div class="theme-card__desc">黒×シャンパンゴールド</div>
+          </div>
+          <div class="theme-card" data-theme="cyber" onclick="selectTheme('cyber', this)">
+            <div class="theme-card__name">サイバー覚醒</div>
+            <div class="theme-card__desc">黒×シアン — 男性に人気</div>
+          </div>
+          <div class="theme-card" data-theme="luxury" onclick="selectTheme('luxury', this)">
+            <div class="theme-card__name">Luxury Cinderella</div>
+            <div class="theme-card__desc">黒×ディープピンク — 女性に人気</div>
+          </div>
+        </div>
       </div>
+    </div>
 
-      <!-- ナビゲーションボタン -->
-      <div style="padding:16px 24px 32px;display:flex;flex-direction:column;gap:12px;">
-        <button class="btn btn-primary" id="btn-next" onclick="nextSlide()">次へ</button>
-        <button class="btn btn-ghost" id="btn-skip" onclick="completeOnboarding()">スキップ</button>
+    <!-- フッター -->
+    <div class="ob-footer">
+      <div class="ob-dots">
+        <div class="ob-dot is-active" id="dot-0"></div>
+        <div class="ob-dot" id="dot-1"></div>
+        <div class="ob-dot" id="dot-2"></div>
+        <div class="ob-dot" id="dot-3"></div>
       </div>
-
-    </main>
+      <button class="btn-primary" id="btn-next">次へ</button>
+      <button class="btn-text" id="btn-skip" onclick="complete()">スキップして始める</button>
+    </div>
   </div>
 
   <script type="module">
     import ZenStorage from '../js/zen_hikiyose_storage.js';
 
-    let currentSlide = 0;
-    const totalSlides = 4;
-    let selectedTheme = 'default';
+    let current = 0;
+    const total = 4;
+    let chosenTheme = 'default';
 
-    // テーマ適用
-    const theme = ZenStorage.get('theme', 'default');
-    if (theme && theme !== 'default') {
-      document.documentElement.setAttribute('data-theme', theme);
-    }
+    // テーマプレビュー適用
+    const theme = ZenStorage.get('zen_hikiyose_theme', 'default');
+    if (theme && theme !== 'default') document.documentElement.setAttribute('data-theme', theme);
 
-    window.selectTheme = (theme) => {
-      selectedTheme = theme;
-      document.querySelectorAll('[id^="theme-"]').forEach(btn => {
-        btn.style.borderColor = '';
-        btn.style.background = '';
-      });
-      const selected = document.getElementById(`theme-${theme}`);
-      if (selected) {
-        selected.style.borderColor = 'var(--color-accent)';
-        selected.style.background = 'var(--color-accent-glow)';
-      }
-      ZenStorage.set('theme', theme);
+    window.selectTheme = (theme, el) => {
+      chosenTheme = theme;
+      document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('is-selected'));
+      el.classList.add('is-selected');
+      // プレビュー
       if (theme !== 'default') {
         document.documentElement.setAttribute('data-theme', theme);
       } else {
@@ -149,27 +310,47 @@
       }
     };
 
-    window.nextSlide = () => {
-      if (currentSlide < totalSlides - 1) {
-        document.getElementById(`slide-${currentSlide}`).classList.remove('active');
-        document.getElementById(`dot-${currentSlide}`).classList.remove('active');
-        currentSlide++;
-        document.getElementById(`slide-${currentSlide}`).classList.add('active');
-        document.getElementById(`dot-${currentSlide}`).classList.add('active');
+    const goTo = (n) => {
+      const prev = document.getElementById(`slide-${current}`);
+      prev.classList.remove('is-active');
+      prev.classList.add('is-prev');
+      document.getElementById(`dot-${current}`).classList.remove('is-active');
 
-        if (currentSlide === totalSlides - 1) {
-          document.getElementById('btn-next').textContent = 'はじめる';
-          document.getElementById('btn-next').onclick = completeOnboarding;
-          document.getElementById('btn-skip').classList.add('hidden');
-        }
+      current = n;
+      const next = document.getElementById(`slide-${current}`);
+      next.classList.remove('is-prev');
+      next.classList.add('is-active');
+      document.getElementById(`dot-${current}`).classList.add('is-active');
+
+      const btnNext = document.getElementById('btn-next');
+      const btnSkip = document.getElementById('btn-skip');
+      if (current === total - 1) {
+        btnNext.textContent = 'さあ、始めよう';
+        btnNext.onclick = complete;
+        btnSkip.classList.add('hidden');
+      } else {
+        btnNext.textContent = '次へ';
+        btnNext.onclick = nextSlide;
+        btnSkip.classList.remove('hidden');
       }
     };
 
-    window.completeOnboarding = () => {
-      ZenStorage.set('onboarding_completed', true);
-      ZenStorage.set('theme', selectedTheme);
-      window.location.href = '../index.html';
+    window.nextSlide = () => {
+      if (current < total - 1) goTo(current + 1);
     };
+
+    window.complete = () => {
+      ZenStorage.set('zen_hikiyose_onboarding', { completed: true, completed_at: new Date().toISOString() });
+      ZenStorage.set('zen_hikiyose_theme', chosenTheme);
+      window.location.href = 'zen_hikiyose_home.html';
+    };
+
+    document.getElementById('btn-next').onclick = nextSlide;
+
+    // Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('../service-worker.js').catch(() => {});
+    }
   </script>
 </body>
 </html>

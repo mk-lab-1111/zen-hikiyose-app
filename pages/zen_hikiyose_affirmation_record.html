@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#D4AF37">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>MINDFUL ASSET - 実践記録</title>
+  <link rel="stylesheet" href="../css/zen_hikiyose_theme.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_base.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_components.css">
+</head>
+<body>
+<div id="app">
+
+  <header class="page-header">
+    <button class="page-header__back" onclick="history.back()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <span class="page-header__title">実践記録</span>
+  </header>
+
+  <main class="main-content main-content--no-nav">
+
+    <!-- 統計 -->
+    <section class="section">
+      <div class="stat-grid">
+        <div class="stat-item">
+          <div class="stat-value" id="stat-streak">0</div>
+          <div class="stat-label">現在の連続日数</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="stat-best">0</div>
+          <div class="stat-label">最高記録（日）</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="stat-total">0</div>
+          <div class="stat-label">累計実践日数</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 凡例 -->
+    <section class="section">
+      <div style="display:flex;gap:var(--sp-4);align-items:center;">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div class="calendar-dot" style="width:8px;height:8px;"></div>
+          <span style="font-size:var(--text-xs);color:var(--color-text-muted);">朝</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div class="calendar-dot calendar-dot--eve" style="width:8px;height:8px;"></div>
+          <span style="font-size:var(--text-xs);color:var(--color-text-muted);">夜</span>
+        </div>
+        <div style="margin-left:auto;">
+          <span id="premium-note" style="font-size:var(--text-xs);color:var(--color-text-muted);">無料版：当月のみ表示</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- カレンダー -->
+    <section class="section">
+      <div class="card">
+        <div class="calendar">
+          <div class="calendar-header">
+            <button class="calendar-nav" id="btn-prev-month" onclick="prevMonth()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <span class="calendar-title" id="cal-title"></span>
+            <button class="calendar-nav" id="btn-next-month" onclick="nextMonth()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+          <div class="calendar-weekdays">
+            <div class="calendar-weekday">日</div>
+            <div class="calendar-weekday">月</div>
+            <div class="calendar-weekday">火</div>
+            <div class="calendar-weekday">水</div>
+            <div class="calendar-weekday">木</div>
+            <div class="calendar-weekday">金</div>
+            <div class="calendar-weekday">土</div>
+          </div>
+          <div class="calendar-days" id="cal-days"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ボトムナビ -->
+  <nav class="bottom-nav">
+    <a href="zen_hikiyose_home.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+      <span class="bottom-nav__label">ホーム</span>
+    </a>
+    <a href="zen_hikiyose_affirmation.html" class="bottom-nav__item is-active">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></span>
+      <span class="bottom-nav__label">アファメーション</span>
+    </a>
+    <a href="zen_hikiyose_log.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
+      <span class="bottom-nav__label">ログ</span>
+    </a>
+    <a href="zen_hikiyose_roadmap.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg></span>
+      <span class="bottom-nav__label">マップ</span>
+    </a>
+    <a href="zen_hikiyose_settings.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+      <span class="bottom-nav__label">設定</span>
+    </a>
+  </nav>
+
+</div>
+
+<script type="module">
+  import ZenStorage from '../js/zen_hikiyose_storage.js';
+  import ZenScore from '../js/zen_hikiyose_score.js';
+  import ZenPremium from '../js/zen_hikiyose_premium.js';
+  import ZenApp from '../js/zen_hikiyose_app.js';
+
+  ZenApp.init();
+
+  const isPremium = ZenPremium.isPremium();
+  const record = ZenStorage.get('zen_hikiyose_affirmation_record', {});
+  const today = new Date();
+  let viewYear = today.getFullYear();
+  let viewMonth = today.getMonth(); // 0-indexed
+
+  // 統計
+  document.getElementById('stat-streak').textContent = ZenScore.getStreak();
+  document.getElementById('stat-total').textContent = ZenScore.getTotalDays();
+  if (isPremium) {
+    document.getElementById('premium-note').textContent = '全期間表示';
+  }
+
+  // 最高記録を計算
+  const calcBest = () => {
+    const dates = Object.keys(record).sort();
+    let best = 0, cur = 0, prev = null;
+    dates.forEach(d => {
+      if (record[d].morning || record[d].evening) {
+        if (!prev) {
+          cur = 1;
+        } else {
+          const diff = (new Date(d) - new Date(prev)) / 86400000;
+          cur = diff === 1 ? cur + 1 : 1;
+        }
+        best = Math.max(best, cur);
+        prev = d;
+      }
+    });
+    return best;
+  };
+  document.getElementById('stat-best').textContent = calcBest();
+
+  const renderCalendar = () => {
+    const title = `${viewYear}年${viewMonth + 1}月`;
+    document.getElementById('cal-title').textContent = title;
+
+    const todayMonth = today.getFullYear() * 12 + today.getMonth();
+    const viewMonthNum = viewYear * 12 + viewMonth;
+
+    // プレミアムでなければ当月のみ
+    const isPast = viewMonthNum < todayMonth;
+    document.getElementById('btn-prev-month').disabled = !isPremium && isPast;
+    document.getElementById('btn-next-month').disabled = viewMonthNum >= todayMonth;
+
+    const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+    const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+    const container = document.getElementById('cal-days');
+    container.innerHTML = '';
+
+    // 空白セル
+    for (let i = 0; i < firstDay; i++) {
+      container.innerHTML += '<div class="calendar-day is-other"></div>';
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const key = `${viewYear}-${String(viewMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const rec = record[key] || {};
+      const isToday = key === today.toISOString().split('T')[0];
+
+      let dots = '';
+      if (rec.morning) dots += '<div class="calendar-dot"></div>';
+      if (rec.evening) dots += '<div class="calendar-dot calendar-dot--eve"></div>';
+
+      container.innerHTML += `
+        <div class="calendar-day${isToday ? ' is-today' : ''}">
+          <span>${d}</span>
+          ${dots ? `<div class="calendar-day-dots">${dots}</div>` : ''}
+        </div>
+      `;
+    }
+  };
+
+  window.prevMonth = () => {
+    if (!isPremium) return;
+    viewMonth--;
+    if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+    renderCalendar();
+  };
+
+  window.nextMonth = () => {
+    const todayMonth = today.getFullYear() * 12 + today.getMonth();
+    if (viewYear * 12 + viewMonth >= todayMonth) return;
+    viewMonth++;
+    if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+    renderCalendar();
+  };
+
+  renderCalendar();
+</script>
+</body>
+</html>

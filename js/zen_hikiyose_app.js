@@ -1,88 +1,68 @@
 /**
- * zen_hikiyose_app.js - アプリ本体・画面遷移
+ * zen_hikiyose_app.js
+ * アプリ共通の初期化・ユーティリティ
  */
 
 import ZenStorage from './zen_hikiyose_storage.js';
-import ZenPremium from './zen_hikiyose_premium.js';
+import ZenScore from './zen_hikiyose_score.js';
+import ZenRouter from './zen_hikiyose_router.js';
 
-// ==========================================================================
-// トースト通知
-// ==========================================================================
-const showToast = (message, type = '', duration = 2000) => {
-  let container = document.getElementById('toast-container');
-  if (!container) {
-    container = document.createElement('div');
-    container.id = 'toast-container';
-    container.className = 'toast-container';
-    document.body.appendChild(container);
-  }
+const ZenApp = (() => {
 
-  const toast = document.createElement('div');
-  toast.className = `toast${type ? ` toast-${type}` : ''}`;
-  toast.textContent = message;
-  container.appendChild(toast);
+  /** テーマを適用する */
+  const applyTheme = () => {
+    const theme = ZenStorage.get('zen_hikiyose_theme', 'default');
+    if (theme && theme !== 'default') {
+      document.documentElement.setAttribute('data-theme', theme);
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+  };
 
-  setTimeout(() => {
-    toast.classList.add('toast-hiding');
-    toast.addEventListener('animationend', () => toast.remove());
-  }, duration);
-};
+  /** テーマを保存・適用する */
+  const setTheme = (theme) => {
+    ZenStorage.set('zen_hikiyose_theme', theme);
+    applyTheme();
+  };
 
-// ==========================================================================
-// テーマ管理
-// ==========================================================================
-const applyTheme = () => {
-  const theme = ZenStorage.get('theme', 'default');
-  if (theme && theme !== 'default') {
-    document.documentElement.setAttribute('data-theme', theme);
-  } else {
-    document.documentElement.removeAttribute('data-theme');
-  }
-};
+  /**
+   * トースト通知を表示する。
+   * @param {string} message
+   * @param {'default'|'success'|'error'} type
+   * @param {number} duration - ミリ秒
+   */
+  const showToast = (message, type = 'default', duration = 2500) => {
+    let container = document.getElementById('toast-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'toast-container';
+      container.className = 'toast-container';
+      document.body.appendChild(container);
+    }
 
-const setTheme = (theme) => {
-  ZenStorage.set('theme', theme);
-  applyTheme();
-};
+    const toast = document.createElement('div');
+    toast.className = `toast toast--${type}`;
+    toast.textContent = message;
+    container.appendChild(toast);
 
-// ==========================================================================
-// ボトムナビ アクティブ制御
-// ==========================================================================
-const updateNavActive = () => {
-  const path = window.location.pathname.split('/').pop() || 'index.html';
-  document.querySelectorAll('.bottom-nav-item').forEach(item => {
-    const href = item.getAttribute('href') || '';
-    const isActive = href.includes(path) || (path === 'index.html' && href.includes('home'));
-    item.classList.toggle('active', isActive);
-  });
-};
+    // 表示後にアニメーションクラス追加
+    requestAnimationFrame(() => toast.classList.add('is-visible'));
 
-// ==========================================================================
-// オンボーディング判定
-// ==========================================================================
-const checkOnboarding = () => {
-  const completed = ZenStorage.get('onboarding_completed', false);
-  const isIndex = window.location.pathname.endsWith('index.html') ||
-                  window.location.pathname === '/' ||
-                  window.location.pathname === '';
-  if (!completed && isIndex) {
-    window.location.href = 'pages/zen_hikiyose_onboarding.html';
-  }
-};
+    setTimeout(() => {
+      toast.classList.remove('is-visible');
+      toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+    }, duration);
+  };
 
-// ==========================================================================
-// 初期化
-// ==========================================================================
-document.addEventListener('DOMContentLoaded', () => {
-  applyTheme();
-  ZenPremium.applyUI();
-  updateNavActive();
-  checkOnboarding();
+  /** アプリ共通の初期化 */
+  const init = () => {
+    applyTheme();
+    ZenRouter.updateNav();
+    ZenScore.applyDailyGrowth();
+  };
 
-  // Service Worker 登録
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js').catch(() => {});
-  }
-});
+  return { init, applyTheme, setTheme, showToast };
+})();
 
-export { showToast, setTheme, applyTheme };
+export default ZenApp;
+export const showToast = ZenApp.showToast;

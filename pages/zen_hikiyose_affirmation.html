@@ -9,105 +9,329 @@
   <link rel="stylesheet" href="../css/zen_hikiyose_theme.css">
   <link rel="stylesheet" href="../css/zen_hikiyose_base.css">
   <link rel="stylesheet" href="../css/zen_hikiyose_components.css">
+  <style>
+    .aff-text-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-accent-border);
+      border-radius: var(--radius-lg);
+      padding: var(--sp-6);
+      min-height: 160px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      margin-bottom: var(--sp-4);
+      position: relative;
+    }
+
+    .aff-text {
+      font-size: var(--text-md);
+      font-weight: 500;
+      color: var(--color-text);
+      line-height: 1.85;
+    }
+
+    .aff-index {
+      position: absolute;
+      top: var(--sp-3);
+      right: var(--sp-3);
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+    }
+
+    .play-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--sp-2);
+      padding: 16px var(--sp-6);
+      background: var(--color-accent);
+      color: #0D0D0D;
+      border-radius: var(--radius-full);
+      font-weight: 700;
+      font-size: var(--text-base);
+      cursor: pointer;
+      border: none;
+      font-family: 'Noto Sans JP', sans-serif;
+      width: 100%;
+      transition: all var(--ease-normal);
+    }
+    .play-btn:active { transform: scale(0.97); }
+    .play-btn:disabled { opacity: 0.5; cursor: default; }
+    .play-btn.is-playing { background: var(--color-bg-elevated); color: var(--color-accent); border: 1.5px solid var(--color-accent-border); }
+
+    .nav-arrows {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--sp-3);
+      margin-top: var(--sp-3);
+    }
+    .arrow-btn {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      color: var(--color-text-sub);
+      background: var(--color-bg-card);
+      cursor: pointer;
+      transition: all var(--ease-fast);
+    }
+    .arrow-btn:disabled { opacity: 0.3; cursor: default; }
+    .arrow-btn:not(:disabled):active { background: var(--color-bg-elevated); }
+  </style>
 </head>
 <body>
-  <div id="app">
-    <header class="page-header">
-      <span class="page-header-title">アファメーション</span>
-      <span class="badge badge-free">FREE</span>
-    </header>
+<div id="app">
 
-    <main class="main-content">
-      <p class="page-subtitle">あなただけの言葉で潜在意識を書き換えましょう</p>
+  <header class="page-header">
+    <span class="page-header__title">アファメーション</span>
+    <a href="zen_hikiyose_affirmation_record.html" style="font-size:var(--text-xs);color:var(--color-text-muted);">記録を見る</a>
+  </header>
 
-      <div class="section">
-        <p class="section-title">MY AFFIRMATIONS</p>
-        <div id="affirmation-list" style="display:flex;flex-direction:column;gap:12px;">
-          <!-- JSで挿入 -->
-        </div>
-        <button class="btn btn-secondary mt-16" onclick="addAffirmation()">＋ アファメーションを追加</button>
+  <main class="main-content">
+
+    <!-- タブ -->
+    <div class="tab-bar">
+      <button class="tab-item is-active" id="tab-morning" onclick="switchTab('morning')">朝のセッション</button>
+      <button class="tab-item" id="tab-evening" onclick="switchTab('evening')">夜のセッション</button>
+    </div>
+
+    <!-- セッション情報 -->
+    <div class="card mb-4" id="session-info" style="display:flex;align-items:center;gap:var(--sp-3);">
+      <div id="session-icon" style="width:40px;height:40px;border-radius:50%;background:var(--color-accent-dim);border:1.5px solid var(--color-accent-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
       </div>
-
-      <div class="section">
-        <p class="section-title">今日の実践</p>
-        <div class="card" style="text-align:center;padding:32px 16px;">
-          <p style="font-size:3rem;margin-bottom:16px;">🔥</p>
-          <p class="text-muted text-sm">アファメーションを声に出して読み、<br>「完了」を押してください</p>
-          <button class="btn btn-primary mt-16" onclick="completePractice()">今日の実践完了</button>
-        </div>
+      <div>
+        <div style="font-weight:700;font-size:var(--text-sm);" id="session-label">朝のセッション</div>
+        <div style="font-size:var(--text-xs);color:var(--color-text-muted);" id="session-status">未実施</div>
       </div>
-    </main>
+    </div>
 
-    <nav class="bottom-nav">
-      <a href="zen_hikiyose_home.html" class="bottom-nav-item">
-        <span class="nav-icon">🏠</span><span class="nav-label">ホーム</span>
-      </a>
-      <a href="zen_hikiyose_affirmation.html" class="bottom-nav-item active">
-        <span class="nav-icon">🔥</span><span class="nav-label">アファメーション</span>
-      </a>
-      <a href="zen_hikiyose_log.html" class="bottom-nav-item">
-        <span class="nav-icon">📓</span><span class="nav-label">ログ</span>
-      </a>
-      <a href="zen_hikiyose_roadmap.html" class="bottom-nav-item">
-        <span class="nav-icon">🗺️</span><span class="nav-label">マップ</span>
-      </a>
-      <a href="zen_hikiyose_settings.html" class="bottom-nav-item">
-        <span class="nav-icon">⚙️</span><span class="nav-label">設定</span>
-      </a>
-    </nav>
-  </div>
-  <div class="toast-container" id="toast-container"></div>
+    <!-- アファメーションテキスト -->
+    <div class="aff-text-card" id="aff-card">
+      <span class="aff-index" id="aff-index">1 / 5</span>
+      <p class="aff-text" id="aff-text">読み込み中...</p>
+    </div>
 
-  <script type="module">
-    import ZenStorage from '../js/zen_hikiyose_storage.js';
+    <!-- ナビゲーション矢印 -->
+    <div class="nav-arrows">
+      <button class="arrow-btn" id="btn-prev" onclick="prevAff()" disabled>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <span style="font-size:var(--text-xs);color:var(--color-text-muted);">前後に切り替えられます</span>
+      <button class="arrow-btn" id="btn-next-aff" onclick="nextAff()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
 
-    const theme = ZenStorage.get('theme', 'default');
-    if (theme && theme !== 'default') document.documentElement.setAttribute('data-theme', theme);
+    <div style="height:var(--sp-4);"></div>
 
-    const DEFAULT_AFFIRMATIONS = [
-      '私はお金と豊かさを引き寄せる磁石です',
-      '私はすでに理想の人生を生きています',
-      '宇宙は常に私の味方です',
-    ];
+    <!-- 再生ボタン -->
+    <button class="play-btn" id="play-btn" onclick="togglePlay()">
+      <svg id="play-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      <span id="play-label">声に出して読む（音声再生）</span>
+    </button>
 
-    const renderList = () => {
-      const list = ZenStorage.get('affirmations', DEFAULT_AFFIRMATIONS);
-      const container = document.getElementById('affirmation-list');
-      container.innerHTML = list.map((text, i) => `
-        <div class="card" style="display:flex;align-items:center;gap:12px;">
-          <span style="font-size:1.2rem;color:var(--color-accent);">✦</span>
-          <p style="flex:1;font-size:0.9rem;line-height:1.6;">${text}</p>
-          <button onclick="removeAffirmation(${i})" style="color:var(--color-text-muted);font-size:1.2rem;padding:4px;">×</button>
-        </div>
-      `).join('');
+    <!-- 有料版制限説明 -->
+    <div class="card mt-4" style="text-align:center;padding:var(--sp-3);" id="premium-hint">
+      <p style="font-size:var(--text-xs);color:var(--color-text-muted);">
+        無料版は各セッション1種のみ。
+        <a href="zen_hikiyose_premium.html" style="color:var(--color-accent);">プレミアムで30種を解放する</a>
+      </p>
+    </div>
+
+    <!-- 完了状態 -->
+    <div class="card mt-4" id="completed-banner" style="background:rgba(76,175,80,0.08);border-color:rgba(76,175,80,0.25);text-align:center;" class="hidden">
+      <p style="color:var(--color-success);font-weight:700;font-size:var(--text-sm);">本日のセッション完了</p>
+      <p style="font-size:var(--text-xs);color:var(--color-text-muted);margin-top:4px;">お疲れさまでした。明日も続けましょう。</p>
+    </div>
+
+  </main>
+
+  <!-- ボトムナビ -->
+  <nav class="bottom-nav">
+    <a href="zen_hikiyose_home.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+      <span class="bottom-nav__label">ホーム</span>
+    </a>
+    <a href="zen_hikiyose_affirmation.html" class="bottom-nav__item is-active">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></span>
+      <span class="bottom-nav__label">アファメーション</span>
+    </a>
+    <a href="zen_hikiyose_log.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
+      <span class="bottom-nav__label">ログ</span>
+    </a>
+    <a href="zen_hikiyose_roadmap.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg></span>
+      <span class="bottom-nav__label">マップ</span>
+    </a>
+    <a href="zen_hikiyose_settings.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+      <span class="bottom-nav__label">設定</span>
+    </a>
+  </nav>
+
+</div>
+<div id="toast-container" class="toast-container"></div>
+
+<script type="module">
+  import ZenStorage from '../js/zen_hikiyose_storage.js';
+  import ZenScore from '../js/zen_hikiyose_score.js';
+  import ZenPremium from '../js/zen_hikiyose_premium.js';
+  import ZenApp from '../js/zen_hikiyose_app.js';
+
+  ZenApp.init();
+
+  let currentTab = 'morning';
+  let affirmations = { morning: [], evening: [] };
+  let currentIndex = 0;
+  let isSpeaking = false;
+  let utterance = null;
+
+  // URLパラメータからセッション取得
+  const params = new URLSearchParams(window.location.search);
+  const initSession = params.get('session') || 'morning';
+
+  // データ読み込み
+  fetch('../data/zen_hikiyose_affirmation_samples.json')
+    .then(r => r.json())
+    .then(data => {
+      affirmations = data;
+      switchTab(initSession);
+    });
+
+  window.switchTab = (tab) => {
+    stopSpeech();
+    currentTab = tab;
+    currentIndex = 0;
+
+    document.getElementById('tab-morning').classList.toggle('is-active', tab === 'morning');
+    document.getElementById('tab-evening').classList.toggle('is-active', tab === 'evening');
+
+    const isMorning = tab === 'morning';
+    document.getElementById('session-label').textContent = isMorning ? '朝のセッション' : '夜のセッション';
+
+    const dl = ZenScore.getDailyLog();
+    const done = isMorning ? dl.morning : dl.evening;
+    document.getElementById('session-status').textContent = done ? '本日完了' : '未実施';
+
+    const completedBanner = document.getElementById('completed-banner');
+    if (done) {
+      completedBanner.style.display = 'block';
+    } else {
+      completedBanner.style.display = 'none';
+    }
+
+    // プレミアムでなければ1種のみ
+    const list = affirmations[tab] || [];
+    const available = ZenPremium.isPremium() ? list : list.slice(0, 1);
+    renderAff(available);
+  };
+
+  const renderAff = (list) => {
+    const item = list[currentIndex];
+    if (!item) return;
+    document.getElementById('aff-text').textContent = item.text;
+    document.getElementById('aff-index').textContent = `${currentIndex + 1} / ${list.length}`;
+    document.getElementById('btn-prev').disabled = currentIndex === 0;
+    document.getElementById('btn-next-aff').disabled = currentIndex === list.length - 1;
+    document.getElementById('premium-hint').style.display = ZenPremium.isPremium() ? 'none' : 'block';
+  };
+
+  const getList = () => {
+    const list = affirmations[currentTab] || [];
+    return ZenPremium.isPremium() ? list : list.slice(0, 1);
+  };
+
+  window.prevAff = () => { if (currentIndex > 0) { stopSpeech(); currentIndex--; renderAff(getList()); } };
+  window.nextAff = () => { const l = getList(); if (currentIndex < l.length - 1) { stopSpeech(); currentIndex++; renderAff(l); } };
+
+  window.togglePlay = () => {
+    if (isSpeaking) { stopSpeech(); return; }
+    startSpeech();
+  };
+
+  const startSpeech = () => {
+    const text = document.getElementById('aff-text').textContent;
+    if (!('speechSynthesis' in window)) {
+      ZenApp.showToast('この端末では音声再生に対応していません', 'error');
+      return;
+    }
+    stopSpeech();
+    utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'ja-JP';
+    utterance.rate = 0.82;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+
+    // 日本語音声を選択
+    const setVoice = () => {
+      const voices = speechSynthesis.getVoices();
+      const jpVoice = voices.find(v => v.lang === 'ja-JP' || v.lang === 'ja');
+      if (jpVoice) utterance.voice = jpVoice;
     };
 
-    window.addAffirmation = () => {
-      const text = prompt('新しいアファメーションを入力してください（現在形・肯定文で）');
-      if (!text) return;
-      const list = ZenStorage.get('affirmations', DEFAULT_AFFIRMATIONS);
-      list.push(text.trim());
-      ZenStorage.set('affirmations', list);
-      renderList();
+    if (speechSynthesis.getVoices().length > 0) {
+      setVoice();
+    } else {
+      speechSynthesis.onvoiceschanged = setVoice;
+    }
+
+    utterance.onstart = () => {
+      isSpeaking = true;
+      document.getElementById('play-btn').classList.add('is-playing');
+      document.getElementById('play-icon').innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+      document.getElementById('play-label').textContent = '再生中（タップで停止）';
     };
 
-    window.removeAffirmation = (index) => {
-      const list = ZenStorage.get('affirmations', DEFAULT_AFFIRMATIONS);
-      list.splice(index, 1);
-      ZenStorage.set('affirmations', list);
-      renderList();
+    utterance.onend = () => {
+      isSpeaking = false;
+      document.getElementById('play-btn').classList.remove('is-playing');
+      document.getElementById('play-icon').innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
+      document.getElementById('play-label').textContent = '声に出して読む（音声再生）';
+      // 完了記録
+      recordCompletion();
     };
 
-    window.completePractice = () => {
-      ZenStorage.set('affirmation_last_date', new Date().toDateString());
-      const toast = document.createElement('div');
-      toast.className = 'toast toast-gold';
-      toast.textContent = '今日のアファメーション実践完了！✨';
-      document.getElementById('toast-container').appendChild(toast);
-      setTimeout(() => { toast.classList.add('toast-hiding'); setTimeout(() => toast.remove(), 300); }, 2000);
+    utterance.onerror = () => {
+      isSpeaking = false;
+      document.getElementById('play-btn').classList.remove('is-playing');
     };
 
-    renderList();
-  </script>
+    speechSynthesis.speak(utterance);
+  };
+
+  const stopSpeech = () => {
+    if (speechSynthesis.speaking) speechSynthesis.cancel();
+    isSpeaking = false;
+    document.getElementById('play-btn').classList.remove('is-playing');
+    document.getElementById('play-icon').innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
+    document.getElementById('play-label').textContent = '声に出して読む（音声再生）';
+  };
+
+  const recordCompletion = () => {
+    const type = currentTab === 'morning' ? 'morning' : 'evening';
+    const earned = ZenScore.addPoints(type);
+
+    // アファメーション記録に保存
+    const record = ZenStorage.get('zen_hikiyose_affirmation_record', {});
+    const today = new Date().toISOString().split('T')[0];
+    if (!record[today]) record[today] = {};
+    record[today][type] = true;
+    ZenStorage.set('zen_hikiyose_affirmation_record', record);
+
+    const label = currentTab === 'morning' ? '朝' : '夜';
+    ZenApp.showToast(`${label}のセッションを記録しました（+${earned}pt）`, 'success');
+    document.getElementById('session-status').textContent = '本日完了';
+    document.getElementById('completed-banner').style.display = 'block';
+  };
+</script>
 </body>
 </html>

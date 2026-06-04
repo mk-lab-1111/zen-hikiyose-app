@@ -4,112 +4,107 @@
 
 :root {
   /* ベースカラー */
-  --color-bg-primary:    #121212;  /* マットブラック */
-  --color-bg-secondary:  #1A1A1A;  /* ダークグラファイト */
-  --color-bg-card:       #222222;  /* カード背景 */
+  --color-bg:           #121212;
+  --color-bg-card:      #1A1A1A;
+  --color-bg-elevated:  #222222;
 
-  /* アクセントカラー */
-  --color-gold:          #D4AF37;  /* シャンパンゴールド */
-  --color-gold-light:    #E8C96A;  /* ゴールド明 */
-  --color-gold-dark:     #A07D20;  /* ゴールド暗 */
+  /* アクセント */
+  --color-accent:       #D4AF37;
+  --color-accent-dim:   rgba(212,175,55,0.12);
+  --color-accent-border:rgba(212,175,55,0.30);
 
-  /* テキストカラー */
-  --color-text-primary:  #F0F0F0;
-  --color-text-secondary:#A0A0A0;
-  --color-text-muted:    #666666;
+  /* テキスト */
+  --color-text:         #F0F0F0;
+  --color-text-sub:     #A0A0A0;
+  --color-text-muted:   #666666;
 
   /* ボーダー */
-  --color-border:        #2A2A2A;
-  --color-border-gold:   #D4AF3740;
+  --color-border:       #2A2A2A;
+  --color-border-light: #333333;
 
-  /* セマンティック */
-  --color-success:       #4CAF50;
-  --color-warning:       #FF9800;
-  --color-danger:        #F44336;
-
-  /* テーマ切替用変数（defaultはゴールド） */
-  --color-accent:        #D4AF37;
-  --color-accent-glow:   #D4AF3720;
+  /* 状態カラー */
+  --color-success:      #4CAF50;
+  --color-warning:      #FF9800;
+  --color-danger:       #F44336;
+  --color-info:         #2196F3;
 
   /* スペーシング */
-  --space-xs:  4px;
-  --space-sm:  8px;
-  --space-md:  16px;
-  --space-lg:  24px;
-  --space-xl:  32px;
-  --space-2xl: 48px;
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
 
-  /* ボーダーRadius */
-  --radius-sm:  4px;
-  --radius-md:  8px;
-  --radius-lg:  12px;
-  --radius-xl:  16px;
-  --radius-full: 9999px;
+  /* 角丸 */
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  14px;
+  --radius-xl:  20px;
+  --radius-full:9999px;
 
   /* シャドウ */
-  --shadow-card:    0 2px 8px rgba(0, 0, 0, 0.4);
-  --shadow-gold:    0 0 16px var(--color-accent-glow);
-  --shadow-modal:   0 8px 32px rgba(0, 0, 0, 0.6);
+  --shadow-sm:  0 1px 4px rgba(0,0,0,0.4);
+  --shadow-md:  0 4px 12px rgba(0,0,0,0.5);
+  --shadow-lg:  0 8px 24px rgba(0,0,0,0.6);
+  --shadow-accent: 0 0 16px rgba(212,175,55,0.2);
 
   /* トランジション */
-  --transition-fast:   0.15s ease;
-  --transition-normal: 0.25s ease;
-  --transition-slow:   0.4s ease;
+  --ease-fast:   0.15s ease;
+  --ease-normal: 0.25s ease;
+  --ease-slow:   0.4s cubic-bezier(0.25,0.46,0.45,0.94);
 
   /* フォントサイズ */
-  --font-xs:   0.75rem;
-  --font-sm:   0.875rem;
-  --font-base: 1rem;
-  --font-lg:   1.125rem;
-  --font-xl:   1.25rem;
-  --font-2xl:  1.5rem;
-  --font-3xl:  1.875rem;
+  --text-xs:  0.6875rem;  /* 11px */
+  --text-sm:  0.8125rem;  /* 13px */
+  --text-base:0.9375rem;  /* 15px */
+  --text-md:  1.0625rem;  /* 17px */
+  --text-lg:  1.25rem;    /* 20px */
+  --text-xl:  1.5rem;     /* 24px */
+  --text-2xl: 1.875rem;   /* 30px */
 
-  /* ボトムナビ高さ */
-  --bottom-nav-height: 64px;
+  /* ボトムナビ */
+  --bottom-nav-h: 60px;
 }
 
 /* ==========================================================================
-   サイバー覚醒テーマ（男性向け）
+   サイバー覚醒テーマ
    ========================================================================== */
 [data-theme="cyber"] {
   --color-accent:        #00E5FF;
-  --color-accent-glow:   #00E5FF20;
+  --color-accent-dim:    rgba(0,229,255,0.10);
+  --color-accent-border: rgba(0,229,255,0.28);
   --color-bg-card:       #0D1B2A;
-  --color-bg-secondary:  #0A1520;
-  --color-border:        #1A3A4A;
-  --color-border-gold:   #00E5FF40;
+  --color-bg-elevated:   #111E2E;
+  --shadow-accent: 0 0 16px rgba(0,229,255,0.18);
 }
 
 /* ==========================================================================
-   Luxury Cinderellaテーマ（女性向け）
+   Luxury Cinderellaテーマ
    ========================================================================== */
 [data-theme="luxury"] {
   --color-accent:        #E8A0BF;
-  --color-accent-glow:   #E8A0BF20;
+  --color-accent-dim:    rgba(232,160,191,0.10);
+  --color-accent-border: rgba(232,160,191,0.28);
   --color-bg-card:       #1A1020;
-  --color-bg-secondary:  #150D1A;
-  --color-border:        #2A1A2A;
-  --color-border-gold:   #E8A0BF40;
+  --color-bg-elevated:   #201428;
+  --shadow-accent: 0 0 16px rgba(232,160,191,0.18);
 }
 
 /* ==========================================================================
-   グラデーション定義
+   グラデーション
    ========================================================================== */
-.gradient-gold {
-  background: linear-gradient(135deg, var(--color-gold-dark), var(--color-gold), var(--color-gold-light));
+.grad-accent {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--color-accent) 70%, black), var(--color-accent));
 }
 
-.gradient-accent {
-  background: linear-gradient(135deg, var(--color-accent), var(--color-gold));
-}
-
-.gradient-dark {
-  background: linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%);
-}
-
-.text-gradient-gold {
-  background: linear-gradient(135deg, var(--color-gold-dark), var(--color-gold-light));
+.text-accent-grad {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--color-accent) 70%, white),
+    var(--color-accent)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

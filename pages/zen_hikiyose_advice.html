@@ -5,65 +5,140 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#D4AF37">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>MINDFUL ASSET - アドバイス</title>
+  <title>MINDFUL ASSET - ZENアドバイス</title>
   <link rel="stylesheet" href="../css/zen_hikiyose_theme.css">
   <link rel="stylesheet" href="../css/zen_hikiyose_base.css">
   <link rel="stylesheet" href="../css/zen_hikiyose_components.css">
+  <style>
+    .advice-item { padding: var(--sp-4) 0; border-bottom: 1px solid var(--color-border); }
+    .advice-item:last-child { border-bottom: none; }
+    .advice-title { font-weight: 700; font-size: var(--text-sm); color: var(--color-accent); margin-bottom: 8px; }
+    .advice-body  { font-size: var(--text-sm); color: var(--color-text-sub); line-height: 1.8; }
+    .today-tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: var(--radius-full); background: var(--color-accent); color: #0D0D0D; font-size: var(--text-xs); font-weight: 700; margin-bottom: 8px; }
+  </style>
 </head>
 <body>
-  <div id="app">
-    <header class="page-header">
-      <a href="zen_hikiyose_home.html" style="color:var(--color-text-muted);font-size:1.5rem;">‹</a>
-      <span class="page-header-title">アドバイス</span>
-    </header>
+<div id="app">
 
-    <main class="main-content">
-      <div id="advice-list" style="display:flex;flex-direction:column;gap:12px;">
+  <header class="page-header">
+    <button class="page-header__back" onclick="history.back()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <span class="page-header__title">ZENアドバイス</span>
+  </header>
+
+  <main class="main-content main-content--no-nav">
+
+    <!-- 今日のメッセージ -->
+    <section class="section">
+      <p class="section-title">本日のZENメッセージ</p>
+      <div class="card-accent" id="today-advice">
         <div class="spinner"></div>
       </div>
-    </main>
+    </section>
 
-    <nav class="bottom-nav">
-      <a href="zen_hikiyose_home.html" class="bottom-nav-item">
-        <span class="nav-icon">🏠</span><span class="nav-label">ホーム</span>
-      </a>
-      <a href="zen_hikiyose_affirmation.html" class="bottom-nav-item">
-        <span class="nav-icon">🔥</span><span class="nav-label">アファメーション</span>
-      </a>
-      <a href="zen_hikiyose_log.html" class="bottom-nav-item">
-        <span class="nav-icon">📓</span><span class="nav-label">ログ</span>
-      </a>
-      <a href="zen_hikiyose_roadmap.html" class="bottom-nav-item">
-        <span class="nav-icon">🗺️</span><span class="nav-label">マップ</span>
-      </a>
-      <a href="zen_hikiyose_settings.html" class="bottom-nav-item">
-        <span class="nav-icon">⚙️</span><span class="nav-label">設定</span>
-      </a>
-    </nav>
-  </div>
+    <!-- ZENプロフィール -->
+    <section class="section">
+      <div class="card">
+        <button class="collapsible-toggle" onclick="toggleProfile(this)">
+          <span style="font-weight:700;font-size:var(--text-sm);">ZENのプロフィール</span>
+          <svg class="collapsible-icon" id="profile-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="collapsible-body" id="profile-body">
+          <div style="margin-top:var(--sp-4);font-size:var(--text-sm);color:var(--color-text-sub);line-height:1.85;">
+            <p style="font-weight:700;color:var(--color-text);margin-bottom:var(--sp-3);">ZEN（完全匿名）</p>
+            <p style="margin-bottom:var(--sp-2);">顔出しなし・声出しなし・実名非公開</p>
+            <p style="margin-bottom:var(--sp-2);">年収1億円超・海外在住・複数事業オーナー</p>
+            <p style="margin-bottom:var(--sp-3);">20歳から20年以上、独自の思考アルゴリズムを研究・実践。中学までは何も目立たない普通の少年だった。成功者の間だけで共有されてきた本物の引き寄せメソッドを、完全匿名を条件に監修。</p>
+            <p style="font-size:var(--text-xs);color:var(--color-text-muted);">「脳のOSを書き換えれば、現実は必ず変わる。それを証明するのが私の使命だ。」—ZEN</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <script type="module">
-    import ZenStorage from '../js/zen_hikiyose_storage.js';
+    <!-- 実践者の声リンク -->
+    <section class="section">
+      <a href="zen_hikiyose_reviews.html" class="card card-clickable" style="display:flex;align-items:center;gap:var(--sp-3);">
+        <div style="flex:1;">
+          <p style="font-weight:700;font-size:var(--text-sm);">実践者の声を見る</p>
+          <p style="font-size:var(--text-xs);color:var(--color-text-muted);margin-top:2px;">実際に変容を遂げた方々のレポート</p>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+    </section>
 
-    const theme = ZenStorage.get('theme', 'default');
-    if (theme && theme !== 'default') document.documentElement.setAttribute('data-theme', theme);
+    <!-- 全アドバイス -->
+    <section class="section">
+      <p class="section-title">ZENメッセージ 全30日</p>
+      <div class="card">
+        <div id="all-advice">
+          <div class="spinner"></div>
+        </div>
+      </div>
+    </section>
 
-    fetch('../data/zen_hikiyose_advice.json')
-      .then(r => r.json())
-      .then(data => {
-        const todayIdx = new Date().getDay();
-        const container = document.getElementById('advice-list');
-        container.innerHTML = data.advice.map((a, i) => {
-          const isToday = (todayIdx === 0 ? 6 : todayIdx - 1) === i;
-          return `
-            <div class="${isToday ? 'card card-premium' : 'card'}">
-              ${isToday ? '<span class="badge badge-free" style="margin-bottom:8px;">TODAY</span>' : ''}
-              <p style="font-weight:700;font-size:0.9375rem;color:var(--color-accent);margin-bottom:8px;">${a.title}</p>
-              <p style="font-size:0.875rem;color:var(--color-text-secondary);line-height:1.7;">${a.body}</p>
-            </div>
-          `;
-        }).join('');
-      });
-  </script>
+  </main>
+
+  <!-- ボトムナビ -->
+  <nav class="bottom-nav">
+    <a href="zen_hikiyose_home.html" class="bottom-nav__item is-active">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+      <span class="bottom-nav__label">ホーム</span>
+    </a>
+    <a href="zen_hikiyose_affirmation.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></span>
+      <span class="bottom-nav__label">アファメーション</span>
+    </a>
+    <a href="zen_hikiyose_log.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
+      <span class="bottom-nav__label">ログ</span>
+    </a>
+    <a href="zen_hikiyose_roadmap.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg></span>
+      <span class="bottom-nav__label">マップ</span>
+    </a>
+    <a href="zen_hikiyose_settings.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+      <span class="bottom-nav__label">設定</span>
+    </a>
+  </nav>
+
+</div>
+
+<script type="module">
+  import ZenApp from '../js/zen_hikiyose_app.js';
+  ZenApp.init();
+
+  window.toggleProfile = (btn) => {
+    const body = document.getElementById('profile-body');
+    const icon = document.getElementById('profile-icon');
+    body.classList.toggle('is-open');
+    icon.classList.toggle('is-open');
+  };
+
+  fetch('../data/zen_hikiyose_advice.json')
+    .then(r => r.json())
+    .then(data => {
+      const day = new Date().getDate();
+      const todayItem = data.advice[(day - 1) % data.advice.length];
+
+      document.getElementById('today-advice').innerHTML = `
+        <div class="today-tag">本日のメッセージ</div>
+        <p style="font-weight:700;font-size:var(--text-sm);color:var(--color-accent);margin-bottom:10px;">${todayItem.title}</p>
+        <p style="font-size:var(--text-sm);color:var(--color-text-sub);line-height:1.85;">${todayItem.body}</p>
+      `;
+
+      document.getElementById('all-advice').innerHTML = data.advice.map(item => {
+        const isToday = item.id === todayItem.id;
+        return `
+          <div class="advice-item">
+            ${isToday ? '<div class="today-tag">本日</div>' : ''}
+            <div class="advice-title">${item.title}</div>
+            <div class="advice-body">${item.body}</div>
+          </div>
+        `;
+      }).join('');
+    });
+</script>
 </body>
 </html>

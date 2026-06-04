@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#D4AF37">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>MINDFUL ASSET - アラーム設定</title>
+  <link rel="stylesheet" href="../css/zen_hikiyose_theme.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_base.css">
+  <link rel="stylesheet" href="../css/zen_hikiyose_components.css">
+</head>
+<body>
+<div id="app">
+
+  <header class="page-header">
+    <button class="page-header__back" onclick="history.back()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <span class="page-header__title">アラーム設定</span>
+  </header>
+
+  <main class="main-content main-content--no-nav">
+
+    <!-- 通知許可 -->
+    <section class="section">
+      <div class="card" id="notif-card">
+        <p style="font-weight:700;font-size:var(--text-sm);margin-bottom:6px;">通知の許可</p>
+        <p style="font-size:var(--text-xs);color:var(--color-text-muted);line-height:1.7;margin-bottom:var(--sp-3);">
+          アファメーションのリマインダーを受け取るには、通知を許可してください。
+        </p>
+        <button class="btn-primary" id="btn-notif" onclick="requestNotif()">通知を許可する</button>
+        <p style="font-size:var(--text-xs);color:var(--color-text-muted);margin-top:8px;text-align:center;" id="notif-status"></p>
+      </div>
+    </section>
+
+    <!-- 朝アラーム -->
+    <section class="section">
+      <p class="section-title">朝のアファメーション</p>
+      <div class="card">
+        <div class="setting-row">
+          <div class="setting-row__label">
+            朝のアラーム
+            <div class="setting-row__sub">毎日この時間にリマインド</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="morning-enabled" onchange="saveAlarm()">
+            <div class="switch-track"></div>
+          </label>
+        </div>
+        <div class="setting-row" id="morning-time-row" style="opacity:0.5;">
+          <label class="setting-row__label" for="morning-time">時刻</label>
+          <input type="time" id="morning-time" value="07:00" onchange="saveAlarm()"
+            style="background:var(--color-bg-elevated);border:1px solid var(--color-border);border-radius:var(--radius-sm);color:var(--color-text);padding:6px 10px;font-family:inherit;font-size:var(--text-sm);">
+        </div>
+      </div>
+    </section>
+
+    <!-- 夜アラーム -->
+    <section class="section">
+      <p class="section-title">夜のアファメーション</p>
+      <div class="card">
+        <div class="setting-row">
+          <div class="setting-row__label">
+            夜のアラーム
+            <div class="setting-row__sub">毎日この時間にリマインド</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="evening-enabled" onchange="saveAlarm()">
+            <div class="switch-track"></div>
+          </label>
+        </div>
+        <div class="setting-row" id="evening-time-row" style="opacity:0.5;">
+          <label class="setting-row__label" for="evening-time">時刻</label>
+          <input type="time" id="evening-time" value="22:00" onchange="saveAlarm()"
+            style="background:var(--color-bg-elevated);border:1px solid var(--color-border);border-radius:var(--radius-sm);color:var(--color-text);padding:6px 10px;font-family:inherit;font-size:var(--text-sm);">
+        </div>
+      </div>
+    </section>
+
+    <div class="card" style="background:rgba(33,150,243,0.06);border-color:rgba(33,150,243,0.2);">
+      <p style="font-size:var(--text-xs);color:var(--color-text-muted);line-height:1.7;">
+        ブラウザを閉じている間は通知が届かない場合があります。確実に受け取るには、ホーム画面にアプリを追加してください。
+      </p>
+    </div>
+
+  </main>
+
+  <!-- ボトムナビ -->
+  <nav class="bottom-nav">
+    <a href="zen_hikiyose_home.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+      <span class="bottom-nav__label">ホーム</span>
+    </a>
+    <a href="zen_hikiyose_affirmation.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></span>
+      <span class="bottom-nav__label">アファメーション</span>
+    </a>
+    <a href="zen_hikiyose_log.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
+      <span class="bottom-nav__label">ログ</span>
+    </a>
+    <a href="zen_hikiyose_roadmap.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg></span>
+      <span class="bottom-nav__label">マップ</span>
+    </a>
+    <a href="zen_hikiyose_settings.html" class="bottom-nav__item is-active">
+      <span class="bottom-nav__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+      <span class="bottom-nav__label">設定</span>
+    </a>
+  </nav>
+</div>
+<div id="toast-container" class="toast-container"></div>
+
+<script type="module">
+  import ZenStorage from '../js/zen_hikiyose_storage.js';
+  import ZenApp from '../js/zen_hikiyose_app.js';
+
+  ZenApp.init();
+
+  // 保存済みアラーム読み込み
+  const alarm = ZenStorage.get('zen_hikiyose_alarm', { morning: { enabled: false, time: '07:00' }, evening: { enabled: false, time: '22:00' } });
+  document.getElementById('morning-enabled').checked = alarm.morning.enabled;
+  document.getElementById('morning-time').value = alarm.morning.time;
+  document.getElementById('evening-enabled').checked = alarm.evening.enabled;
+  document.getElementById('evening-time').value = alarm.evening.time;
+
+  const updateTimeRowOpacity = () => {
+    document.getElementById('morning-time-row').style.opacity = document.getElementById('morning-enabled').checked ? '1' : '0.5';
+    document.getElementById('evening-time-row').style.opacity = document.getElementById('evening-enabled').checked ? '1' : '0.5';
+  };
+  updateTimeRowOpacity();
+
+  window.saveAlarm = () => {
+    const data = {
+      morning: { enabled: document.getElementById('morning-enabled').checked, time: document.getElementById('morning-time').value },
+      evening: { enabled: document.getElementById('evening-enabled').checked, time: document.getElementById('evening-time').value },
+    };
+    ZenStorage.set('zen_hikiyose_alarm', data);
+    updateTimeRowOpacity();
+    ZenApp.showToast('アラームを保存しました', 'success');
+  };
+
+  // 通知許可状態確認
+  const updateNotifStatus = () => {
+    if (!('Notification' in window)) {
+      document.getElementById('notif-status').textContent = 'この端末はブラウザ通知に対応していません';
+      document.getElementById('btn-notif').disabled = true;
+      return;
+    }
+    const perm = Notification.permission;
+    if (perm === 'granted') {
+      document.getElementById('notif-status').textContent = '通知が許可されています';
+      document.getElementById('btn-notif').textContent = '許可済み';
+      document.getElementById('btn-notif').disabled = true;
+    } else if (perm === 'denied') {
+      document.getElementById('notif-status').textContent = 'ブラウザの設定から通知を許可してください';
+      document.getElementById('btn-notif').disabled = true;
+    }
+  };
+  updateNotifStatus();
+
+  window.requestNotif = async () => {
+    if (!('Notification' in window)) return;
+    const perm = await Notification.requestPermission();
+    updateNotifStatus();
+    if (perm === 'granted') {
+      ZenApp.showToast('通知が許可されました', 'success');
+    }
+  };
+</script>
+</body>
+</html>
