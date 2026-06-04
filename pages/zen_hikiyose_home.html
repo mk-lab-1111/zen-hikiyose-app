@@ -214,7 +214,13 @@
       const day = new Date().getDate();
       const item = data.advice[(day - 1) % data.advice.length];
       document.getElementById('daily-advice').innerHTML = `
-        <p style="font-size:var(--text-xs);color:var(--color-accent);font-weight:700;letter-spacing:0.08em;margin-bottom:10px;">${item.title}</p>
+        <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;">
+          <img src="../images/zen_avatar.png" style="width:40px;height:40px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1.5px solid var(--color-border-accent);">
+          <div style="flex:1;">
+            <p style="font-size:var(--text-xs);color:var(--color-text-muted);font-weight:700;margin-bottom:3px;">ZEN</p>
+            <p style="font-size:var(--text-xs);color:var(--color-accent);font-weight:700;letter-spacing:0.08em;">${item.title}</p>
+          </div>
+        </div>
         <p style="font-size:var(--text-sm);color:var(--color-text-sub);line-height:1.8;">${item.body}</p>
         <div style="margin-top:12px;text-align:right;">
           <a href="zen_hikiyose_advice.html" style="font-size:var(--text-xs);color:var(--color-text-muted);">すべて見る</a>
